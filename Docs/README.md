@@ -7,7 +7,7 @@ Here is a simple overview of the components involved in the Back-office context:
 - a frontend application made with React used as the user interface layer. _TODO: add link to doc_
 - a symfony application used as an [API layer](./API-layer.md), this will act as a
   middleware between the frontend application and Monolith.
-- a zend application - Monolith(Beprems) - used for saving/fetching data to/from the
+- a zend application - [Monolith(Beprems)](./Monolith.md) - used for saving/fetching data to/from the
   database and to process and store documents. It has other functionalities
   that are not relevant for this context
 - a database layer  
