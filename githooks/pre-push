@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+grn=$'\e[1;32m'
+red=$'\e[1;31m'
+end=$'\e[0m'
+
+echo "$grn Trying to run tests... $end";
+
+#docker-compose exec -T app php bin/console --no-interaction doctrine:migrations:migrate --env=test
+#docker-compose exec -T app php bin/console doctrine:fixtures:load -n --em=default --group=default --purge-with-truncate --env=test
+#docker-compose exec -T app php bin/phpunit
+
+if [ $? -eq 0 ]
+then
+echo "$grn Tests ran SUCCESSFULLY! $end";
+echo "$grn Pushing commits... $end";
+else
+echo "$red Tests FAILED! $end";
+exit 1;
+fi
