@@ -1,5 +1,8 @@
 /.idea
 /Docs/assets/.DS_Store
+.DS_Store
+/Docs/.DS_Store
+/docker/.DS_Store
 
 ###> symfony/framework-bundle ###
 /.env.local
