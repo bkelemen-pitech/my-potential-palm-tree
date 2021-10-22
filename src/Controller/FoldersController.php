@@ -18,7 +18,6 @@ class FoldersController extends AbstractController
      */
     public function test(): Response
     {
-
         return $this->json(['test' => 'test']);
     }
 }
