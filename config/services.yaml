@@ -4,12 +4,22 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    env(INTERNAL_API_APP_ID): null
+    env(INTERNAL_API_APP_KEY): null
+    env(INTERNAL_API_URL): null
+    internal_api_app_id: '%env(INTERNAL_API_APP_ID)%'
+    internal_api_app_key: '%env(INTERNAL_API_APP_KEY)%'
+    internal_api_url: '%env(INTERNAL_API_URL)%'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $internalApiUrl: '%internal_api_url%'
+            $internalApiKey: '%internal_api_app_key%'
+            $internalApiId: '%internal_api_app_id%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
