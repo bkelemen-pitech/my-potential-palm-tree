@@ -6,9 +6,7 @@ end=$'\e[0m'
 
 echo "$grn Trying to run tests... $end";
 
-#docker-compose exec -T app php bin/console --no-interaction doctrine:migrations:migrate --env=test
-#docker-compose exec -T app php bin/console doctrine:fixtures:load -n --em=default --group=default --purge-with-truncate --env=test
-#docker-compose exec -T app php bin/phpunit
+docker-compose exec -T app php bin/phpunit
 
 if [ $? -eq 0 ]
 then
