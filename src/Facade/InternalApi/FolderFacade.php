@@ -20,7 +20,6 @@ class FolderFacade
     {
         try {
             $folders = $this->client->getFolders($queryParams);
-            die(var_dump($folders));
 
             return $folders->getResource();
         } catch (\Exception $exception) {

@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Fetcher\FolderFetcher;
-use App\Model\Request\DefaultFolderFiltersModel;
+use App\Model\Request\BaseFolderFiltersModel;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class FolderService
@@ -25,7 +25,11 @@ class FolderService
 
     public function getFolders(array $data): array
     {
-        $folderFiltersModel = $this->serializer->deserialize(json_encode($data), DefaultFolderFiltersModel::class, 'json');
+        $folderFiltersModel = $this->serializer->deserialize(
+            json_encode($data),
+            BaseFolderFiltersModel::class,
+            'json'
+        );
         $this->validationService->validate($folderFiltersModel);
 
         $data = $this->folderFetcher->getFoldersWithFilters($folderFiltersModel);

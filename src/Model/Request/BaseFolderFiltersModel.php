@@ -8,7 +8,7 @@ use App\Enum\FolderEnum;
 use App\Traits\StringTransformationTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
-abstract class BaseFolderFiltersModel extends PaginationModel implements BaseFolderFiltersInterface
+class BaseFolderFiltersModel extends PaginationModel implements BaseFolderFiltersInterface
 {
     use StringTransformationTrait;
 
@@ -77,14 +77,9 @@ abstract class BaseFolderFiltersModel extends PaginationModel implements BaseFol
     protected ?string $textSearchFields = null;
 
     /**
-     * @Assert\Type(type="integer")
+     * @Assert\Type(type="string")
      */
-    protected ?int $agencyId;
-
-    /**
-     * @Assert\Type(type="integer")
-     */
-    protected ?int $agentId;
+    protected ?string $filters = null;
 
     public function getOrderBy(): ?string
     {
@@ -206,26 +201,14 @@ abstract class BaseFolderFiltersModel extends PaginationModel implements BaseFol
         return $this;
     }
 
-    public function getAgencyId(): ?int
+    public function getFilters(): ?string
     {
-        return $this->agencyId;
+        return $this->filters;
     }
 
-    public function setAgencyId(?int $agencyId): BaseFolderFiltersModel
+    public function setFilters(?string $filters): BaseFolderFiltersModel
     {
-        $this->agencyId = $agencyId;
-
-        return $this;
-    }
-
-    public function getAgentId(): ?int
-    {
-        return $this->agentId;
-    }
-
-    public function setAgentId(?int $agentId): BaseFolderFiltersModel
-    {
-        $this->agentId = $agentId;
+        $this->filters = $filters;
 
         return $this;
     }
@@ -295,21 +278,13 @@ abstract class BaseFolderFiltersModel extends PaginationModel implements BaseFol
     public function toArray(): array
     {
         return [
-//            TODO: Uncomment this once agent credentials are checked and the ID can be retrieved.
-//            FolderEnum::AGENT_ID => $this->getAgentId(),
             FolderEnum::LIMIT => (int) $this->getLimit(),
             FolderEnum::PAGE => (int) $this->getPage(),
             FolderEnum::ORDER_BY => $this->getOrderBy(),
             FolderEnum::ORDER => $this->getOrder(),
             FolderEnum::TEXT_SEARCH => $this->getTextSearch(),
             FolderEnum::TEXT_SEARCH_FIELDS => $this->getTextSearch() ? $this->prepareTextSearchFields() : null,
-            FolderEnum::PARTNER_FOLDER_ID_FR => $this->getPartnerFolderId() ? [$this->getPartnerFolderId()] : null,
-            FolderEnum::FIRST_NAME => $this->getFirstName(),
-            FolderEnum::LAST_NAME => $this->getLastName(),
-            FolderEnum::EMAIL => $this->getEmail(),
-            FolderEnum::TELEPHONE => $this->getTelephone(),
-            FolderEnum::START_DATE => $this->getStartDate() ? $this->getStartDate()->format('Y-m-d') : null,
-            FolderEnum::END_DATE => $this->getEndDate() ? $this->getEndDate()->format('Y-m-d') : null,
+            FolderEnum::FILTERS => $this->getFilters(),
         ];
     }
 }

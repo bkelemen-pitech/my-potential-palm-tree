@@ -16,7 +16,4 @@ interface BaseFolderFiltersInterface extends ListInterface
     public function getStartDate(): ?\DateTime;
     public function getEndDate(): ?\DateTime;
     public function getTextSearchFields(): ?string;
-    public function getAgencyId(): ?int;
-    public function getAgentId(): ?int;
-    public function getAgencyAd();
 }

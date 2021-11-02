@@ -39,7 +39,6 @@ class FoldersController extends AbstractController
      */
     public function getFolder(Request $request): JsonResponse
     {
-//        $userData = $this->getUserData();
         $folders = $this->folderService->getFolders($request->query->all());
 
         return $this->json($folders);
