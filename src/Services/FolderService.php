@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enum\FolderEnum;
 use App\Fetcher\FolderFetcher;
 use App\Model\Request\BaseFolderFiltersModel;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -35,8 +36,8 @@ class FolderService
         $data = $this->folderFetcher->getFoldersWithFilters($folderFiltersModel);
 
         return [
-            'total_records' => $data['meta']['total'],
-            'records' => $data['folders'],
+            FolderEnum::TOTAL_RECORDS => $data[FolderEnum::META][FolderEnum::TOTAL],
+            FolderEnum::RECORDS => $data[FolderEnum::FOLDERS],
         ];
     }
 

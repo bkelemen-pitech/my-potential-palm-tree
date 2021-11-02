@@ -20,19 +20,22 @@ class FolderEnum
     public const TEXT_SEARCH = 'text_search';
     public const TEXT_SEARCH_FIELDS = 'text_search_fields';
 
+    // INTERNAL API RESPONSE
+    public const FOLDERS = 'folders';
+    public const META = 'meta';
+    public const TOTAL = 'total';
+
+    // API RESPONSE
+    public const RECORDS = 'records';
+    public const TOTAL_RECORDS = 'total_records';
+
     // DATABASE TABLES PREFIXES
     public const PERSON_PREFIX = 'personne.';
     public const USER_FOLDER_PREFIX = 'user_dossier.';
 
     // FILTERS
-    public const AGENCY_AD = 'agency_ad';
-    public const AGENCY_ID = 'agency_id';
-    public const AGENCY_ID_FR = 'agence_id';
-    public const AGENT_ID = 'agent_id';
-    public const DISPLAY_AGENT_ONLY = 'display_agent_only';
     public const EMAIL = 'email';
     public const END_DATE = 'end_date';
-    public const FILTER_BY_AGENCY_ADS = 'filter_by_agency_ads';
     public const FIRST_NAME = 'first_name';
     public const FIRST_NAME_FR = 'prenom';
     public const FOLDER_IDS = 'folder_ids';
