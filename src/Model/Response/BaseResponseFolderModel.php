@@ -15,67 +15,67 @@ class BaseResponseFolderModel implements BaseResponseFolderInterface
     /**
      * @Assert\Type(type="int")
      */
-    protected ?int $folderId = null;
+    protected ?int $userDossierId = null;
 
     /**
      * @Assert\Type(type="string")
      */
-    protected ?string $folderName = '';
+    protected ?string $partenaireDossierId = '';
 
     /**
      * @Assert\Type(type="string")
      */
-    protected ?string $firstName = '';
+    protected ?string $prenom = '';
 
     /**
      * @Assert\Type(type="string")
      */
-    protected ?string $lastName = '';
+    protected ?string $nom = '';
 
     public function getUserDossierId(): ?int
     {
-        return $this->folderId;
+        return $this->userDossierId;
     }
 
-    public function setUserDossierId(?int $folderId): BaseResponseFolderModel
+    public function setUserDossierId(?int $userDossierId): BaseResponseFolderModel
     {
-        $this->folderId = $folderId;
+        $this->userDossierId = $userDossierId;
 
         return $this;
     }
 
     public function getPartenaireDossierId(): ?string
     {
-        return $this->folderName;
+        return $this->partenaireDossierId;
     }
 
-    public function setPartenaireDossierId(?string $folderName): BaseResponseFolderModel
+    public function setPartenaireDossierId(?string $partenaireDossierId): BaseResponseFolderModel
     {
-        $this->folderName = $folderName;
+        $this->partenaireDossierId = $partenaireDossierId;
 
         return $this;
     }
 
     public function getPrenom(): ?string
     {
-        return $this->firstName;
+        return $this->prenom;
     }
 
-    public function setPrenom(?string $firstName): BaseResponseFolderModel
+    public function setPrenom(?string $prenom): BaseResponseFolderModel
     {
-        $this->firstName = $firstName;
+        $this->prenom = $prenom;
 
         return $this;
     }
 
     public function getNom(): ?string
     {
-        return $this->lastName;
+        return $this->nom;
     }
 
-    public function setNom(?string $lastName): BaseResponseFolderModel
+    public function setNom(?string $nom): BaseResponseFolderModel
     {
-        $this->lastName = $lastName;
+        $this->nom = $nom;
 
         return $this;
     }

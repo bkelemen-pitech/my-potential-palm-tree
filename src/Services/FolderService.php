@@ -38,7 +38,11 @@ class FolderService
         $restructuredFolderArray = [];
 
         foreach ($data[FolderEnum::FOLDERS] as $folder) {
-            $restructuredFolderArray[] = $this->serializer->deserialize(json_encode($folder), BaseResponseFolderModel::class, 'json')->toArray();
+            $restructuredFolderArray[] = $this->serializer->deserialize(
+                json_encode($folder),
+                BaseResponseFolderModel::class,
+                'json'
+            )->toArray();
         }
 
         return [
