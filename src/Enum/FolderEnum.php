@@ -20,14 +20,13 @@ class FolderEnum
     public const TEXT_SEARCH = 'text_search';
     public const TEXT_SEARCH_FIELDS = 'text_search_fields';
 
-    // INTERNAL API RESPONSE
+    // API RESPONSE
+    public const FIRST_NAME = 'firstName';
+    public const FOLDER_ID = 'folderId';
     public const FOLDERS = 'folders';
+    public const LAST_NAME = 'lastName';
     public const META = 'meta';
     public const TOTAL = 'total';
-
-    // API RESPONSE
-    public const RECORDS = 'records';
-    public const TOTAL_RECORDS = 'total_records';
 
     // DATABASE TABLES PREFIXES
     public const PERSON_PREFIX = 'personne.';
@@ -35,15 +34,8 @@ class FolderEnum
 
     // FILTERS
     public const EMAIL = 'email';
-    public const END_DATE = 'end_date';
-    public const FIRST_NAME = 'first_name';
     public const FIRST_NAME_FR = 'prenom';
-    public const FOLDER_IDS = 'folder_ids';
-    public const LAST_NAME = 'last_name';
     public const LAST_NAME_FR = 'nom';
-    public const PERSON_TYPE_ID = 'person_type_id';
-    public const START_DATE = 'start_date';
-    public const SUBSCRIPTION_FR = 'abonnement';
     public const TELEPHONE = 'telephone';
 
     // ENTITY PROPERTIES

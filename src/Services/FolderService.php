@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enum\FolderEnum;
 use App\Fetcher\FolderFetcher;
 use App\Model\Request\BaseFolderFiltersModel;
+use App\Model\Response\BaseResponseFolderModel;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class FolderService
@@ -34,10 +35,15 @@ class FolderService
         $this->validationService->validate($folderFiltersModel);
 
         $data = $this->folderFetcher->getFoldersWithFilters($folderFiltersModel);
+        $restructuredFolderArray = [];
+
+        foreach ($data[FolderEnum::FOLDERS] as $folder) {
+            $restructuredFolderArray[] = $this->serializer->deserialize(json_encode($folder), BaseResponseFolderModel::class, 'json')->toArray();
+        }
 
         return [
-            FolderEnum::TOTAL_RECORDS => $data[FolderEnum::META][FolderEnum::TOTAL],
-            FolderEnum::RECORDS => $data[FolderEnum::FOLDERS],
+            FolderEnum::FOLDERS => $restructuredFolderArray,
+            FolderEnum::META => $data[FolderEnum::META],
         ];
     }
 
