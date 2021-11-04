@@ -34,7 +34,7 @@ class BaseFolderFiltersModel extends PaginationModel implements BaseFolderFilter
     /**
      * @Assert\Type(type="string")
      */
-    protected ?string $textSearch = '';
+    protected ?string $textSearch = null;
 
     /**
      * @Assert\Type(type="string")
@@ -282,9 +282,9 @@ class BaseFolderFiltersModel extends PaginationModel implements BaseFolderFilter
             FolderEnum::PAGE => (int) $this->getPage(),
             FolderEnum::ORDER_BY => $this->getOrderBy(),
             FolderEnum::ORDER => $this->getOrder(),
-            FolderEnum::TEXT_SEARCH => $this->getTextSearch(),
+            FolderEnum::TEXT_SEARCH => $this->getTextSearch() ?? null,
             FolderEnum::TEXT_SEARCH_FIELDS => $this->getTextSearch() ? $this->prepareTextSearchFields() : null,
-            FolderEnum::FILTERS => $this->getFilters(),
+            FolderEnum::FILTERS => $this->getFilters() ?? null,
         ];
     }
 }
