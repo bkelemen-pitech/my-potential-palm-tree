@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\InternalApi\Folder;
 
+use App\Enum\FolderEnum;
 use App\Model\InternalApi\InternalResponse;
 
 class GetFoldersResponse extends InternalResponse
@@ -24,11 +25,11 @@ class GetFoldersResponse extends InternalResponse
 
     public function getFolders(): array
     {
-        return $this->resource['folders'];
+        return $this->resource[FolderEnum::FOLDERS];
     }
 
     public function getMetaTotal(): int
     {
-        return $this->resource['meta']['total'];
+        return $this->resource[FolderEnum::META][FolderEnum::TOTAL];
     }
 }
