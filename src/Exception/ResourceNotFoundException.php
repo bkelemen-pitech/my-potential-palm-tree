@@ -8,5 +8,4 @@ use RuntimeException;
 
 class ResourceNotFoundException extends RuntimeException
 {
-
 }
