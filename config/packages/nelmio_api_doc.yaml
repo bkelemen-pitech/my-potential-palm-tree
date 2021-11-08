@@ -24,7 +24,7 @@ nelmio_api_doc:
           in: query
           required: false
           description: Order direction (ASC/DESC)
-        orderBy:
+        order_by:
           name: orderBy
           in: query
           description: "'user_dossier' database property used to order the results by"
@@ -197,7 +197,7 @@ nelmio_api_doc:
           parameters:
             - ref: '#/components/parameters/page'
             - ref: '#/components/parameters/limit'
-            - ref: '#/components/parameters/orderBy'
+            - ref: '#/components/parameters/order_by'
             - ref: '#/components/parameters/order'
             - ref: '#/components/parameters/text_search'
             - ref: '#/components/parameters/text_search_fields'
