@@ -69,6 +69,36 @@ nelmio_api_doc:
             application/json:
               schema:
                 $ref: '#/components/schemas/200Success'
+        SuccessFolders:
+          description: Success response example for the GET folders API call
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  folders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        folderId:
+                          type: integer
+                          example: 12345
+                        folder:
+                          type: string
+                          example: "Folder123"
+                        firstName:
+                          type: string
+                          example: Bruce
+                        lastName:
+                          type: string
+                          example: Wayne
+                  meta:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 777
         Unauthenticated:
           description: Authentication failed
           content:
@@ -177,49 +207,13 @@ nelmio_api_doc:
           responses:
             '200':
               description: OK
-              content:
-                application/json:
-                  schema:
-                    type: object
-                    properties:
-                      folders:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            folderId:
-                              type: integer
-                              example: 12345
-                            folder:
-                              type: string
-                              example: "Folder123"
-                            firstName:
-                              type: string
-                              example: Bruce
-                            lastName:
-                              type: string
-                              example: Wayne
-                      meta:
-                        type: object
-                        properties:
-                          total:
-                            type: integer
-                            example: 777
+              ref: '#/components/responses/SuccessFolders'
             '400':
               description: Invalid Request
-              content:
-                application/json:
-                  schema:
-                    ref: '#/components/responses/InvalidRequest'
+              ref: '#/components/responses/InvalidRequest'
             '401':
               description: Invalid Request
-              content:
-                application/json:
-                  schema:
-                    ref: '#/components/responses/Unauthenticated'
+              ref: '#/components/responses/Unauthenticated'
             '500':
               description: Invalid Request
-              content:
-                application/json:
-                  schema:
-                    ref: '#/components/responses/ServerError'
+              ref: '#/components/responses/ServerError'
