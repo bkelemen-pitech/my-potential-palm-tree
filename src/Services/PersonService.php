@@ -24,6 +24,7 @@ class PersonService
 
         $personDTO = new PersonDTO();
         $personDTO
+            ->setPersonId($person->getPersonneId())
             ->setLastName($person->getNom())
             ->setFirstName($person->getPrenom())
             ->setPersonTypeId($person->getPersonneTypeId())

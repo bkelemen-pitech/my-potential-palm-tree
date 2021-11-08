@@ -56,6 +56,7 @@ class FolderControllerTest extends BaseApiTest
                 ->setDateOfBirth('12-01-2020')
                 ->setPersonTypeId(1)
                 ->setPersonUid('1')
+                ->setPersonId(30)
                 ->setPersonInfo(
                     [
                         (new PersonInfoDTO())
@@ -69,7 +70,8 @@ class FolderControllerTest extends BaseApiTest
                 ->setFirstName('Johny')
                 ->setDateOfBirth('12-03-2020')
                 ->setPersonTypeId(1)
-                ->setPersonUid('1'),
+                ->setPersonUid('1')
+                ->setPersonId(31),
         ];
     }
 
@@ -101,6 +103,7 @@ class FolderControllerTest extends BaseApiTest
                     'dateOfBirth' => '2020-01-12T00:00:00+00:00',
                     'personTypeId' => 1,
                     'personUid' => '1',
+                    'personId' => 30,
                     'personInfo' => [
                         [
                             'nameInfo' => 'dossier',
@@ -115,6 +118,7 @@ class FolderControllerTest extends BaseApiTest
                     'dateOfBirth' => '2020-03-12T00:00:00+00:00',
                     'personTypeId' => 1,
                     'personUid' => '1',
+                    'personId' => 31,
                     'personInfo' => [],
                 ],
             ],

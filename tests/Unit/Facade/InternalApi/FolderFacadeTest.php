@@ -53,13 +53,13 @@ class FolderFacadeTest extends BaseApiTest
                 new ClientException(
                     new MockResponse(
                         '',
-                        ['http_code' => 400, 'url' => 'http://beprems.com/internalAPI/folders/getfolder/folder-id/1']
+                        ['http_code' => 400, 'url' => $_ENV['INTERNAL_API_URL'] . '/internalAPI/folders/getfolder/folder-id/1']
                     )
                 )
             );
 
         $this->expectException(InvalidDataException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://beprems.com/internalAPI/folders/getfolder/folder-id/1".');
+        $this->expectExceptionMessage('HTTP 400 returned for "' . $_ENV['INTERNAL_API_URL'] . '/internalAPI/folders/getfolder/folder-id/1".');
         $this->facade->getFolderById(1);
     }
 
@@ -98,7 +98,7 @@ class FolderFacadeTest extends BaseApiTest
                 new ClientException(
                     new MockResponse(
                         '',
-                        ['http_code' => 400, 'url' => 'http://beprems.com/internalAPI/folders/persons/folder-id/1']
+                        ['http_code' => 400, 'url' => $_ENV['INTERNAL_API_URL'] . '/internalAPI/folders/persons/folder-id/1']
                     )
                 )
             );
