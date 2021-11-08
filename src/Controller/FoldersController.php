@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enum\BepremsEnum;
+use App\Exception\ApiException;
+use App\Fetcher\FolderFetcher;
 use App\Services\FolderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,5 +42,26 @@ class FoldersController extends AbstractController
         $folders = $this->folderService->getFolders($request->query->all());
 
         return $this->json($folders);
+    }
+
+    /**
+     * @Route("/{id}", name="get_by_id", methods="GET")
+     */
+    public function getFolderById(int $id, FolderFetcher $folderFetcher): JsonResponse
+    {
+        try {
+            $filters = [
+                BepremsEnum::PERSON_ORDER => 'ASC NULLS FIRST',
+                BepremsEnum::PERSON_INFO_ORDER => 'ASC',
+                BepremsEnum::PERSON_ORDER_BY => 'prenom,nom',
+                BepremsEnum::PERSON_INFO_ORDER_BY => 'source,creation'
+            ];
+
+            $folderData = $folderFetcher->getFolderData($id, $filters);
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
+        }
+
+        return $this->json($folderData);
     }
 }
