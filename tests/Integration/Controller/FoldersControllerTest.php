@@ -29,7 +29,27 @@ class FolderControllerTest extends BaseApiTest
 
     public function testGetFolderById()
     {
-        $persons = [
+        $persons = $this->getPersonDtoTestData();
+        $folderData = $this->getFolderByIdDtoTestData($persons);
+        $expected = $this->getFolderByIdExpectedData();
+
+        $this->folderFetcher->getFolderData(1, FolderData::GET_FOLDER_BY_ID_ORDER_FILTERS)->willReturn($folderData);
+        $this->requestWithBody(BaseEnum::METHOD_GET, self::GET_FOLDER);
+        $this->assertEquals(200, $this->getStatusCode());
+        $this->assertEquals($expected, $this->getResponseContent());
+    }
+
+    public function testGetFolderByIdNotFound()
+    {
+        $this->folderFetcher->getFolderData(1, FolderData::GET_FOLDER_BY_ID_ORDER_FILTERS)->willThrow(new ResourceNotFoundException());
+        $this->requestWithBody(BaseEnum::METHOD_GET, self::GET_FOLDER);
+
+        $this->assertEquals(404, $this->getStatusCode());
+    }
+
+    private function getPersonDtoTestData()
+    {
+        return [
             (new PersonDTO())
                 ->setLastName('Smith')
                 ->setFirstName('John')
@@ -51,18 +71,23 @@ class FolderControllerTest extends BaseApiTest
                 ->setPersonTypeId(1)
                 ->setPersonUid('1'),
         ];
+    }
 
-        $folderData = new FolderByIdDTO();
-        $folderData
-            ->setId(1)
-            ->setPartnerFolderId('2')
-            ->setStatus(3)
-            ->setWorkflowStatus(1400)
-            ->setLabel(2)
-            ->setSubscription(20)
-            ->setPersons($persons);
+    private function getFolderByIdDtoTestData($persons)
+    {
+        return (new FolderByIdDTO())
+        ->setId(1)
+        ->setPartnerFolderId('2')
+        ->setStatus(3)
+        ->setWorkflowStatus(1400)
+        ->setLabel(2)
+        ->setSubscription(20)
+        ->setPersons($persons);
+    }
 
-        $expected = [
+    private function getFolderByIdExpectedData()
+    {
+        return [
             'id' => 1,
             'partnerFolderId' => '2',
             'status' => 3,
@@ -94,19 +119,5 @@ class FolderControllerTest extends BaseApiTest
                 ],
             ],
         ];
-
-        $this->folderFetcher->getFolderData(1, FolderData::GET_FOLDER_BY_ID_ORDER_FILTERS)->willReturn($folderData);
-        $this->requestWithBody(BaseEnum::METHOD_GET, self::GET_FOLDER);
-        $this->assertEquals(200, $this->getStatusCode());
-        $this->assertEquals($expected, $this->getResponseContent());
-    }
-
-    public function testGetFolderByIdNotFound()
-    {
-        $exception = new ResourceNotFoundException();
-        $this->folderFetcher->getFolderData(1, FolderData::GET_FOLDER_BY_ID_ORDER_FILTERS)->willThrow($exception);
-        $this->requestWithBody(BaseEnum::METHOD_GET, self::GET_FOLDER);
-
-        $this->assertEquals(404, $this->getStatusCode());
     }
 }
