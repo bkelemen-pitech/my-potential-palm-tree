@@ -10,15 +10,11 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 class PersonInfoDTO
 {
     /**
-     * @SerializedName("name_info")
-     *
      * @Groups({"readList"})
      */
     protected ?string $nameInfo;
 
     /**
-     * @SerializedName("data_info")
-     *
      * @Groups({"readList"})
      */
     protected ?string $dataInfo;

@@ -10,22 +10,10 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 class FolderByIdDTO
 {
     protected int $id;
-    /**
-     * @SerializedName("partenaire_dossier_id")
-     */
     protected ?string $partnerFolderId;
-    /**
-     * @SerializedName("statut")
-     */
     protected ?int $status;
-    /**
-     * @SerializedName("statut_workflow")
-     */
     protected ?int $workflowStatus;
     protected ?int $label;
-    /**
-     * @SerializedName("abonnement")
-     */
     protected ?int $subscription;
     /**
      * @var PersonDTO[]

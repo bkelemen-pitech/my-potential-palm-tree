@@ -5,62 +5,41 @@ declare(strict_types=1);
 namespace App\DTO\Person;
 
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class PersonDTO
 {
-    /**
-     * @SerializedName("person_id")
-     */
     protected int $personId;
 
     /**
-     * @SerializedName("last_name")
-     *
      * @Groups({"readList"})
      */
     protected ?string $lastName;
 
     /**
-     * @SerializedName("first_name")
-     *
      * @Groups({"readList"})
      */
     protected ?string $firstName;
 
     /**
-     * @SerializedName("date_of_birth")
-     *
      * @Groups({"readList"})
      */
     protected ?string $dateOfBirth;
 
     /**
-     * @SerializedName("person_type_id")
-     *
      * @Groups({"readList"})
      */
     protected ?int $personTypeId;
 
     /**
-     * @SerializedName("person_uid")
-     *
      * @Groups({"readList"})
      */
     protected ?string $personUid;
 
     /**
-     * @SerializedName("person_info")
-     *
-     * @Groups({"readList"})
-     *
      * @var PersonInfoDTO[]
      */
     protected array $personInfo = [];
 
-    /**
-     * @SerializedName("folder_id")
-     */
     protected ?int $folderId;
 
     public function getPersonId(): int
