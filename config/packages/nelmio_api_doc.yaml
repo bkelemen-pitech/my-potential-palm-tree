@@ -1,9 +1,225 @@
 nelmio_api_doc:
-    documentation:
-        info:
-            title: My App
-            description: This is an awesome app!
-            version: 1.0.0
-    areas: # to filter documented areas
-        path_patterns:
-            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+  areas: # to filter documented areas
+    path_patterns:
+      - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+  documentation:
+    info:
+      title: BO rewrite
+      description: BO rewrite API list
+      version: 1.0.0
+    components:
+      parameters:
+        filters:
+          name: filters
+          in: query
+          description: Filters applied to the request - any database property from the table 'user_dossier'
+          required: false
+        limit:
+          name: limit
+          in: query
+          description: Number of results per page
+          required: false
+        order:
+          name: order
+          in: query
+          required: false
+          description: Order direction (ASC/DESC)
+        orderBy:
+          name: orderBy
+          in: query
+          description: "'user_dossier' database property used to order the results by"
+          required: false
+        page:
+          name: page
+          in: query
+          description: Page number
+          required: false
+        text_search:
+          name: text_search
+          in: query
+          description: Text to search
+          required: false
+        text_search_fields:
+          name: text_search_fields
+          in: query
+          description: Fields in which the text_search should be searched
+          required: false
+      responses:
+        InvalidRequest:
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400Error'
+        NotFound:
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404Error'
+        ServerError:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500Error'
+        Success:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200Success'
+        Unauthenticated:
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401Error'
+      schemas:
+        200Success:
+          title: 200 Success
+          type: object
+          properties:
+            statusCode:
+              type: integer
+              example: 200
+            body:
+              type: string
+              example: Success
+            status:
+              type: string
+              example: success
+        400Error:
+          title: 400 Error
+          type: object
+          properties:
+            statusCode:
+              type: integer
+              example: 400
+            body:
+              type: string
+              example: Invalid request
+            error:
+              type: string
+              example: Invalid request
+            status:
+              type: string
+              example: error
+        401Error:
+          title: 401 Error
+          type: object
+          properties:
+            statusCode:
+              type: integer
+              example: 401
+            body:
+              type: string
+              example: Authentication required.
+            error:
+              type: string
+              example: Authentication required.
+            status:
+              type: string
+              example: error
+        404Error:
+          title: 404 Error
+          type: object
+          properties:
+            statusCode:
+              type: integer
+              example: 404
+            body:
+              type: string
+              example: Resource not found.
+            error:
+              type: string
+              example: Resource not found.
+            status:
+              type: string
+              example: error
+        500Error:
+          title: 500 Error
+          type: object
+          properties:
+            statusCode:
+              type: integer
+              example: 500
+            body:
+              type: string
+              example: Third party issues
+            error:
+              type: string
+              example: Third party issues
+            status:
+              type: string
+              example: error
+      securitySchemes:
+        apiAuth:
+          type: apiKey
+          name: X-Auth-Token
+          in: header
+#    security:
+#      apiAuth
+    paths:
+      /api/v1/folders/:
+        get:
+          description: Get folders with or without parameters
+          parameters:
+            - ref: '#/components/parameters/page'
+            - ref: '#/components/parameters/limit'
+            - ref: '#/components/parameters/orderBy'
+            - ref: '#/components/parameters/order'
+            - ref: '#/components/parameters/text_search'
+            - ref: '#/components/parameters/text_search_fields'
+            - ref: '#/components/parameters/filters'
+          tags:
+            - Folder
+          responses:
+            '200':
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      folders:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            folderId:
+                              type: integer
+                              example: 12345
+                            folder:
+                              type: string
+                              example: "Folder123"
+                            firstName:
+                              type: string
+                              example: Bruce
+                            lastName:
+                              type: string
+                              example: Wayne
+                      meta:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                            example: 777
+            '400':
+              description: Invalid Request
+              content:
+                application/json:
+                  schema:
+                    ref: '#/components/responses/InvalidRequest'
+            '401':
+              description: Invalid Request
+              content:
+                application/json:
+                  schema:
+                    ref: '#/components/responses/Unauthenticated'
+            '500':
+              description: Invalid Request
+              content:
+                application/json:
+                  schema:
+                    ref: '#/components/responses/ServerError'
