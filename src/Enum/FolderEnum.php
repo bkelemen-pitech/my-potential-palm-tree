@@ -86,6 +86,8 @@ class FolderEnum
     public const PARTNER_FOLDER_ID = 'partner_folder_id';
     public const PARTNER_FOLDER_ID_FR = 'partenaire_dossier_id';
     public const PREAGREMENT = 'preagrement';
+    public const PROCESSING_STATUS = 'processing_status';
+    public const PROCESSING_STATUS_FR = 'treatment_status';
     public const PROCESSING_TIME = 'processing_time';
     public const PROCESSING_TIME_FR = 'duree_traitement';
     public const PROCESSING_VALUE = 'processing_value';
@@ -123,7 +125,6 @@ class FolderEnum
     public const THIRD_PARTY_VALIDATION_DATE = 'third_party_validation_date';
     public const THIRD_PARTY_VALIDATION_DATE_FR = 'date_validation_tiers';
     public const TO_BE_DELETED = 'to_be_deleted';
-    public const TREATMENT_STATUS = 'treatment_status';
     public const UNIVERSAL_FOLDER = 'universal_folder';
     public const UNIVERSAL_FOLDER_FR = 'dossier_universel';
     public const UPDATED_AT = 'updated_at';
@@ -171,6 +172,7 @@ class FolderEnum
         self::OTP_TELEPHONE,
         self::PARTNER_FOLDER_ID,
         self::PREAGREMENT,
+        self::PROCESSING_STATUS,
         self::PROCESSING_TIME,
         self::PROCESSING_VALUE,
         self::REASON,
@@ -191,7 +193,6 @@ class FolderEnum
         self::SUPERVISION,
         self::THIRD_PARTY_VALIDATION_DATE,
         self::TO_BE_DELETED,
-        self::TREATMENT_STATUS,
         self::UNIVERSAL_FOLDER,
         self::UPDATED_AT,
         self::USER_FOLDER_ID,
@@ -232,6 +233,7 @@ class FolderEnum
         self::OTP_TELEPHONE,
         self::PARTNER_FOLDER_ID_FR,
         self::PREAGREMENT,
+        self::PROCESSING_STATUS_FR,
         self::PROCESSING_TIME_FR,
         self::PROCESSING_VALUE_FR,
         self::REASON_FR,
@@ -252,7 +254,6 @@ class FolderEnum
         self::SUPERVISION,
         self::THIRD_PARTY_VALIDATION_DATE_FR,
         self::TO_BE_DELETED,
-        self::TREATMENT_STATUS,
         self::UNIVERSAL_FOLDER_FR,
         self::UPDATED_AT_FR,
         self::USER_FOLDER_ID_FR,
@@ -293,6 +294,7 @@ class FolderEnum
         self::OTP_TELEPHONE => self::OTP_TELEPHONE,
         self::PARTNER_FOLDER_ID => self::PARTNER_FOLDER_ID_FR,
         self::PREAGREMENT => self::PREAGREMENT,
+        self::PROCESSING_STATUS => self::PROCESSING_STATUS_FR,
         self::PROCESSING_TIME => self::PROCESSING_TIME_FR,
         self::PROCESSING_VALUE => self::PROCESSING_VALUE_FR,
         self::REASON => self::REASON_FR,
@@ -313,7 +315,6 @@ class FolderEnum
         self::SUPERVISION => self::SUPERVISION,
         self::THIRD_PARTY_VALIDATION_DATE => self::THIRD_PARTY_VALIDATION_DATE_FR,
         self::TO_BE_DELETED => self::TO_BE_DELETED,
-        self::TREATMENT_STATUS => self::TREATMENT_STATUS,
         self::UNIVERSAL_FOLDER => self::UNIVERSAL_FOLDER_FR,
         self::UPDATED_AT => self::UPDATED_AT_FR,
         self::USER_FOLDER_ID => self::USER_FOLDER_ID_FR,
