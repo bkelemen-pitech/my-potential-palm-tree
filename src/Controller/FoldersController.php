@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Exception\ApiException;
 use App\Services\FolderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -36,7 +37,11 @@ class FoldersController extends AbstractController
      */
     public function getFolder(Request $request): JsonResponse
     {
-        $folders = $this->folderService->getFolders($request->query->all());
+        try {
+            $folders = $this->folderService->getFolders($request->query->all());
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
+        }
 
         return $this->json($folders);
     }
