@@ -14,6 +14,14 @@ nelmio_api_doc:
           in: query
           description: Filters applied to the request - any database property from the table 'user_dossier'
           required: false
+        id:
+          name: id
+          in: path
+          description: The id of the folder
+          schema:
+            type: integer
+            example: 9
+          required: true
         limit:
           name: limit
           in: query
@@ -99,6 +107,70 @@ nelmio_api_doc:
                       total:
                         type: integer
                         example: 777
+        SuccessFolderPersons:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 9
+                    partnerFolderId:
+                      type: integer
+                      example: 51
+                    status:
+                      type: integer
+                      example: 3
+                    workflowStatus:
+                      type: integer
+                      example: 10400
+                    label:
+                      type: integer
+                      example: 1
+                    subscription:
+                      type: integer
+                      example: 20
+                    persons:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          personId:
+                            type: integer
+                            example: 1234
+                          lastName:
+                            type: string
+                            example: "John"
+                          firstName:
+                            type: string
+                            example: "Smith"
+                          dateOfBirth:
+                            type: string
+                            example: "2020-05-05T00:00:00+00:00"
+                          personTypeId:
+                            type: integer
+                            example: 221
+                          personUid:
+                            type: string
+                            example: "5e86ebc489087"
+                          personInfo:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                nameInfo:
+                                  type: string
+                                  example: "nom"
+                                dataInfo:
+                                  type: string
+                                  example: "data"
+                                source:
+                                  type: string
+                                  example: "IMPORT"
         Unauthenticated:
           description: Authentication failed
           content:
@@ -201,7 +273,7 @@ nelmio_api_doc:
             - ref: '#/components/parameters/text_search_fields'
             - ref: '#/components/parameters/filters'
           tags:
-            - Folder
+            - Folders
           responses:
             '200':
               description: OK
@@ -214,4 +286,19 @@ nelmio_api_doc:
               ref: '#/components/responses/Unauthenticated'
             '500':
               description: Invalid Request
+              ref: '#/components/responses/ServerError'
+      /api/v1/folders/{id}:
+        get:
+          summary: Get the folder and folder persons informations based on the folder id
+          tags:
+            - Folders
+          parameters:
+            - ref: '#/components/parameters/id'
+          responses:
+            '200':
+              description: OK
+              ref: '#/components/responses/SuccessFolderPersons'
+            '404':
+              ref: '#/components/responses/NotFound'
+            '500':
               ref: '#/components/responses/ServerError'
