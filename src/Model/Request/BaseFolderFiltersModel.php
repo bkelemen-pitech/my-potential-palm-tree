@@ -231,6 +231,19 @@ class BaseFolderFiltersModel extends PaginationModel implements BaseFolderFilter
         ];
     }
 
+    public function toArray(): array
+    {
+        return [
+            FolderEnum::LIMIT => (int) $this->getLimit(),
+            FolderEnum::PAGE => (int) $this->getPage(),
+            FolderEnum::ORDER_BY => FolderEnum::FOLDER_ENTITY_PROPERTIES_EN_TO_FR[$this->getOrderBy()],
+            FolderEnum::ORDER => $this->getOrder(),
+            FolderEnum::TEXT_SEARCH => $this->getTextSearch(),
+            FolderEnum::TEXT_SEARCH_FIELDS => $this->getTextSearch() ? $this->prepareTextSearchFields() : null,
+            FolderEnum::FILTERS => $this->getFilters() ? $this->prepareFilters() : null,
+        ];
+    }
+
     protected function prepareTextSearchField(
         array $keys,
         array $criteria,
@@ -275,16 +288,16 @@ class BaseFolderFiltersModel extends PaginationModel implements BaseFolderFilter
         return array_merge($userFolderFields, $personFields);
     }
 
-    public function toArray(): array
+    private function prepareFilters(): array
     {
-        return [
-            FolderEnum::LIMIT => (int) $this->getLimit(),
-            FolderEnum::PAGE => (int) $this->getPage(),
-            FolderEnum::ORDER_BY => $this->getOrderBy(),
-            FolderEnum::ORDER => $this->getOrder(),
-            FolderEnum::TEXT_SEARCH => $this->getTextSearch() ?? null,
-            FolderEnum::TEXT_SEARCH_FIELDS => $this->getTextSearch() ? $this->prepareTextSearchFields() : null,
-            FolderEnum::FILTERS => $this->getFilters() ?? null,
-        ];
+        $filtersArray = explode(',', $this->getFilters());
+        $filtersSortedArray = [];
+
+        foreach ($filtersArray as $filter) {
+            list($filterKey, $filterValue) = explode(':', $filter);
+            $filtersSortedArray[FolderEnum::FOLDER_ENTITY_PROPERTIES_EN_TO_FR[$filterKey]][] = $filterValue;
+        }
+
+        return $filtersSortedArray;
     }
 }
