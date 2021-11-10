@@ -38,16 +38,16 @@ class DocumentHelper
 
     public static function getStatutVerification($status, $documentTypeId): int
     {
-        $multiplicateur = self::getMultiplicater($documentTypeId);
-        if ($multiplicateur == 0) {
+        $multiplier = self::getMultiplier($documentTypeId);
+        if ($multiplier == 0) {
             return 0;
         }
 
-        return (int) fmod($status / $multiplicateur, 10);
+        return (int) fmod($status / $multiplier, 10);
     }
 
-    private static function getMultiplicater($type)
+    private static function getMultiplier($type)
     {
-        return isset(DocumentEnum::MULTIPLICATOR[$type]) ? DocumentEnum::MULTIPLICATOR[$type] : 0;
+        return isset(DocumentEnum::MULTIPLIER[$type]) ? DocumentEnum::MULTIPLIER[$type] : 0;
     }
 }

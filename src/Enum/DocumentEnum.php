@@ -27,7 +27,7 @@ class DocumentEnum
     const DOCUMENT_UID = 'uid';
     const DOCUMENT_VERIFICATION_STATUS = 'documentStatus';
 
-    public const MULTIPLICATOR = [
+    public const MULTIPLIER = [
         1 => 1,
         2 => 10,
         3 => 1000000,
