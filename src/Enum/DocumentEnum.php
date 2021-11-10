@@ -26,4 +26,21 @@ class DocumentEnum
     const DOCUMENT_TYPE = 'type';
     const DOCUMENT_UID = 'uid';
     const DOCUMENT_VERIFICATION_STATUS = 'documentStatus';
+
+    public const MULTIPLICATOR = [
+        1 => 1,
+        2 => 10,
+        3 => 1000000,
+        4 => 10000000,
+        50 => 100,
+        51 => 10000,
+        53 => 100000,
+        56 => 1000,
+        57 => 10000000000,
+        58 => 100000000000,
+        59 => 100000000,
+        60 => 1000000000,
+        61 => 1000000000000,
+        80 => 100000000000000,
+    ];
 }
