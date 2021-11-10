@@ -32,13 +32,22 @@ class FolderEnum
     public const PERSON_PREFIX = 'personne.';
     public const USER_FOLDER_PREFIX = 'user_dossier.';
 
-    // FILTERS
-    public const EMAIL = 'email';
-    public const FIRST_NAME_FR = 'prenom';
-    public const LAST_NAME_FR = 'nom';
-    public const TELEPHONE = 'telephone';
+    // PERSON ENTITY PROPERTIES
+    public const PERSON_EMAIL = 'email';
+    public const PERSON_FIRST_NAME = 'first_name';
+    public const PERSON_FIRST_NAME_FR = 'prenom';
+    public const PERSON_LAST_NAME = 'last_name';
+    public const PERSON_LAST_NAME_FR = 'nom';
+    public const PERSON_TELEPHONE = 'telephone';
 
-    // ENTITY PROPERTIES
+    public const PERSON_ENTITY_PROPERTIES_EN_TO_FR = [
+        self::PERSON_EMAIL => self::PERSON_EMAIL,
+        self::PERSON_FIRST_NAME => self::PERSON_FIRST_NAME_FR,
+        self::PERSON_LAST_NAME => self::PERSON_LAST_NAME_FR,
+        self::PERSON_TELEPHONE => self::PERSON_TELEPHONE,
+    ];
+
+    // USER FOLDER ENTITY PROPERTIES
     public const ACTIVE_SCREENING = 'active_screening';
     public const ACTIVE_SCREENING_FR = 'screening_actif';
     public const AGENCY_ID_REFERENCE = 'agency_id_reference';

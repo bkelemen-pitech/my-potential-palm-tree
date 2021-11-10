@@ -17,10 +17,10 @@ class BaseFolderFiltersModel extends PaginationModel implements BaseFolderFilter
         FolderEnum::UPDATED_AT,
         FolderEnum::CREATED_AT,
         FolderEnum::PARTNER_FOLDER_ID,
-        FolderEnum::FIRST_NAME,
-        FolderEnum::LAST_NAME,
-        FolderEnum::EMAIL,
-        FolderEnum::TELEPHONE,
+        FolderEnum::PERSON_FIRST_NAME,
+        FolderEnum::PERSON_LAST_NAME,
+        FolderEnum::PERSON_EMAIL,
+        FolderEnum::PERSON_TELEPHONE,
         FolderEnum::LABEL,
         FolderEnum::WORKFLOW_STATUS,
         FolderEnum::USER_FOLDER_ID,
@@ -247,18 +247,17 @@ class BaseFolderFiltersModel extends PaginationModel implements BaseFolderFilter
     protected function prepareTextSearchField(
         array $keys,
         array $criteria,
-        ?string $prefix = null
+        ?string $prefix = null,
+        ?array $translator = FolderEnum::FOLDER_ENTITY_PROPERTIES_EN_TO_FR
     ): array {
         $final = [];
         $useCriteria = count($criteria) > 0;
 
         foreach ($keys as $key) {
-            $key = $this->snakeToCamel($key);
-
             if ($useCriteria && !in_array($key, $criteria)) {
                 continue;
             }
-            $key = $prefix . $this->camelToSnake($key);
+            $key = $prefix . $translator[$key];
             $final[] = $key;
         }
 
@@ -268,8 +267,8 @@ class BaseFolderFiltersModel extends PaginationModel implements BaseFolderFilter
     private function prepareTextSearchFields(): array
     {
         $textSearchFields = str_replace(' ', '', $this->getTextSearchFields());
-        $folderKeys = [FolderEnum::PARTNER_FOLDER_ID_FR];
-        $personKeys = [FolderEnum::LAST_NAME_FR, FolderEnum::FIRST_NAME_FR, FolderEnum::EMAIL, FolderEnum::TELEPHONE];
+        $folderKeys = [FolderEnum::PARTNER_FOLDER_ID];
+        $personKeys = [FolderEnum::PERSON_FIRST_NAME];
         $fields = explode(',', $textSearchFields);
         $fields = array_filter($fields, function ($item) {
             return $item != '';
@@ -277,13 +276,23 @@ class BaseFolderFiltersModel extends PaginationModel implements BaseFolderFilter
 
         if (!count($fields)) {
             $userFolderFields = $this->prepareTextSearchField($folderKeys, [], FolderEnum::USER_FOLDER_PREFIX);
-            $personFields = $this->prepareTextSearchField($personKeys, [], FolderEnum::PERSON_PREFIX);
+            $personFields = $this->prepareTextSearchField(
+                $personKeys,
+                [],
+                FolderEnum::PERSON_PREFIX,
+                FolderEnum::PERSON_ENTITY_PROPERTIES_EN_TO_FR
+            );
 
             return array_merge($userFolderFields, $personFields);
         }
 
         $userFolderFields = $this->prepareTextSearchField($fields, $folderKeys, FolderEnum::USER_FOLDER_PREFIX);
-        $personFields = $this->prepareTextSearchField($fields, $personKeys, FolderEnum::PERSON_PREFIX);
+        $personFields = $this->prepareTextSearchField(
+            $fields,
+            $personKeys,
+            FolderEnum::PERSON_PREFIX,
+            FolderEnum::PERSON_ENTITY_PROPERTIES_EN_TO_FR
+        );
 
         return array_merge($userFolderFields, $personFields);
     }
