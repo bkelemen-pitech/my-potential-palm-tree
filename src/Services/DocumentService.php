@@ -124,12 +124,18 @@ class DocumentService
 
         if (DocumentHelper::isPending($document)) {
             $result[DocumentEnum::DOCUMENT_STATUS] = DocumentEnum::PENDING;
+
+            return $result;
         }
         if (DocumentHelper::isValid($document)) {
             $result[DocumentEnum::DOCUMENT_STATUS] = DocumentEnum::VALID;
+
+            return $result;
         }
         if (DocumentHelper::isInvalid($document, $personStatusVerification)) {
             $result[DocumentEnum::DOCUMENT_STATUS] = DocumentEnum::INVALID;
+
+            return $result;
         }
 
         return $result;
