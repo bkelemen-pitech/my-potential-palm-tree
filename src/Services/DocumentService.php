@@ -62,35 +62,21 @@ class DocumentService
 
     public function prepareDocumentsInfos(DocumentByFolderDTO $document): array
     {
-        $personStatusVerification = DocumentHelper::getStatutVerification(
-            $document->getPersonVerification(),
-            $document->getDocumentTypeId()
-        );
         $documentStatus = DocumentHelper::getStatutVerification(
             $document->getStatusVerification2(),
             $document->getDocumentTypeId()
         );
 
         $result = [
-            'name' => $document->getName(),
-            'type' => $document->getDocumentTypeId(),
-            'uid' => $document->getDocumentUid(),
-            'documentId' => $document->getDocumentId(),
-            'documentStatus' => $documentStatus,
-            'personId' => $document->getPersonId(),
+            DocumentEnum::DOCUMENT_NAME => $document->getName(),
+            DocumentEnum::DOCUMENT_TYPE => $document->getDocumentTypeId(),
+            DocumentEnum::DOCUMENT_UID => $document->getDocumentUid(),
+            DocumentEnum::DOCUMENT_ID => $document->getDocumentId(),
+            DocumentEnum::DOCUMENT_VERIFICATION_STATUS => $documentStatus,
+            DocumentEnum::DOCUMENT_PERSON_ID => $document->getPersonId(),
         ];
 
-        if (DocumentHelper::isPending($document)) {
-            $result['status'] = DocumentEnum::PENDING;
-        }
-        if (DocumentHelper::isValid($document)) {
-            $result['status'] = DocumentEnum::VALID;
-        }
-        if (DocumentHelper::isInvalid($document, $personStatusVerification)) {
-            $result['status'] = DocumentEnum::INVALID;
-        }
-
-        return $result;
+        return $this->setDocumentStatus($result, $document);
     }
 
     private function extractLatestDocumentWithHighestStatusSameType(array $documents): array
@@ -101,7 +87,7 @@ class DocumentService
             $type = $document->getDocumentTypeId();
             if (
                 !isset($newestDocument[$type])
-                || ($document->getStatusVerification2() > $newestDocument[$type]->getStatusVerification2())
+                || $document->getStatusVerification2() > $newestDocument[$type]->getStatusVerification2()
                 || ($document->getStatusVerification2() === $newestDocument[$type]->getStatusVerification2()
                     && $document->getCreation()->getTimestamp() > $newestDocument[$type]->getCreation()->getTimestamp()
                 )
@@ -127,5 +113,25 @@ class DocumentService
             },
             $documentSetList
         );
+    }
+
+    private function setDocumentStatus(array $result, DocumentByFolderDTO $document): array
+    {
+        $personStatusVerification = DocumentHelper::getStatutVerification(
+            $document->getPersonVerification(),
+            $document->getDocumentTypeId()
+        );
+
+        if (DocumentHelper::isPending($document)) {
+            $result[DocumentEnum::DOCUMENT_STATUS] = DocumentEnum::PENDING;
+        }
+        if (DocumentHelper::isValid($document)) {
+            $result[DocumentEnum::DOCUMENT_STATUS] = DocumentEnum::VALID;
+        }
+        if (DocumentHelper::isInvalid($document, $personStatusVerification)) {
+            $result[DocumentEnum::DOCUMENT_STATUS] = DocumentEnum::INVALID;
+        }
+
+        return $result;
     }
 }
