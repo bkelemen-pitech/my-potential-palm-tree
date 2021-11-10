@@ -9,10 +9,12 @@ class DocumentEnum
     const TREATED = 2; // Traite
     const ANOMALY = 3; // Anomalie
     const DELETED = 4; // Supprime
-    const DOCUMENT_TYPE_DOCUEMENT_A_SIGNE_ELEC	= 99;
 
     // Document status (value returned based on "statut" and statutVerification2)
     public const PENDING = 'pending';
     public const VALID = 'valid';
     public const INVALID = 'invalid';
+
+    // Document types
+    const DOCUMENT_TYPE_DOCUEMENT_A_SIGNE_ELEC = 99;
 }
