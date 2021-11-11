@@ -94,7 +94,7 @@ nelmio_api_doc:
                           example: 12345
                         folder:
                           type: string
-                          example: "Folder123"
+                          example: Folder123
                         firstName:
                           type: string
                           example: Bruce
@@ -144,19 +144,19 @@ nelmio_api_doc:
                             example: 1234
                           lastName:
                             type: string
-                            example: "John"
+                            example: John
                           firstName:
                             type: string
-                            example: "Smith"
+                            example: Smith
                           dateOfBirth:
                             type: string
-                            example: "2020-05-05T00:00:00+00:00"
+                            example: 2020-05-05T00:00:00+00:00
                           personTypeId:
                             type: integer
                             example: 221
                           personUid:
                             type: string
-                            example: "5e86ebc489087"
+                            example: 5e86ebc489087
                           personInfo:
                             type: array
                             items:
@@ -164,13 +164,43 @@ nelmio_api_doc:
                               properties:
                                 nameInfo:
                                   type: string
-                                  example: "nom"
+                                  example: nom
                                 dataInfo:
                                   type: string
-                                  example: "data"
+                                  example: data
                                 source:
                                   type: string
-                                  example: "IMPORT"
+                                  example: IMPORT
+        SuccessFolderPersonsDocuments:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: John
+                    type:
+                      type: integer
+                      example: 51
+                    status:
+                      type: string
+                      example: pending
+                    uid:
+                      type: string
+                      example: 5c3479c5eec12
+                    documentId:
+                      type: integer
+                      example: 12345
+                    documenStatus:
+                      type: integer
+                      example: 1
+                    personId:
+                      type: integer
+                      example: 123
         Unauthenticated:
           description: Authentication failed
           content:
@@ -298,6 +328,21 @@ nelmio_api_doc:
             '200':
               description: OK
               ref: '#/components/responses/SuccessFolderPersons'
+            '404':
+              ref: '#/components/responses/NotFound'
+            '500':
+              ref: '#/components/responses/ServerError'
+      /api/v1/folders/{id}/documents:
+        get:
+          summary: Get the folder persons documents informations based on the folder id
+          tags:
+            - Folders
+          parameters:
+            - ref: '#/components/parameters/id'
+          responses:
+            '200':
+              description: OK
+              ref: '#/components/responses/SuccessFolderPersonsDocuments'
             '404':
               ref: '#/components/responses/NotFound'
             '500':
