@@ -5,17 +5,22 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\DTO\document\DocumentByFolderDTO;
+use App\DTO\Document\DocumentDTO;
 use App\Enum\DocumentEnum;
 use App\Fetcher\DocumentFetcher;
 use App\Helper\DocumentHelper;
+use App\Model\InternalApi\Document\Document;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class DocumentService
 {
     protected DocumentFetcher $documentFetcher;
+    protected SerializerInterface $serializer;
 
-    public function __construct(DocumentFetcher $documentFetcher)
+    public function __construct(DocumentFetcher $documentFetcher, SerializerInterface $serializer)
     {
         $this->documentFetcher = $documentFetcher;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -79,6 +84,23 @@ class DocumentService
         return $this->setDocumentStatus($result, $document);
     }
 
+    public function getDocumentByUid(string $uid, bool $includeFiles): DocumentDTO
+    {
+        $internalApiDocuments = $this->documentFetcher->getDocumentsByUid($uid, $includeFiles);
+        $documentDTO = $this->serializer->deserialize(
+            $this->serializer->serialize($internalApiDocuments[0], 'json'),
+            DocumentDTO::class,
+            'json'
+        );
+
+        if (count($internalApiDocuments) > 1){
+            $this->addVersoData($internalApiDocuments[1], $documentDTO, $includeFiles);
+        }
+
+
+        return $documentDTO;
+    }
+
     private function extractLatestDocumentWithHighestStatusSameType(array $documents): array
     {
         $newestDocument = [];
@@ -139,5 +161,15 @@ class DocumentService
         }
 
         return $result;
+    }
+
+    private function addVersoData(Document $versoDocument, DocumentDTO $documentDTO, bool $includeFiles)
+    {
+        $documentDTO->setNameVerso($versoDocument->getNom());
+        if ($includeFiles) {
+            $documentDTO->setContentVerso($versoDocument->getDocumentFile());
+        }
+
+        return $documentDTO;
     }
 }
