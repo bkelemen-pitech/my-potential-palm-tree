@@ -5,34 +5,92 @@ declare(strict_types=1);
 namespace App\Model\InternalApi\Document;
 
 use DateTime;
-use http\Exception\RuntimeException;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class Document
 {
     protected int $documentId;
+
+    /**
+     * @SerializedName("name")
+     */
     protected ?string $nom;
+
+    /**
+     * @SerializedName("status")
+     */
     protected ?int $statut;
     protected ?string $data;
     protected ?DateTime $creation;
     protected ?int $size;
+
+    /**
+     * @SerializedName("anomaly")
+     */
     protected ?string $anomalie;
+
+    /**
+     * @SerializedName("visibility")
+     */
     protected ?int $visibilite;
+
+    /**
+     * @SerializedName("statusVerification")
+     */
     protected ?int $statutVerification;
+
+    /**
+     * @SerializedName("statusVerification2")
+     */
     protected ?int $statutVerification2;
+    /**
+     * @SerializedName("partnerDocumentId")
+     */
     protected ?string $partenaireDocumentId;
     protected ?int $masterDocumentId;
     protected ?string $url;
     protected ?string $documentUid;
     protected ?string $signature;
+
+    /**
+     * @SerializedName("encryption")
+     */
     protected ?bool $cryptage;
+
+    /**
+     * @SerializedName("customerAnomaly")
+     */
     protected ?string $anomalieClient;
+
+    /**
+     * @SerializedName("partnerVerificationStatus")
+     */
     protected ?string $statutVerificationPartenaire;
     protected ?string $signatureInfos;
     protected ?int $documentTypeId;
     protected ?string $type;
     protected ?int $orderDocument;
+
+    /**
+     * @SerializedName("mandatory")
+     */
     protected ?int $obligatoire;
-    protected string $documentFile;
+
+    /**
+     * @SerializedName("personDocumentId")
+     */
+    protected ?int $personneDocumentId;
+
+    /**
+     * @SerializedName("partnerFolderId")
+     */
+    protected ?int $partenaireDossierId;
+
+    /**
+     * @SerializedName("content")
+     */
+    protected ?string $documentFile;
+
 
     public function getDocumentId(): int
     {
@@ -310,6 +368,18 @@ class Document
         return $this;
     }
 
+    public function getPersonneDocumentId(): ?int
+    {
+        return $this->personneDocumentId;
+    }
+
+    public function setPersonneDocumentId(?int $personneDocumentId): Document
+    {
+        $this->personneDocumentId = $personneDocumentId;
+
+        return $this;
+    }
+
     public function getDocumentFile(): string
     {
         return $this->documentFile;
@@ -317,11 +387,7 @@ class Document
 
     public function setDocumentFile(?string $documentFile): Document
     {
-        $decoded = base64_decode($documentFile, true);
-        if (false === $decoded) {
-            throw new RuntimeException('Invalid base 64 string received.');
-        }
-        $this->documentFile = $decoded;
+        $this->documentFile = $documentFile;
 
         return $this;
     }

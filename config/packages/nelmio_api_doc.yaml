@@ -9,6 +9,11 @@ nelmio_api_doc:
       version: 1.0.0
     components:
       parameters:
+        documentUid:
+          name: documentUid
+          in: path
+          description: Document uid
+          required: true
         filters:
           name: filters
           in: query
@@ -22,6 +27,11 @@ nelmio_api_doc:
             type: integer
             example: 9
           required: true
+        include_files:
+          name: include_files
+          in: query
+          description: Set true if you need document content (and verso) in base64 format to be returned.
+          required: false
         limit:
           name: limit
           in: query
@@ -201,6 +211,94 @@ nelmio_api_doc:
                     personId:
                       type: integer
                       example: 123
+        SuccessDocumentsDetails:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Kbis (CompanyID)
+                  documentId:
+                    type: integer
+                    example: 123
+                  documentUid:
+                    type: string
+                    example: 617f896a61e39
+                  masterDocumentId:
+                    type: integer
+                    example: 0
+                  statusVerification:
+                    type: integer
+                    example: 0
+                  statusVerification2:
+                    type: integer
+                    example: 0
+                  status:
+                    type: integer
+                    example: 1
+                  creation:
+                    type: string
+                    example: 2021-11-01T06:30:02+00:00
+                  personDocumentId:
+                    type: integer
+                    example: null
+                  documentTypeId:
+                    type: integer
+                    example: 51
+                  encryption:
+                    type: bool
+                    example: true
+                  customerAnomaly:
+                    type: string
+                    example: null
+                  partnerVerificationStatus:
+                    type: string
+                    example: null
+                  content:
+                    type: string
+                    example: "/9j/4AAQSkZJRgABAQEAYABg..."
+                  data:
+                    type: string
+                    example: "a:2:{s:20:\"agence_document_type\";s:2:\"11\";s:16:\"controle_couleur\";i:0;}"
+                  size:
+                    type: integer
+                    example: 189842
+                  anomaly:
+                    type: string
+                    example: null
+                  visibility:
+                    type: integer
+                    example: 1
+                  partnerDocumentId:
+                    type: string
+                    example: passport.jpg
+                  url:
+                    type: string
+                    example: _TEMP_COMPANYID_1129_617f896a6179a.jpg
+                  signature:
+                    type: string
+                    example: 6bba0ea97392769fffc24df19f7c850ba4c0bfdf9d214b490e001d7bbdfe335f
+                  signatureInfos:
+                    type: string
+                    example: null
+                  orderDocument:
+                    type: integer
+                    example: 21
+                  type:
+                    type: string
+                    example: Kbis
+                  mandatory:
+                    type: integer
+                    example: null
+                  contentVerso:
+                    type: string
+                    example: "/9j/4AAQSkZJRgABAQEAYABg..."
+                  nameVerso:
+                    type: string
+                    example: "Carte nationale d'identité (verso)"
         Unauthenticated:
           description: Authentication failed
           content:
@@ -343,6 +441,22 @@ nelmio_api_doc:
             '200':
               description: OK
               ref: '#/components/responses/SuccessFolderPersonsDocuments'
+            '404':
+              ref: '#/components/responses/NotFound'
+            '500':
+              ref: '#/components/responses/ServerError'
+      /api/v1/documents/{documentUid}:
+        get:
+          summary: Get the document details by documentUid
+          tags:
+            - Documents
+          parameters:
+            - ref: '#/components/parameters/documentUid'
+            - ref: '#/components/parameters/include_files'
+          responses:
+            '200':
+              description: OK
+              ref: '#/components/responses/SuccessDocumentsDetails'
             '404':
               ref: '#/components/responses/NotFound'
             '500':
