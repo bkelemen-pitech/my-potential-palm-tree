@@ -239,7 +239,7 @@ class BaseFolderFiltersModel extends PaginationModel implements BaseFolderFilter
             FolderEnum::ORDER_BY => FolderEnum::FOLDER_ENTITY_PROPERTIES_EN_TO_FR[$this->getOrderBy()],
             FolderEnum::ORDER => $this->getOrder(),
             FolderEnum::TEXT_SEARCH => $this->getTextSearch(),
-            FolderEnum::TEXT_SEARCH_FIELDS => $this->getTextSearch() ? $this->prepareTextSearchFields() : null,
+            FolderEnum::TEXT_SEARCH_FIELDS => !is_null($this->getTextSearch()) ? $this->prepareTextSearchFields() : null,
             FolderEnum::FILTERS => $this->getFilters() ? $this->prepareFilters() : null,
         ];
     }
