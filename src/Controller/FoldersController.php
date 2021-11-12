@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Enum\BepremsEnum;
 use App\Exception\ApiException;
-use App\Exception\ResourceNotFoundException;
 use App\Fetcher\FolderFetcher;
 use App\Services\FolderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -77,8 +76,8 @@ class FoldersController extends AbstractController
     {
         try {
             $documents = $folderService->getDocuments($id);
-        } catch (ResourceNotFoundException $exception) {
-            throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
 
         return $this->json($documents);
