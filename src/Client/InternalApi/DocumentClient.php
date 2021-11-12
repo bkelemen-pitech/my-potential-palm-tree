@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Client\InternalApi;
 
+use App\Enum\BepremsEnum;
 use App\Model\InternalApi\Document\DocumentResponse;
 use App\Model\InternalApi\Document\DocumentsByFolderResponse;
 
@@ -26,8 +27,8 @@ class DocumentClient extends InternalApiClient
         $serviceResults = $this->get(
             $this->getFullUrl(self::PATH_DOCUMENTS),
             [
-                'document-uid' => $documentUid,
-                'include-files' => $includeFiles,
+                BepremsEnum::DOCUMENT_UID_PARAM => $documentUid,
+                BepremsEnum::DOCUMENT_INCLUDE_FILES_PARAM => $includeFiles,
             ]
         );
 

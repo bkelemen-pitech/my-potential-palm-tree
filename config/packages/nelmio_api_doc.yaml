@@ -9,6 +9,11 @@ nelmio_api_doc:
       version: 1.0.0
     components:
       parameters:
+        documentUid:
+          name: documentUid
+          in: path
+          description: Document uid
+          required: true
         filters:
           name: filters
           in: query
@@ -22,8 +27,8 @@ nelmio_api_doc:
             type: integer
             example: 9
           required: true
-        include-files:
-          name: include-files
+        include_files:
+          name: include_files
           in: query
           description: Set true if you need document content (and verso) in base64 format to be returned.
           required: false
@@ -57,11 +62,6 @@ nelmio_api_doc:
           in: query
           description: Fields in which the text_search should be searched
           required: false
-        uid:
-          name: uid
-          in: path
-          description: Document uid
-          required: true
       responses:
         InvalidRequest:
           description: Invalid request
@@ -445,14 +445,14 @@ nelmio_api_doc:
               ref: '#/components/responses/NotFound'
             '500':
               ref: '#/components/responses/ServerError'
-      /api/v1/documents/{uid}:
+      /api/v1/documents/{documentUid}:
         get:
-          summary: Get the document details by uid
+          summary: Get the document details by documentUid
           tags:
             - Documents
           parameters:
-            - ref: '#/components/parameters/uid'
-            - ref: '#/components/parameters/include-files'
+            - ref: '#/components/parameters/documentUid'
+            - ref: '#/components/parameters/include_files'
           responses:
             '200':
               description: OK

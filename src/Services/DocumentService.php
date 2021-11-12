@@ -84,9 +84,9 @@ class DocumentService
         return $this->setDocumentStatus($result, $document);
     }
 
-    public function getDocumentByUid(string $uid, bool $includeFiles): DocumentDTO
+    public function getDocumentByUid(string $documentUid, bool $includeFiles): DocumentDTO
     {
-        $internalApiDocuments = $this->documentFetcher->getDocumentsByUid($uid, $includeFiles);
+        $internalApiDocuments = $this->documentFetcher->getDocumentsByUid($documentUid, $includeFiles);
         $documentDTO = $this->serializer->deserialize(
             $this->serializer->serialize($internalApiDocuments[0], 'json'),
             DocumentDTO::class,

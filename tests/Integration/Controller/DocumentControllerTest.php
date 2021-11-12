@@ -37,7 +37,7 @@ class DocumentControllerTest extends BaseApiTest
     {
         $documentUid = '617f896a61e39';
         $this->documentFacade->getDocuments($documentUid, true)->willReturn(DocumentsData::getInternalApiDocumentsResponse(true));
-        $this->requestWithBody(BaseEnum::METHOD_GET, self::PATH . $documentUid);
+        $this->requestWithBody(BaseEnum::METHOD_GET, self::PATH . $documentUid . '?include_files=true');
         $this->assertEquals(200, $this->getStatusCode());
         $this->assertEquals(DocumentsData::getTestDocumentByUidExpectedData(true), $this->getResponseContent());
     }
