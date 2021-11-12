@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Fetcher;
 
-use App\Exception\ResourceNotFoundException;
 use App\Facade\InternalApi\DocumentFacade;
 
 class DocumentFetcher
@@ -18,13 +17,6 @@ class DocumentFetcher
 
     public function getDocumentsByFolder(int $folderId): array
     {
-        $documents = $this->documentFacade->getDocumentsByFolderId($folderId);
-        if (empty($documents)) {
-            throw new ResourceNotFoundException(
-                sprintf('No documents found for folder id %s.', $folderId)
-            );
-        }
-
-        return $documents;
+        return $this->documentFacade->getDocumentsByFolderId($folderId);
     }
 }

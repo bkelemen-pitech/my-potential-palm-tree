@@ -75,9 +75,7 @@ class FolderService
             }
         );
         if (empty($notDeletedDocuments)) {
-            throw new ResourceNotFoundException(
-                sprintf('No documents found for folder id %s.', $folderId)
-            );
+            return  [];
         }
 
         $documentSetList = $this->documentService->extractDocumentList($notDeletedDocuments);

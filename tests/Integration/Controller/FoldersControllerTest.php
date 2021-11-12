@@ -7,6 +7,7 @@ namespace App\Tests\Integration\Controller;
 use App\DTO\Folder\FolderByIdDTO;
 use App\DTO\Person\PersonDTO;
 use App\DTO\Person\PersonInfoDTO;
+use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
 use App\Facade\InternalApi\DocumentFacade;
 use App\Fetcher\FolderFetcher;
@@ -63,10 +64,10 @@ class FolderControllerTest extends BaseApiTest
 
     public function testGetDocumentsException()
     {
-        $exception = new ResourceNotFoundException('Failed.');
+        $exception = new InvalidDataException('Failed.');
         $this->documentFacade->getDocumentsByFolderId(1)->shouldBeCalledOnce()->willThrow($exception);
         $this->requestWithBody(BaseEnum::METHOD_GET, self::FOLDER_GET_DOCUMENTS);
-        $this->assertEquals(404, $this->getStatusCode());
+        $this->assertEquals(400, $this->getStatusCode());
     }
 
     private function getPersonDtoTestData()
