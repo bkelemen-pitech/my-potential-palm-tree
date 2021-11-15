@@ -473,7 +473,7 @@ nelmio_api_doc:
                 schema:
                   type: object
                   properties:
-                    documentUid:
+                    document_uid:
                       type: string
                       example: 618145978da9e
                     status_verification2:
