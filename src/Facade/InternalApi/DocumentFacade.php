@@ -33,4 +33,20 @@ class DocumentFacade
             throw new InvalidDataException($exception->getMessage());
         }
     }
+
+    public function getDocuments(string $documentUid, bool $includeFiles): array
+    {
+        try {
+            $documents = $this->client->getDocumentsByUid($documentUid, $includeFiles);
+            $resource = $documents->getResource();
+
+            if (0 === count($resource)) {
+                throw new ResourceNotFoundException(sprintf('No document found for documentUid %s.', $documentUid));
+            }
+
+            return $resource;
+        } catch (HttpExceptionInterface $exception) {
+            throw new InvalidDataException($exception->getMessage());
+        }
+    }
 }

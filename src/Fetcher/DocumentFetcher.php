@@ -27,4 +27,9 @@ class DocumentFetcher
 
         return $documents;
     }
+
+    public function getDocumentsByUid(string $documentUid, bool $includeFiles): array
+    {
+        return $this->documentFacade->getDocuments($documentUid, $includeFiles);
+    }
 }
