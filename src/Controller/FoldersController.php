@@ -54,14 +54,7 @@ class FoldersController extends AbstractController
     public function getFolderById(int $id, FolderFetcher $folderFetcher): JsonResponse
     {
         try {
-            $filters = [
-                BepremsEnum::PERSON_ORDER => 'ASC NULLS FIRST',
-                BepremsEnum::PERSON_INFO_ORDER => 'ASC',
-                BepremsEnum::PERSON_ORDER_BY => 'prenom,nom',
-                BepremsEnum::PERSON_INFO_ORDER_BY => 'source,creation'
-            ];
-
-            $folderData = $folderFetcher->getFolderData($id, $filters);
+            $folderData = $folderFetcher->getFolderData($id, BepremsEnum::DEFAULT_FOLDER_BY_ID_FILTERS);
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
         }

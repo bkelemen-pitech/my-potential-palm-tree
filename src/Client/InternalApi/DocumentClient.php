@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Client\InternalApi;
 
-use App\Enum\BepremsEnum;
 use App\Enum\DocumentEnum;
 use App\Model\InternalApi\Document\DocumentResponse;
 use App\Model\InternalApi\Document\DocumentsByFolderResponse;
@@ -30,8 +29,8 @@ class DocumentClient extends InternalApiClient
         $serviceResults = $this->get(
             $this->getFullUrl(self::PATH_DOCUMENTS),
             [
-                BepremsEnum::DOCUMENT_UID => $documentUid,
-                BepremsEnum::DOCUMENT_INCLUDE_FILES => $includeFiles,
+                DocumentEnum::BEPREMS_DOCUMENT_UID => $documentUid,
+                DocumentEnum::BEPREMS_DOCUMENT_INCLUDE_FILES => $includeFiles,
             ]
         );
 
@@ -44,9 +43,9 @@ class DocumentClient extends InternalApiClient
             $this->getFullUrl(self::PATH_TREAT_DOCUMENTS),
             [],
             [
-                BepremsEnum::DOCUMENT_UID => $treatDocumentParams->getDocumentUid(),
-                BepremsEnum::DOCUMENT_STATUS => DocumentEnum::TREATED,
-                BepremsEnum::DOCUMENT_VERIFICATION_STATUS2 => $treatDocumentParams->getStatusVerification2(),
+                DocumentEnum::BEPREMS_DOCUMENT_UID => $treatDocumentParams->getDocumentUid(),
+                DocumentEnum::BEPREMS_DOCUMENT_STATUS => DocumentEnum::TREATED,
+                DocumentEnum::BEPREMS_DOCUMENT_VERIFICATION_STATUS2 => $treatDocumentParams->getStatusVerification2(),
             ]
         );
     }
