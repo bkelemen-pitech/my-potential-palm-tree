@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enum\DocumentEnum;
 use App\Exception\ApiException;
 use App\Exception\ResourceNotFoundException;
 use App\Services\DocumentService;
@@ -24,12 +25,26 @@ class DocumentController extends AbstractController
     public function getDocument(string $documentUid, Request $request, DocumentService $documentService): JsonResponse
     {
         try {
-            $includeFiles = boolval($request->query->get('include_files'));
+            $includeFiles = boolval($request->query->get(DocumentEnum::INCLUDE_FILES_PARAM));
             $document = $documentService->getDocumentByUid($documentUid, $includeFiles);
         } catch (ResourceNotFoundException $exception) {
             throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
         }
 
         return $this->json($document);
+    }
+
+    /**
+     * @Route("/treat", name="treat_document", methods="POST")
+     */
+    public function treatDocument(Request $request, DocumentService $documentService)
+    {
+        try {
+            $documentService->treatDocument($request->toArray());
+
+            return $this->json(null, Response::HTTP_NO_CONTENT);
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
     }
 }

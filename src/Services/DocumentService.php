@@ -7,20 +7,32 @@ namespace App\Services;
 use App\DTO\document\DocumentByFolderDTO;
 use App\DTO\Document\DocumentDTO;
 use App\Enum\DocumentEnum;
+use App\Exception\InvalidDataException;
+use App\Facade\InternalApi\DocumentFacade;
 use App\Fetcher\DocumentFetcher;
 use App\Helper\DocumentHelper;
 use App\Model\InternalApi\Document\Document;
+use App\Model\Request\Document\TreatDocumentModel;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class DocumentService
 {
     protected DocumentFetcher $documentFetcher;
+    protected DocumentFacade $documentFacade;
     protected SerializerInterface $serializer;
+    protected ValidationService $validationService;
 
-    public function __construct(DocumentFetcher $documentFetcher, SerializerInterface $serializer)
-    {
+    public function __construct(
+        DocumentFetcher $documentFetcher,
+        DocumentFacade $documentFacade,
+        SerializerInterface $serializer,
+        ValidationService $validationService
+
+    ) {
         $this->documentFetcher = $documentFetcher;
+        $this->documentFacade = $documentFacade;
         $this->serializer = $serializer;
+        $this->validationService = $validationService;
     }
 
     /**
@@ -97,8 +109,18 @@ class DocumentService
             $this->addVersoData($internalApiDocuments[1], $documentDTO, $includeFiles);
         }
 
-
         return $documentDTO;
+    }
+
+    public function treatDocument($data): void
+    {
+        try {
+            $treatDocumentData = $this->serializer->deserialize(json_encode($data), TreatDocumentModel::class, 'json');
+            $this->validationService->validate($treatDocumentData);
+            $this->documentFacade->treatDocument($treatDocumentData);
+        } catch (\Exception $exception) {
+            throw new InvalidDataException($exception->getMessage());
+        }
     }
 
     private function extractLatestDocumentWithHighestStatusSameType(array $documents): array

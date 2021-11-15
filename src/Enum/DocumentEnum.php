@@ -18,6 +18,9 @@ class DocumentEnum
     // Document types
     const DOCUMENT_TYPE_DOCUEMENT_A_SIGNE_ELEC = 99;
 
+    // API Params
+    const INCLUDE_FILES_PARAM = 'include_files';
+
     // API Response
     const DOCUMENT_ID = 'documentId';
     const DOCUMENT_NAME = 'name';
