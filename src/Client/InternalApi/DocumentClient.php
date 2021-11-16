@@ -29,7 +29,7 @@ class DocumentClient extends InternalApiClient
         $serviceResults = $this->get(
             $this->getFullUrl(self::PATH_DOCUMENTS),
             [
-                DocumentEnum::BEPREMS_DOCUMENT_UID => $documentUid,
+                DocumentEnum::BEPREMS_DOCUMENT_UID_KEBAB_CASE => $documentUid,
                 DocumentEnum::BEPREMS_DOCUMENT_INCLUDE_FILES => $includeFiles,
             ]
         );
