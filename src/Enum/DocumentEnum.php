@@ -18,6 +18,9 @@ class DocumentEnum
     // Document types
     const DOCUMENT_TYPE_DOCUEMENT_A_SIGNE_ELEC = 99;
 
+    // API Params
+    const INCLUDE_FILES_PARAM = 'include_files';
+
     // API Response
     const DOCUMENT_ID = 'documentId';
     const DOCUMENT_NAME = 'name';
@@ -26,6 +29,12 @@ class DocumentEnum
     const DOCUMENT_TYPE = 'type';
     const DOCUMENT_UID = 'uid';
     const DOCUMENT_VERIFICATION_STATUS = 'documentStatus';
+
+    // Monolith routes params name
+    public const BEPREMS_DOCUMENT_INCLUDE_FILES = 'include-files';
+    public const BEPREMS_DOCUMENT_STATUS = 'statut';
+    public const BEPREMS_DOCUMENT_UID = 'document_uid';
+    public const BEPREMS_DOCUMENT_VERIFICATION_STATUS2 = 'statut_verification2';
 
     public const MULTIPLIER = [
         1 => 1,

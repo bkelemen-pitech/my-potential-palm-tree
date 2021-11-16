@@ -12,7 +12,10 @@ class BepremsEnum
     public const PERSON_ORDER_BY = 'person-order-by';
     public const PERSON_INFO_ORDER_BY = 'person-info-order-by';
 
-    // Get document details params
-    public const DOCUMENT_UID_PARAM = 'document-uid';
-    public const DOCUMENT_INCLUDE_FILES_PARAM = 'include-files';
+    public const DEFAULT_FOLDER_BY_ID_FILTERS = [
+        BepremsEnum::PERSON_ORDER => 'ASC NULLS FIRST',
+        BepremsEnum::PERSON_INFO_ORDER => 'ASC',
+        BepremsEnum::PERSON_ORDER_BY => 'prenom,nom',
+        BepremsEnum::PERSON_INFO_ORDER_BY => 'source,creation'
+    ];
 }
