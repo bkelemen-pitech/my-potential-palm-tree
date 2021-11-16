@@ -7,4 +7,5 @@ namespace App\Tests\Enum;
 class BaseEnum
 {
     public const METHOD_GET = 'GET';
+    public const METHOD_POST = 'POST';
 }
