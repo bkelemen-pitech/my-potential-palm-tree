@@ -29,18 +29,20 @@ class DocumentControllerTest extends BaseApiTest
 
     public function testGetDocumentByUid()
     {
-        $documentUid = '617f896a61e39';
-        $this->documentFacade->getDocuments($documentUid, false)->willReturn(DocumentsData::getInternalApiDocumentsResponse());
-        $this->requestWithBody(BaseEnum::METHOD_GET, self::PATH . $documentUid);
+        $this->documentFacade
+            ->getDocuments(DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA, false)
+            ->willReturn(DocumentsData::getInternalApiDocumentsResponse());
+        $this->requestWithBody(BaseEnum::METHOD_GET, self::PATH . DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA);
         $this->assertEquals(200, $this->getStatusCode());
         $this->assertEquals(DocumentsData::getTestDocumentByUidExpectedData(), $this->getResponseContent());
     }
 
     public function testGetDocumentByUidWithContent()
     {
-        $documentUid = '617f896a61e39';
-        $this->documentFacade->getDocuments($documentUid, true)->willReturn(DocumentsData::getInternalApiDocumentsResponse(true));
-        $this->requestWithBody(BaseEnum::METHOD_GET, self::PATH . $documentUid . '?include_files=true');
+        $this->documentFacade
+            ->getDocuments(DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA, true)
+            ->willReturn(DocumentsData::getInternalApiDocumentsResponse(true));
+        $this->requestWithBody(BaseEnum::METHOD_GET, self::PATH . DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA . '?include_files=true');
         $this->assertEquals(200, $this->getStatusCode());
         $this->assertEquals(DocumentsData::getTestDocumentByUidExpectedData(true), $this->getResponseContent());
     }
