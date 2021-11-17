@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
@@ -13,6 +14,7 @@ use function json_encode;
 
 abstract class BaseApiTest extends WebTestCase
 {
+    use ProphecyTrait;
     protected KernelBrowser $client;
 
     public function setUp(): void
