@@ -35,14 +35,14 @@ class FoldersController extends AbstractController
     }
 
     /**
-     * @Route("/", name="get_folder", methods="GET")
+     * @Route("/", name="get_folders", methods="GET")
      */
-    public function getFolder(Request $request): JsonResponse
+    public function getFolders(Request $request): JsonResponse
     {
         try {
             $folders = $this->folderService->getFolders($request->query->all());
         } catch (\Exception $exception) {
-            throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
 
         return $this->json($folders);
