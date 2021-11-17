@@ -17,7 +17,7 @@ class FolderData
         'person-info-order-by' => 'source,creation'
     ];
 
-    public const FOLDER_BY_ID_DATA = [1, '2', 3, 1400, 2, 20];
+    public const FOLDER_BY_ID_DATA = [1, '2', 3, 1400, 2, 20, 7];
 
     public static function createFolderByIdDTO(array $persons, array $data = self::FOLDER_BY_ID_DATA)
     {
@@ -28,6 +28,7 @@ class FolderData
             ->setWorkflowStatus($data[3])
             ->setLabel($data[4])
             ->setSubscription($data[5])
+            ->setAgencyId($data[6])
             ->setPersons($persons);
     }
 
@@ -39,7 +40,8 @@ class FolderData
             ->setStatut($data[2])
             ->setStatutWorkflow($data[3])
             ->setLabel($data[4])
-            ->setAbonnement($data[5]);
+            ->setAbonnement($data[5])
+            ->setAgenceIdRef($data[6]);
     }
 
     public static function createFolderByIdResponseEntity(FolderById $resource)
@@ -85,6 +87,7 @@ class FolderData
                     'personInfo' => [],
                 ],
             ],
+            'agencyId' => 7
         ];
     }
 }

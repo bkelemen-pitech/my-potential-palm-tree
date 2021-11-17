@@ -20,6 +20,7 @@ class FolderByIdDTO
      */
     protected array $persons = [];
     protected ?string $partnerAgencyId;
+    protected ?int $agencyId;
     protected ?string $login;
 
     public function getId(): int
@@ -132,6 +133,18 @@ class FolderByIdDTO
     public function setLogin(?string $login): FolderByIdDTO
     {
         $this->login = $login;
+
+        return $this;
+    }
+
+    public function getAgencyId(): ?int
+    {
+        return $this->agencyId;
+    }
+
+    public function setAgencyId(?int $agencyId): FolderByIdDTO
+    {
+        $this->agencyId = $agencyId;
 
         return $this;
     }
