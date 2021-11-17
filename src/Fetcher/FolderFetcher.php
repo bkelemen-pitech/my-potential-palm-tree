@@ -38,7 +38,8 @@ class FolderFetcher
             ->setStatus($internalApiData->getStatut())
             ->setLabel($internalApiData->getLabel())
             ->setWorkflowStatus($internalApiData->getStatutWorkflow())
-            ->setSubscription($internalApiData->getAbonnement());
+            ->setSubscription($internalApiData->getAbonnement())
+            ->setAgencyId($internalApiData->getAgenceIdRef());
 
         try {
             $personsByFolderId = $this->folderFacade->getPersonsByFolderId($folderId, $filters);
