@@ -87,6 +87,16 @@ nelmio_api_doc:
             application/json:
               schema:
                 $ref: '#/components/schemas/200Success'
+        SuccessAddPerson:
+          description: Success response example for the add person to folder API call
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  personUid:
+                    type: string
+                    example: 61965b8c61e98
         SuccessFolders:
           description: Success response example for the GET folders API call
           content:
@@ -517,8 +527,8 @@ nelmio_api_doc:
                     - personTypeId
                     - agencyId
           responses:
-            '204':
-              description: No Content
+            '200':
+              ref: '#/components/responses/SuccessAddPerson'
             '400':
               description: Invalid Request
               ref: '#/components/responses/InvalidRequest'
