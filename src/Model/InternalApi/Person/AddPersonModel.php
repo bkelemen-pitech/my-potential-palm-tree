@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Model\Person;
 
+use App\Enum\AgencyEnum;
+use App\Enum\FolderEnum;
+use App\Enum\PersonEnum;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class AddPersonModel
@@ -101,11 +104,11 @@ class AddPersonModel
     public function toArray(): array
     {
         $data = [
-            'agence_id' => $this->agencyId,
-            'personne_type_id' => $this->personTypeId,
-            'nom' => $this->lastName,
-            'prenom' => $this->firstName,
-            'user_dossier_id' => $this->userFolderId,
+            AgencyEnum::BEPREMS_AGENCY_ID => $this->agencyId,
+            PersonEnum::BEPREMS_PERSON_TYPE_ID => $this->personTypeId,
+            FolderEnum::PERSON_LAST_NAME_FR => $this->lastName,
+            FolderEnum::PERSON_FIRST_NAME_FR => $this->firstName,
+            FolderEnum::USER_FOLDER_ID_FR => $this->userFolderId,
         ];
 
         return array_filter($data, function ($field) { return !is_null($field);});
