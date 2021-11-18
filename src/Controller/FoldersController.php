@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Enum\BepremsEnum;
+use App\Enum\PersonEnum;
 use App\Exception\ApiException;
+use App\Facade\InternalApi\PersonFacade;
 use App\Fetcher\FolderFetcher;
 use App\Services\FolderService;
+use App\Services\PersonService;
+use App\Strategy\Person\CreatePerson;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,10 +23,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class FoldersController extends AbstractController
 {
+    protected PersonService $personService;
     protected FolderService $folderService;
 
-    public function __construct(FolderService $folderService)
+    public function __construct(
+        PersonService $personService,
+        FolderService $folderService
+    )
     {
+        $this->personService = $personService;
         $this->folderService = $folderService;
     }
 
@@ -74,5 +83,18 @@ class FoldersController extends AbstractController
         }
 
         return $this->json($documents);
+    }
+
+    /**
+     * @Route("/{id}/add-person", name="add_person", methods="POST")
+     */
+    public function createPerson(int $id, Request $request): JsonResponse {
+        try {
+            $personUid = $this->personService->addPerson($id, $request->toArray());
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+
+        return $this->json([PersonEnum::PERSON_UID => $personUid]);
     }
 }

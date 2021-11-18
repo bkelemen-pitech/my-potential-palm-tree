@@ -70,7 +70,10 @@ class DocumentControllerTest extends BaseApiTest
     {
         $this->requestWithBody(BaseEnum::METHOD_POST, self::TREAT_DOCUMENT_PATH, []);
         $this->assertEquals(400, $this->getStatusCode());
-        $this->assertEquals('{"documentUid":"This value should not be blank.","statusVerification2":"This value should not be blank."}', $this->getResponseContent()['detail']);
+        $this->assertEquals([
+            "documentUid" => "This value should not be blank.",
+            "statusVerification2" => "This value should not be blank."
+        ], $this->getResponseContent()['body']);
     }
 
     public function testTreatDocumentInvalidParametersType()
@@ -82,7 +85,7 @@ class DocumentControllerTest extends BaseApiTest
 
         $this->requestWithBody(BaseEnum::METHOD_POST, self::TREAT_DOCUMENT_PATH, $body);
         $this->assertEquals(400, $this->getStatusCode());
-        $this->assertEquals('{"statusVerification2":"This value should be of type integer."}', $this->getResponseContent()['detail']);
+        $this->assertEquals(["statusVerification2" => "This value should be of type integer."], $this->getResponseContent()['body']);
     }
 
     public function testTreatDocumentThrowException()
