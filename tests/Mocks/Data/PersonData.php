@@ -6,15 +6,19 @@ namespace App\Tests\Mocks\Data;
 
 use App\DTO\Person\PersonDTO;
 use App\DTO\Person\PersonInfoDTO;
+use App\Model\InternalApi\Person\AddPersonResponse;
 use App\Model\InternalApi\Person\Person;
 use App\Model\InternalApi\Person\PersonInfo;
 use App\Model\InternalApi\Person\PersonsByFolderIdResponse;
+use App\Model\Person\AddPersonModel;
 
 class PersonData
 {
+    public const DEFAULT_PERSON_UID_TEST_DATA = '6195f4431446f';
     public const DEFAULT_PERSON_INFO_DATA = ['dossier', '39', null];
     public const PERSON1_DATA = ['Smith', 'John', '12-01-2020', 1, '1', 30];
     public const PERSON2_DATA = ['Smithy', 'Johny', '12-03-2020', 1, '1', 31];
+    public const ADD_PERSON_DATA = [709, null, null, 1, 1];
 
     public static function createPersonInfoDTO(array $data = self::DEFAULT_PERSON_INFO_DATA)
     {
@@ -84,5 +88,21 @@ class PersonData
             ->setCode('OK')
             ->setMsg('Success')
             ->setResource($persons);
+    }
+
+    public static function createAddPersonModel(array $data = self::ADD_PERSON_DATA)
+    {
+        return (new AddPersonModel())
+            ->setAgencyId($data[0])
+            ->setFirstName($data[1])
+            ->setLastName($data[2])
+            ->setPersonTypeId($data[3])
+            ->setUserFolderId($data[4]);
+    }
+
+    public static function createAddPersonResponse(array $resource)
+    {
+        return (new AddPersonResponse())
+            ->setResource($resource);
     }
 }
