@@ -10,3 +10,6 @@ services:
 
   App\Facade\InternalApi\DocumentFacade:
     public: true
+
+  App\Facade\InternalApi\PersonFacade:
+    public: true

@@ -87,6 +87,16 @@ nelmio_api_doc:
             application/json:
               schema:
                 $ref: '#/components/schemas/200Success'
+        SuccessAddPerson:
+          description: Success response example for the add person to folder API call
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  personUid:
+                    type: string
+                    example: 61965b8c61e98
         SuccessFolders:
           description: Success response example for the GET folders API call
           content:
@@ -482,6 +492,43 @@ nelmio_api_doc:
           responses:
             '204':
               description: No Content
+            '400':
+              description: Invalid Request
+              ref: '#/components/responses/InvalidRequest'
+            '500':
+              ref: '#/components/responses/ServerError'
+      /api/v1/folders/{id}/add-person:
+        post:
+          summary: Add a person to folder with id {id}.
+          tags:
+            - Folders
+          parameters:
+            - ref: '#/components/parameters/id'
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    personTypeId:
+                      type: integer
+                      example: 4
+                    agencyId:
+                      type: integer
+                      example: 4
+                    firstName:
+                      type: string
+                      example: Snow
+                    lastName:
+                      type: string
+                      example: John
+                  required:
+                    - personTypeId
+                    - agencyId
+          responses:
+            '200':
+              ref: '#/components/responses/SuccessAddPerson'
             '400':
               description: Invalid Request
               ref: '#/components/responses/InvalidRequest'
