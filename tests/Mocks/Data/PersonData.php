@@ -11,6 +11,7 @@ use App\Model\InternalApi\Person\Person;
 use App\Model\InternalApi\Person\PersonInfo;
 use App\Model\InternalApi\Person\PersonsByFolderIdResponse;
 use App\Model\Person\AddPersonModel;
+use App\Model\Person\AssignDocumentToPersonModel;
 
 class PersonData
 {
@@ -19,6 +20,7 @@ class PersonData
     public const PERSON1_DATA = ['Smith', 'John', '12-01-2020', 1, '1', 30];
     public const PERSON2_DATA = ['Smithy', 'Johny', '12-03-2020', 1, '1', 31];
     public const ADD_PERSON_DATA = [709, null, null, 1, 1];
+    public const ASSIGN_DOCUMENT_DATA = [1, '6196610f9d67', '6184c9672f420'];
 
     public static function createPersonInfoDTO(array $data = self::DEFAULT_PERSON_INFO_DATA)
     {
@@ -104,5 +106,13 @@ class PersonData
     {
         return (new AddPersonResponse())
             ->setResource($resource);
+    }
+
+    public static function createAssignDocumentToPersonModel(array $data = self::ASSIGN_DOCUMENT_DATA): AssignDocumentToPersonModel
+    {
+        return (new AssignDocumentToPersonModel())
+            ->setFolderId($data[0])
+            ->setDocumentUid($data[1])
+            ->setPersonUid($data[2]);
     }
 }
