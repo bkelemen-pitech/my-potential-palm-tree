@@ -11,5 +11,5 @@ services:
   App\Facade\InternalApi\DocumentFacade:
     public: true
 
-  App\Facade\InternalApi\PersonFacade:
+  App\Services\PersonService:
     public: true

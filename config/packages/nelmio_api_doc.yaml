@@ -19,6 +19,11 @@ nelmio_api_doc:
           in: query
           description: Filters applied to the request - any database property from the table 'user_dossier'
           required: false
+        folderId:
+          name: folderId
+          in: path
+          description: Folder id
+          required: true
         id:
           name: id
           in: path
@@ -52,6 +57,11 @@ nelmio_api_doc:
           in: query
           description: Page number
           required: false
+        personUid:
+          name: personUid
+          in: path
+          description: Person uid
+          required: true
         text_search:
           name: text_search
           in: query
@@ -532,5 +542,25 @@ nelmio_api_doc:
             '400':
               description: Invalid Request
               ref: '#/components/responses/InvalidRequest'
+            '500':
+              ref: '#/components/responses/ServerError'
+      /api/v1/folders/{folderId}/persons/{personUid}/documents/{documentUid}:
+        put:
+          summary: Assign the document(s) with the uid {documentUid} to the person with the uid {personUid}.
+          tags:
+            - Folders
+          parameters:
+            - ref: '#/components/parameters/folderId'
+            - ref: '#/components/parameters/personUid'
+            - ref: '#/components/parameters/documentUid'
+          responses:
+            '200':
+              description: OK
+            '400':
+              description: Invalid Request
+              ref: '#/components/responses/InvalidRequest'
+            '404':
+              description: Resource Not Found
+              ref: '#/components/responses/NotFound'
             '500':
               ref: '#/components/responses/ServerError'
