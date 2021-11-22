@@ -12,41 +12,44 @@ GET {HOST_NAME}/api/v1/folders/1
 Accept: application/json 
 Content-Type: application/json 
 
+200 OK
 {
-    "id":104090,
-    "partenaire_dossier_id":"KYCTestPB2B_F_131021011",
-    "statut":1,
-    "statut_workflow":10401,
-    "label":5,
-    "abonnement": 20
-    "persons":[
-        {
-            "last_name":null,
-            "first_name":null,
-            "date_of_birth":null,
-            "person_type_id":1,
-            "person_uid":"6167c77066952",
-            "person_info":[
-                {
-                    "name_info":"nom",
-                    "data_info":"JOHN",
-                    "source":"IMPORT"
-                },
-                {
-                    "name_info":"dossier",
-                    "data_info":"KYCTestPB2B_F_131021011",
-                    "source":"PARCOURS"
-                },
-                {
-                    "name_info":"prenom",
-                    "data_info":"DOE",
-                    "source":"PARCOURS"
-                },
-                ...
-            ],
-            "folder_id":null
-        }
+  "id":1,
+  "partnerFolderId":"2",
+  "status":1,
+  "workflowStatus":10300,
+  "label":0,
+  "subscription":10,
+  "persons":[{
+    "personId":1,
+    "lastName":"jhon",
+    "firstName":"doe",
+    "dateOfBirth":"1970-01-01T00:00:00+00:00",
+    "personTypeId":1,
+    "personUid":"619b8418437b6",
+    "personInfo":[
+      {
+        "nameInfo":"nom",
+        "dataInfo":"john",
+        "source":"IMPORT"
+      },
+      {
+        "nameInfo":"email",
+        "dataInfo":"john.doe@test.com",
+        "source":"IMPORT"
+      },
+      ...
     ],
-    ...
+    "folderId":null
+  }],
+  "agencyId":1088
+}
+
+404 NOT FOUND
+{
+  "statusCode":404,
+  "body":null,
+  "error":"Folder with id 1072383444 not found",
+  "status":"error"
 }
 ```
