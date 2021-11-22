@@ -48,6 +48,6 @@ class DocumentHelper
 
     private static function getMultiplier($type)
     {
-        return isset(DocumentEnum::MULTIPLIER[$type]) ? DocumentEnum::MULTIPLIER[$type] : 10000000000000;
+        return DocumentEnum::MULTIPLIER[$type] ?? DocumentEnum::DEFAULT_MULTIPLIER;
     }
 }
