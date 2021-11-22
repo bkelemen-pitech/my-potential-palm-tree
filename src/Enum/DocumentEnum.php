@@ -37,6 +37,7 @@ class DocumentEnum
     public const BEPREMS_DOCUMENT_UID_KEBAB_CASE = 'document-uid';
     public const BEPREMS_DOCUMENT_VERIFICATION_STATUS2 = 'statut_verification2';
 
+    public const DEFAULT_MULTIPLIER = 10000000000000;
     public const MULTIPLIER = [
         1 => 1,
         2 => 10,
@@ -52,5 +53,7 @@ class DocumentEnum
         60 => 1000000000,
         61 => 1000000000000,
         80 => 100000000000000,
+        99 => 0,
+        100 => 0,
     ];
 }
