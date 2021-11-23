@@ -268,7 +268,7 @@ class BaseFolderFiltersModel extends PaginationModel implements BaseFolderFilter
     {
         $textSearchFields = str_replace(' ', '', $this->getTextSearchFields());
         $folderKeys = [FolderEnum::PARTNER_FOLDER_ID];
-        $personKeys = [FolderEnum::PERSON_FIRST_NAME];
+        $personKeys = [FolderEnum::PERSON_LAST_NAME];
         $fields = explode(',', $textSearchFields);
         $fields = array_filter($fields, function ($item) {
             return $item != '';
