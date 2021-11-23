@@ -11,6 +11,7 @@ use App\Exception\InvalidDataException;
 use App\Facade\InternalApi\PersonFacade;
 use App\Model\InternalApi\Person\Person;
 use App\Model\Person\AddPersonModel;
+use App\Model\Person\AssignDocumentToPersonModel;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PersonService
@@ -43,10 +44,20 @@ class PersonService
             $this->validationService->validate($addPersonModelData);
             $addPersonResource = $this->personFacade->addPerson($addPersonModelData);
 
-            return $addPersonResource[PersonEnum::BEPREMS_PERSON_UID];
+            return $addPersonResource[PersonEnum::BEPREMS_RESPONSE_PERSON_UID];
         } catch (\Exception $exception) {
             throw new InvalidDataException($exception->getMessage());
         }
+    }
+
+    public function assignDocument(array $data): void
+    {
+        $assignDocumentData = $this->serializer->deserialize(
+            json_encode($data),
+            AssignDocumentToPersonModel::class, 'json'
+        );
+        $this->validationService->validate($assignDocumentData);
+        $this->personFacade->assignDocument($assignDocumentData);
     }
 
     public function transformPersonToDTO(Person $person): PersonDTO

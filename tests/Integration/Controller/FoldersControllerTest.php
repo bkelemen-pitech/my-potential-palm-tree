@@ -8,7 +8,6 @@ use App\Enum\PersonEnum;
 use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
 use App\Facade\InternalApi\DocumentFacade;
-use App\Facade\InternalApi\PersonFacade;
 use App\Fetcher\FolderFetcher;
 use App\Services\PersonService;
 use App\Tests\BaseApiTest;
@@ -23,6 +22,8 @@ class FolderControllerTest extends BaseApiTest
     public const GET_FOLDER = 'api/v1/folders/1';
     public const FOLDER_GET_DOCUMENTS = 'api/v1/folders/1/documents';
     public const FOLDER_ADD_PERSON = 'api/v1/folders/1/add-person';
+    public const FOLDER_ASSIGN_DOCUMENT_TO_PERSON = 'api/v1/folders/1/persons/6196610f9d67/documents/6184c9672f420';
+    public const FOLDER_ASSIGN_DOCUMENT_TO_PERSON_NO_DOCUMENT = 'api/v1/folders/1/persons/6196610f9d67/documents/';
 
     protected ObjectProphecy $folderFetcher;
     protected ObjectProphecy $documentFacade;
@@ -33,10 +34,10 @@ class FolderControllerTest extends BaseApiTest
         parent::setUp();
         $this->folderFetcher = $this->prophesize(FolderFetcher::class);
         $this->documentFacade = $this->prophesize(DocumentFacade::class);
-        $this->personService = $this->prophesize(PersonFacade::class);
+        $this->personService = $this->prophesize(PersonService::class);
         static::getContainer()->set(FolderFetcher::class, $this->folderFetcher->reveal());
         static::getContainer()->set(DocumentFacade::class, $this->documentFacade->reveal());
-        static::getContainer()->set(PersonFacade::class, $this->personService->reveal());
+        static::getContainer()->set(PersonService::class, $this->personService->reveal());
     }
 
     public function testGetFolderById()
@@ -83,39 +84,42 @@ class FolderControllerTest extends BaseApiTest
         ];
 
         $this->personService
-            ->addPerson(PersonData::createAddPersonModel())
+            ->addPerson(1, $body)
             ->shouldBeCalledOnce()
-            ->willReturn([PersonEnum::BEPREMS_PERSON_UID => PersonData::DEFAULT_PERSON_UID_TEST_DATA]);
+            ->willReturn(PersonData::DEFAULT_PERSON_UID_TEST_DATA);
         $this->requestWithBody(BaseEnum::METHOD_POST, self::FOLDER_ADD_PERSON, $body);
 
         $this->assertEquals(200, $this->getStatusCode());
         $this->assertEquals([PersonEnum::PERSON_UID => PersonData::DEFAULT_PERSON_UID_TEST_DATA], $this->getResponseContent());
     }
 
-    public function testAddPersonEmptyBodyTriggerValidations()
+    public function testAddPersonEmptyBodyShouldThrowException()
     {
-        $this->requestWithBody(BaseEnum::METHOD_POST, self::FOLDER_ADD_PERSON, []);
+        $this->personService
+            ->addPerson(1, [])
+            ->shouldBeCalledOnce()
+            ->willThrow(new InvalidDataException());
 
+        $this->requestWithBody(BaseEnum::METHOD_POST, self::FOLDER_ADD_PERSON, []);
         $this->assertEquals(400, $this->getStatusCode());
-        $this->assertEquals([
-            'agencyId' => 'This value should not be blank.',
-            'personTypeId' => 'This value should not be blank.'
-        ], $this->getResponseContent()['body']);
     }
 
-    public function testAddPersonWrongBodyParamsTypeTriggerValidations()
+    public function testAssignDocumentOk()
     {
-        $body = [
-            'personTypeId' => "1",
-            'agencyId' => "709"
-        ];
+        $requestData = ["folderId" => 1, "personUid" => "6196610f9d67", "documentUid" => "6184c9672f420"];
+        $this->personService
+            ->assignDocument($requestData)
+            ->shouldBeCalledOnce();
 
-        $this->requestWithBody(BaseEnum::METHOD_POST, self::FOLDER_ADD_PERSON, $body);
+        $this->requestWithBody(BaseEnum::METHOD_PUT, self::FOLDER_ASSIGN_DOCUMENT_TO_PERSON);
 
-        $this->assertEquals(400, $this->getStatusCode());
-        $this->assertEquals([
-            'agencyId' => 'This value should be of type integer.',
-            'personTypeId' => 'This value should be of type integer.'
-        ], $this->getResponseContent()['body']);
+        $this->assertEquals(204, $this->getStatusCode());
+        $this->assertEquals(null, $this->getResponseContent());
+    }
+
+    public function testAssignDocumentNotFoundException()
+    {
+        $this->requestWithBody(BaseEnum::METHOD_PUT, self::FOLDER_ASSIGN_DOCUMENT_TO_PERSON_NO_DOCUMENT);
+        $this->assertEquals(404, $this->getStatusCode());
     }
 }
