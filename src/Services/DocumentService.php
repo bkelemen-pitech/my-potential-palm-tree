@@ -105,7 +105,7 @@ class DocumentService
             'json'
         );
 
-        if (count($internalApiDocuments) > 1){
+        if (count($internalApiDocuments) > 1) {
             $this->addVersoData($internalApiDocuments[1], $documentDTO, $includeFiles);
         }
 
@@ -128,7 +128,9 @@ class DocumentService
         $newestDocument = [];
         /** @var DocumentByFolderDTO $document */
         foreach ($documents as $document) {
-            $type = $document->getDocumentTypeId();
+            // As multiple types of persons can have the same type of ID the uniqueness has to be tied to the person's ID
+            $type = $document->getPersonId() . '-' . $document->getDocumentTypeId();
+
             if (
                 !isset($newestDocument[$type])
                 || $document->getStatusVerification2() > $newestDocument[$type]->getStatusVerification2()
@@ -153,6 +155,7 @@ class DocumentService
                     array_shift($documentSet);
                     $masterDocument->setSlaves($documentSet);
                 }
+
                 return $masterDocument;
             },
             $documentSetList
