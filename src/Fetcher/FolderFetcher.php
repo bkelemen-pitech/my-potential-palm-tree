@@ -7,7 +7,6 @@ namespace App\Fetcher;
 use App\DTO\Folder\FolderByIdDTO;
 use App\Exception\ResourceNotFoundException;
 use App\Facade\InternalApi\FolderFacade;
-use App\Model\Request\BaseFolderFiltersInterface;
 use App\Services\PersonService;
 
 class FolderFetcher
@@ -21,11 +20,6 @@ class FolderFetcher
     {
         $this->folderFacade = $folderFacade;
         $this->personService = $personService;
-    }
-
-    public function getFoldersWithFilters(BaseFolderFiltersInterface $folderFiltersModel): array
-    {
-        return $this->folderFacade->getFolders($folderFiltersModel->toArray());
     }
 
     public function getFolderData(int $folderId, array $filters): FolderByIdDTO

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Unit\Facade\InternalApi;
+namespace App\Tests\Unit\Facade\InternalApi;
 
 use App\Client\InternalApi\FoldersClient;
 use App\Exception\InvalidDataException;

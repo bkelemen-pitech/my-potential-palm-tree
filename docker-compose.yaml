@@ -10,12 +10,15 @@ services:
             - '8090:80'
         volumes:
             - ./:/var/www/html
+            - ../internal_api_bundle:/var/www/html/internal_api_bundle/
+            - ~/.ssh:/root/.ssh
         networks:
             - default
             - webhelp-kyc-docker_default
 
 volumes:
     postgresql-volume:
+    internal_api_bundle:
 
 networks:
     webhelp-kyc-docker_default:

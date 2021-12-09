@@ -20,17 +20,6 @@ class FolderFacade
         $this->client = $client;
     }
 
-    public function getFolders(array $queryParams = []): array
-    {
-        try {
-            $folders = $this->client->getFolders($queryParams);
-
-            return $folders->getResource();
-        } catch (\Exception $exception) {
-            throw new InvalidDataException($exception->getMessage());
-        }
-    }
-
     public function getFolderById(int $folderId): FolderById
     {
         try {
