@@ -5,12 +5,11 @@ namespace App\Services;
 use App\DTO\Document\DocumentByFolderDTO;
 use App\Enum\DocumentEnum;
 use App\Enum\FolderEnum;
-use App\Exception\ResourceNotFoundException;
 use App\Fetcher\DocumentFetcher;
 use App\Fetcher\FolderFetcher;
 use App\Model\Request\BaseFolderFiltersModel;
-use App\Model\Response\BaseResponseFolderModel;
 use Symfony\Component\Serializer\SerializerInterface;
+use Kyc\InternalApiBundle\Services\FolderService as InternalApiFolderService;
 
 class FolderService
 {
@@ -19,19 +18,22 @@ class FolderService
     protected FolderFetcher $folderFetcher;
     protected DocumentFetcher $documentFetcher;
     protected DocumentService $documentService;
+    protected InternalApiFolderService $internalApiFolderService;
 
     public function __construct(
         FolderFetcher $folderFetcher,
         SerializerInterface $serializer,
         ValidationService $validationService,
         DocumentFetcher $documentFetcher,
-        DocumentService $documentService
+        DocumentService $documentService,
+        InternalApiFolderService $internalApiFolderService
     ) {
         $this->folderFetcher = $folderFetcher;
         $this->serializer = $serializer;
         $this->validationService = $validationService;
         $this->documentFetcher = $documentFetcher;
         $this->documentService = $documentService;
+        $this->internalApiFolderService = $internalApiFolderService;
     }
 
     public function getFolders(array $data): array
@@ -41,21 +43,11 @@ class FolderService
             BaseFolderFiltersModel::class,
             'json'
         );
-        $this->validationService->validate($folderFiltersModel);
 
-        $data = $this->folderFetcher->getFoldersWithFilters($folderFiltersModel);
-        $restructuredFolderArray = [];
-
-        foreach ($data[FolderEnum::FOLDERS] as $folder) {
-            $restructuredFolderArray[] = $this->serializer->deserialize(
-                json_encode($folder),
-                BaseResponseFolderModel::class,
-                'json'
-            )->toArray();
-        }
+        $data = $this->internalApiFolderService->getFolders($folderFiltersModel);
 
         return [
-            FolderEnum::FOLDERS => $restructuredFolderArray,
+            FolderEnum::FOLDERS => $data[FolderEnum::FOLDERS],
             FolderEnum::META => $data[FolderEnum::META],
         ];
     }

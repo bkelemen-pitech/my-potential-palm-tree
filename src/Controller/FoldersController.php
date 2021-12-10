@@ -9,11 +9,9 @@ use App\Enum\FolderEnum;
 use App\Enum\PersonEnum;
 use App\Exception\ApiException;
 use App\Exception\ResourceNotFoundException;
-use App\Facade\InternalApi\PersonFacade;
 use App\Fetcher\FolderFetcher;
 use App\Services\FolderService;
 use App\Services\PersonService;
-use App\Strategy\Person\CreatePerson;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,8 +30,7 @@ class FoldersController extends AbstractController
     public function __construct(
         PersonService $personService,
         FolderService $folderService
-    )
-    {
+    ) {
         $this->personService = $personService;
         $this->folderService = $folderService;
     }

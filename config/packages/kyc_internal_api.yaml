@@ -1,0 +1,5 @@
+kyc_internal_api:
+  auth:
+    id: '%env(INTERNAL_API_APP_ID)%'
+    key: '%env(INTERNAL_API_APP_KEY)%'
+    url: '%env(INTERNAL_API_URL)%'
