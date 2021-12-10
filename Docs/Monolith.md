@@ -2,7 +2,7 @@
 The Monolith or Beprems is a zend application that handles the KYC platform.
 ### Communication
 The communication between Back Office symfony app and Monolith is done backend to 
-backend through HTTP requests. All Monolith API endpoints will be secured. In order 
+backend through HTTP requests with the help of a specialized [bundle](https://github.com/beprems/internal_api_bundle). All Monolith API endpoints will be secured. In order 
 to communicate securely a set of headers must be sent on all requests.
 These headers are:
 - `X-APP-ID`: it is an identifier for the requesting application

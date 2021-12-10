@@ -1,5 +1,5 @@
 ## API layer
-This application consists of several APIs.
+This application consists of several APIs. In general this application will communicate with `Beprems`
 ### Unprotected APIs
 The unprotected APIs are used for authenticating the user into the application.  
 [Authentication flow](./Authentification/Authentication.md)
