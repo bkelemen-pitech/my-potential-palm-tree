@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\Request;
 
-interface BaseFolderFiltersInterface extends ListInterface
+interface BaseFolderFiltersInterface
 {
     public function getOrderBy(): ?string;
     public function getTextSearch(): ?string;

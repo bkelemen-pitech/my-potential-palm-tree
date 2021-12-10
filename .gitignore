@@ -20,3 +20,4 @@
 ###< symfony/phpunit-bridge ###
 
 /coverage
+/docker-compose.override.yaml

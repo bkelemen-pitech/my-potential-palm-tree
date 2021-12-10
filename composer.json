@@ -8,6 +8,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/annotations": "^1.0",
+        "kyc/internal-api-bundle": "^1.0",
         "nelmio/api-doc-bundle": "^4.6",
         "nelmio/cors-bundle": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -79,5 +80,12 @@
         "symfony/phpunit-bridge": "^5.3",
         "symfony/twig-bundle": "^5.3",
         "symfony/web-profiler-bundle": "^5.3"
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:beprems/internal_api_bundle.git",
+            "no-api": true
+        }
+    ]
 }
