@@ -22,7 +22,7 @@ class PersonData
     public const ADD_PERSON_DATA = [709, null, null, 1, 1];
     public const ASSIGN_DOCUMENT_DATA = [1, '6196610f9d67', '6184c9672f420'];
 
-    public static function createPersonInfoModelResponse(array $data = self::DEFAULT_PERSON_INFO_DATA)
+    public static function createPersonInfoModelResponse(array $data = self::DEFAULT_PERSON_INFO_DATA): PersonInfoModelResponse
     {
         return (new PersonInfoModelResponse())
             ->setNameInfo($data[0])
@@ -30,7 +30,7 @@ class PersonData
             ->setSource($data[2]);
     }
 
-    public static function createPersonModelResponse(bool $withPersonInfo = false, array $data = self::PERSON1_DATA)
+    public static function createPersonModelResponse(bool $withPersonInfo = false, array $data = self::PERSON1_DATA): PersonModelResponse
     {
         $personModel = (new PersonModelResponse())
             ->setLastName($data[0])
@@ -45,7 +45,7 @@ class PersonData
         return $personModel;
     }
 
-    public static function getFolderPersonsModelResponseByIdTestData()
+    public static function getFolderPersonsModelResponseByIdTestData(): array
     {
         return [
           self::createPersonModelResponse(true),
@@ -53,7 +53,7 @@ class PersonData
         ];
     }
 
-    public static function createInternalApiPersonInfo(array $data = self::DEFAULT_PERSON_INFO_DATA)
+    public static function createInternalApiPersonInfo(array $data = self::DEFAULT_PERSON_INFO_DATA): PersonInfo
     {
         return (new PersonInfo())
             ->setNomInfo($data[0])
@@ -61,7 +61,7 @@ class PersonData
             ->setSource($data[2]);
     }
 
-    public static function createInternalApiPerson(bool $withPersonInfo = false, array $data = self::PERSON1_DATA)
+    public static function createInternalApiPerson(bool $withPersonInfo = false, array $data = self::PERSON1_DATA): Person
     {
         $personModel = (new Person())
             ->setPrenom($data[0])
@@ -84,7 +84,7 @@ class PersonData
         ];
     }
 
-    public static function createInternalApiPersonsByFolderIdResponseData(array $persons)
+    public static function createInternalApiPersonsByFolderIdResponseData(array $persons): PersonsByFolderIdResponse
     {
         return (new PersonsByFolderIdResponse())
             ->setCode('OK')
@@ -92,7 +92,7 @@ class PersonData
             ->setResource($persons);
     }
 
-    public static function createAddPersonModel(array $data = self::ADD_PERSON_DATA)
+    public static function createAddPersonModel(array $data = self::ADD_PERSON_DATA): AddPersonModel
     {
         return (new AddPersonModel())
             ->setAgencyId($data[0])
@@ -102,7 +102,7 @@ class PersonData
             ->setUserFolderId($data[4]);
     }
 
-    public static function createAddPersonResponse(array $resource)
+    public static function createAddPersonResponse(array $resource): AddPersonResponse
     {
         return (new AddPersonResponse())
             ->setResource($resource);

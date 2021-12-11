@@ -9,7 +9,6 @@ use App\Enum\FolderEnum;
 use App\Enum\PersonEnum;
 use App\Exception\ApiException;
 use App\Exception\ResourceNotFoundException;
-use App\Fetcher\FolderFetcher;
 use App\Services\FolderService;
 use App\Services\PersonService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
