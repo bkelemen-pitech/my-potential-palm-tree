@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Mocks\Data;
 
-use App\DTO\Person\PersonDTO;
-use App\DTO\Person\PersonInfoDTO;
 use App\Model\InternalApi\Person\AddPersonResponse;
-use App\Model\InternalApi\Person\Person;
-use App\Model\InternalApi\Person\PersonInfo;
-use App\Model\InternalApi\Person\PersonsByFolderIdResponse;
-use App\Model\Person\AddPersonModel;
-use App\Model\Person\AssignDocumentToPersonModel;
+use App\Model\InternalApi\Person\AddPersonModel;
+use App\Model\InternalApi\Person\AssignDocumentToPersonModel;
+use Kyc\InternalApiBundle\Model\InternalApi\Person\Person;
+use Kyc\InternalApiBundle\Model\InternalApi\Person\PersonInfo;
+use Kyc\InternalApiBundle\Model\InternalApi\Person\PersonsByFolderIdResponse;
+use Kyc\InternalApiBundle\Model\Response\Person\PersonInfoModelResponse;
+use Kyc\InternalApiBundle\Model\Response\Person\PersonModelResponse;
 
 class PersonData
 {
@@ -22,17 +22,17 @@ class PersonData
     public const ADD_PERSON_DATA = [709, null, null, 1, 1];
     public const ASSIGN_DOCUMENT_DATA = [1, '6196610f9d67', '6184c9672f420'];
 
-    public static function createPersonInfoDTO(array $data = self::DEFAULT_PERSON_INFO_DATA)
+    public static function createPersonInfoModelResponse(array $data = self::DEFAULT_PERSON_INFO_DATA)
     {
-        return (new PersonInfoDTO())
+        return (new PersonInfoModelResponse())
             ->setNameInfo($data[0])
             ->setDataInfo($data[1])
             ->setSource($data[2]);
     }
 
-    public static function createPersonDTO(bool $withPersonInfo = false, array $data = self::PERSON1_DATA)
+    public static function createPersonModelResponse(bool $withPersonInfo = false, array $data = self::PERSON1_DATA)
     {
-        $personDTO = (new PersonDTO())
+        $personModel = (new PersonModelResponse())
             ->setLastName($data[0])
             ->setFirstName($data[1])
             ->setDateOfBirth($data[2])
@@ -40,20 +40,20 @@ class PersonData
             ->setPersonUid($data[4])
             ->setPersonId($data[5]);
 
-        if ($withPersonInfo) $personDTO->setPersonInfo([self::createPersonInfoDTO()]);
+        if ($withPersonInfo) $personModel->setPersonInfo([self::createPersonInfoModelResponse()]);
 
-        return $personDTO;
+        return $personModel;
     }
 
-    public static function getFolderPersonsDTOByIdTestData()
+    public static function getFolderPersonsModelResponseByIdTestData()
     {
         return [
-          self::createPersonDTO(true),
-          self::createPersonDTO(false, self::PERSON2_DATA)
+          self::createPersonModelResponse(true),
+          self::createPersonModelResponse(false, self::PERSON2_DATA)
         ];
     }
 
-    public static function createPersonInfoEntity(array $data = self::DEFAULT_PERSON_INFO_DATA)
+    public static function createInternalApiPersonInfo(array $data = self::DEFAULT_PERSON_INFO_DATA)
     {
         return (new PersonInfo())
             ->setNomInfo($data[0])
@@ -61,9 +61,9 @@ class PersonData
             ->setSource($data[2]);
     }
 
-    public static function createPersonEntity(bool $withPersonInfo = false, array $data = self::PERSON1_DATA)
+    public static function createInternalApiPerson(bool $withPersonInfo = false, array $data = self::PERSON1_DATA)
     {
-        $personDTO = (new Person())
+        $personModel = (new Person())
             ->setPrenom($data[0])
             ->setNom($data[1])
             ->setDateNaissance($data[2])
@@ -71,20 +71,20 @@ class PersonData
             ->setPersonneUid($data[4])
             ->setPersonneId($data[5]);
 
-        if ($withPersonInfo) $personDTO->setPersonInfos([self::createPersonInfoEntity()]);
+        if ($withPersonInfo) $personModel->setPersonInfos([self::createInternalApiPersonInfo()]);
 
-        return $personDTO;
+        return $personModel;
     }
 
-    public static function getFolderPersonsEntityByIdTestData()
+    public static function getInternalApiFolderPersonsByIdTestData()
     {
         return [
-            self::createPersonEntity(true),
-            self::createPersonEntity(false, self::PERSON2_DATA)
+            self::createInternalApiPerson(true),
+            self::createInternalApiPerson(false, self::PERSON2_DATA)
         ];
     }
 
-    public static function createPersonsByFolderIdResponseData(array $persons)
+    public static function createInternalApiPersonsByFolderIdResponseData(array $persons)
     {
         return (new PersonsByFolderIdResponse())
             ->setCode('OK')

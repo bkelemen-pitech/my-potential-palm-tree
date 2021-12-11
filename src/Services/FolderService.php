@@ -5,30 +5,29 @@ namespace App\Services;
 use App\DTO\Document\DocumentByFolderDTO;
 use App\Enum\DocumentEnum;
 use App\Enum\FolderEnum;
+use App\Exception\ResourceNotFoundException;
 use App\Fetcher\DocumentFetcher;
-use App\Fetcher\FolderFetcher;
 use App\Model\Request\BaseFolderFiltersModel;
-use Symfony\Component\Serializer\SerializerInterface;
+use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotFoundException;
+use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
 use Kyc\InternalApiBundle\Services\FolderService as InternalApiFolderService;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class FolderService
 {
     protected SerializerInterface $serializer;
     protected ValidationService $validationService;
-    protected FolderFetcher $folderFetcher;
     protected DocumentFetcher $documentFetcher;
     protected DocumentService $documentService;
     protected InternalApiFolderService $internalApiFolderService;
 
     public function __construct(
-        FolderFetcher $folderFetcher,
         SerializerInterface $serializer,
         ValidationService $validationService,
         DocumentFetcher $documentFetcher,
         DocumentService $documentService,
         InternalApiFolderService $internalApiFolderService
     ) {
-        $this->folderFetcher = $folderFetcher;
         $this->serializer = $serializer;
         $this->validationService = $validationService;
         $this->documentFetcher = $documentFetcher;
@@ -73,5 +72,18 @@ class FolderService
         $documentSetList = $this->documentService->extractDocumentList($notDeletedDocuments);
 
         return $this->documentService->getInfoForDocuments($documentSetList);
+    }
+
+    public function getFolderData(int $folderId, array $filters): FolderByIdModelResponse
+    {
+        try {
+            $folderById = $this->internalApiFolderService->getFolderById($folderId);
+            $persons = $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters);
+            $folderById->setPersons($persons);
+
+            return $folderById;
+        } catch (KycResourceNotFoundException $exception) {
+            throw new ResourceNotFoundException($exception->getMessage());
+        }
     }
 }
