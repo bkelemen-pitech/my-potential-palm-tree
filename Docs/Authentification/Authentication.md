@@ -31,12 +31,14 @@ __401 Unauthorized__
   "status": "error"
 }
 ```
+#### Decoding the JWT
 Decoding the JWT will result in something similar to this
 ```JSON
 {
   "iat": 1527026794,
   "exp": 1527027994,
-  "role": "administrator"
+  "role": "administrator",
+  "user_id": 123
 }
 ```
 This JWT will be used to keep the user authenticated on subsequent requests,

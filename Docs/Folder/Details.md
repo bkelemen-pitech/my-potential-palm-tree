@@ -1,7 +1,10 @@
 ### Folder detail API
 This API retrieves the details of a folder along with all the persons and the information
 associated with them. Internally it will call `internalAPI/folders/getfolder/folder-id`
-and `internalAPI/folders/persons/folder-id`
+and `internalAPI/folders/persons/folder-id`.
+> Note: when the folder is opened for the first time
+> the workflowStatus property will be updated from 10300 to 10301 by calling `/internalAPI/folders/updatestatusworkflow`
+
 __Method__: GET.  
 __URL__: `/api/v1/folders/{folderId}`.  
 Request example:
@@ -53,3 +56,10 @@ Content-Type: application/json
   "status":"error"
 }
 ```
+#### Assign folder to user
+This API will also assign the folder to the active user by calling the 
+`/internalAPI/folders/assign` in [Monolith](../Monolith.md). The active user id can be retrieved
+by decoding the [JWT token](../Authentification/Authentication.md#Decoding the JWT)
+
+### Flow
+![Folder details](../assets/Folder%20details.png)
