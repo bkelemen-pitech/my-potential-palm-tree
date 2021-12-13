@@ -8,7 +8,7 @@ __Query params__:
 - __limit__ (int) - the number of entries per page, default `20`
 - __filters__ - the filters list, key-value pairs separated by ':' and ','. The same 
   field can be sent more than once. In this case the query will be executed with the
-  `IN` operator. Eg: `&filters=userId:1`
+  `IN` operator. Eg: `&filters=statut_workflow:10300,userId:1`
 - __text_search__ (string) - filter criteria. Eg `&text_search=Doe`.
 - __text_search_fields__ -  a list of fields on which the `text_search` is applied. 
   The items in the list are separated by `,`. This works only in conjunction 
@@ -43,6 +43,7 @@ Content-Type: application/json
   }
 }
 ```
+> Note: if in the filters query param we find `userId` we must remove it before sending it to the [Monolith](../Monolith.md) 
 #### Views
 This parameter will set a specific set of filters on the request to the internalAPI 
 from [Monolith](../Monolith.md). It can have these values:
