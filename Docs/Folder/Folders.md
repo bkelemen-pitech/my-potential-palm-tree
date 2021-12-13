@@ -43,7 +43,7 @@ Content-Type: application/json
   }
 }
 ```
-> Note: if in the filters query param we find `userId` we must remove it before sending it to the [Monolith](../Monolith.md) 
+> Note: if in the filters query param we find `userId` we must remove it before sending it to the internalAPi 
 #### Views
 This parameter will set a specific set of filters on the request to the internalAPI 
 from [Monolith](../Monolith.md). It can have these values:
@@ -51,7 +51,7 @@ from [Monolith](../Monolith.md). It can have these values:
 - 2 - corresponds to the _in treatment_ tab. This will add `statut_workflow in [10301, 10302, 10303, 10304]` filter to the internalAPI request.
 If there is a _userId_ in the `filters` query params, we need to call the `/internalAPI/administrator/assignedfolders/administrator-id/{administrator-id}` 
 and filter the [folders list](#folders-api) with the folderIds [assigned](./Details.md#assign-folder-to-user) to the user.
-> Note: do not send this parameter to the [Monolith](../Monolith.md)
+> Note: do not send this parameter to the internalAPI
 #### View criteria
 `view_criteria` can have two values:
 - 1 - **all folders** - filter the list based on the given filters;
@@ -63,6 +63,6 @@ left empty and in the `filters` query param the _userId_ must be sent. In this c
 API should get the assigned folders of the user, here we have the following cases:
 - **if the user has assigned folders**: return the list of folder assigned to the user and also the view_criteria=2 in the meta property
 - **if the user does not have assigned folders**: return the list of folders and the view_criteria=1 in the meta property
-> Note: do not send this parameter to the [Monolith](../Monolith.md)
+> Note: do not send this parameter to the internalAPI
 ### Flow
 ![Folders list with view = 2 flow](../assets/Folders%20list%20with%20view%202.png)  
