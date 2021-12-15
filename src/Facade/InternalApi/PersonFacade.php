@@ -7,8 +7,8 @@ namespace App\Facade\InternalApi;
 use App\Client\InternalApi\PersonClient;
 use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
-use App\Model\Person\AddPersonModel;
-use App\Model\Person\AssignDocumentToPersonModel;
+use App\Model\InternalApi\Person\AddPersonModel;
+use App\Model\InternalApi\Person\AssignDocumentToPersonModel;
 use Symfony\Component\HttpFoundation\Response;
 
 class PersonFacade

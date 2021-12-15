@@ -9,7 +9,6 @@ use App\Enum\FolderEnum;
 use App\Enum\PersonEnum;
 use App\Exception\ApiException;
 use App\Exception\ResourceNotFoundException;
-use App\Fetcher\FolderFetcher;
 use App\Services\FolderService;
 use App\Services\PersonService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -60,10 +59,10 @@ class FoldersController extends AbstractController
     /**
      * @Route("/{id}", name="get_by_id", methods="GET")
      */
-    public function getFolderById(int $id, FolderFetcher $folderFetcher): JsonResponse
+    public function getFolderById(int $id): JsonResponse
     {
         try {
-            $folderData = $folderFetcher->getFolderData($id, BepremsEnum::DEFAULT_FOLDER_BY_ID_FILTERS);
+            $folderData = $this->folderService->getFolderData($id, BepremsEnum::DEFAULT_FOLDER_BY_ID_FILTERS);
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
         }

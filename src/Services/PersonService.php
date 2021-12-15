@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\DTO\Person\PersonDTO;
-use App\DTO\Person\PersonInfoDTO;
 use App\Enum\PersonEnum;
 use App\Exception\InvalidDataException;
 use App\Facade\InternalApi\PersonFacade;
-use App\Model\InternalApi\Person\Person;
-use App\Model\Person\AddPersonModel;
-use App\Model\Person\AssignDocumentToPersonModel;
+use App\Model\InternalApi\Person\AddPersonModel;
+use App\Model\InternalApi\Person\AssignDocumentToPersonModel;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PersonService
@@ -58,31 +55,5 @@ class PersonService
         );
         $this->validationService->validate($assignDocumentData);
         $this->personFacade->assignDocument($assignDocumentData);
-    }
-
-    public function transformPersonToDTO(Person $person): PersonDTO
-    {
-        $personInfos = [];
-        foreach ($person->getPersonInfos() as $personInfo) {
-            $personInfoDTO = new PersonInfoDTO();
-            $personInfoDTO
-                ->setNameInfo($personInfo->getNomInfo())
-                ->setDataInfo($personInfo->getDataInfo())
-                ->setSource($personInfo->getSource());
-            $personInfos[] = $personInfoDTO;
-        }
-
-        $personDTO = new PersonDTO();
-        $personDTO
-            ->setPersonId($person->getPersonneId())
-            ->setLastName($person->getNom())
-            ->setFirstName($person->getPrenom())
-            ->setPersonTypeId($person->getPersonneTypeId())
-            ->setPersonUid($person->getPersonneUid())
-            ->setDateOfBirth($person->getDateNaissance())
-            ->setPersonInfo($personInfos)
-            ->setFolderId($person->getUserDossierId());
-
-        return $personDTO;
     }
 }

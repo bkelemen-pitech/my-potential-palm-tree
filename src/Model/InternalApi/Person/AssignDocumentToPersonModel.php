@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Person;
+namespace App\Model\InternalApi\Person;
 
 use App\Enum\DocumentEnum;
 use App\Enum\FolderEnum;
