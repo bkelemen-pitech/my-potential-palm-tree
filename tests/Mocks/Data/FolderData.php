@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Mocks\Data;
 
-use App\DTO\Folder\FolderByIdDTO;
-use App\Model\InternalApi\Folder\FolderById;
-use App\Model\InternalApi\Folder\GetFolderByIdResponse;
+use Kyc\InternalApiBundle\Model\InternalApi\Folder\FolderById;
+use Kyc\InternalApiBundle\Model\InternalApi\Folder\GetFolderByIdResponse;
+use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
 
 class FolderData
 {
@@ -19,32 +19,20 @@ class FolderData
 
     public const FOLDER_BY_ID_DATA = [1, '2', 3, 1400, 2, 20, 7];
 
-    public static function createFolderByIdDTO(array $persons, array $data = self::FOLDER_BY_ID_DATA)
+    public static function createFolderByIdModelResponse(array $data = self::FOLDER_BY_ID_DATA): FolderByIdModelResponse
     {
-        return (new FolderByIdDTO())
+        return (new FolderByIdModelResponse())
             ->setId($data[0])
             ->setPartnerFolderId($data[1])
             ->setStatus($data[2])
             ->setWorkflowStatus($data[3])
             ->setLabel($data[4])
             ->setSubscription($data[5])
-            ->setAgencyId($data[6])
-            ->setPersons($persons);
+            ->setAgencyId($data[6]);
     }
 
-    public static function createFolderByIdEntity(array $data = self::FOLDER_BY_ID_DATA)
-    {
-        return (new FolderById())
-            ->setUserDossierId($data[0])
-            ->setPartenaireDossierId($data[1])
-            ->setStatut($data[2])
-            ->setStatutWorkflow($data[3])
-            ->setLabel($data[4])
-            ->setAbonnement($data[5])
-            ->setAgenceIdRef($data[6]);
-    }
 
-    public static function createFolderByIdResponseEntity(FolderById $resource)
+    public static function createInternalApiFolderByIdResponse(FolderById $resource): GetFolderByIdResponse
     {
         return (new GetFolderByIdResponse())
             ->setCode('OK')
@@ -52,7 +40,7 @@ class FolderData
             ->setResource($resource);
     }
 
-    public static function getFolderByIdExpectedData()
+    public static function getFolderByIdExpectedData(): array
     {
         return [
             'id' => 1,
