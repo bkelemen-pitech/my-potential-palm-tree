@@ -49,7 +49,7 @@ This parameter will set a specific set of filters on the request to the internal
 from [Monolith](../Monolith.md). It can have these values:
 - 1 - corresponds to the _to be treated_ tab. This will add `statut_workflow = 10300` filter to the internalAPI request;
 - 2 - corresponds to the _in treatment_ tab. This will add `statut_workflow in [10301, 10302, 10303, 10304]` filter to the internalAPI request.
-If there is a _userId_ in the `filters` query params, we need to call the `/internalAPI/administrator/assignedfolders/administrator-id/{administrator-id}` 
+If there is a _userId_ in the `filters` query params, we need to call the `/internalAPI/administrators/assignedfolders/administrator-id/{administrator-id}` 
 and filter the [folders list](#folders-api) with the folderIds [assigned](./Details.md#assign-folder-to-user) to the user.
 > Note: do not send this parameter to the internalAPI
 #### View criteria
