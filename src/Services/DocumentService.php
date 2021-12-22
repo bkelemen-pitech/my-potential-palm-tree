@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\DTO\document\DocumentByFolderDTO;
-use App\DTO\Document\DocumentDTO;
 use App\Enum\DocumentEnum;
 use App\Exception\InvalidDataException;
 use App\Facade\InternalApi\DocumentFacade;
 use App\Fetcher\DocumentFetcher;
 use App\Helper\DocumentHelper;
-use App\Model\InternalApi\Document\Document;
-use App\Model\Request\Document\TreatDocumentModel;
+use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
+use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
+use Kyc\InternalApiBundle\Services\DocumentService as InternalApiDocumentService;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class DocumentService
@@ -21,18 +21,20 @@ class DocumentService
     protected DocumentFacade $documentFacade;
     protected SerializerInterface $serializer;
     protected ValidationService $validationService;
+    protected InternalApiDocumentService $internalApiDocumentService;
 
     public function __construct(
         DocumentFetcher $documentFetcher,
         DocumentFacade $documentFacade,
         SerializerInterface $serializer,
-        ValidationService $validationService
-
+        ValidationService $validationService,
+        InternalApiDocumentService $internalApiDocumentService
     ) {
         $this->documentFetcher = $documentFetcher;
         $this->documentFacade = $documentFacade;
         $this->serializer = $serializer;
         $this->validationService = $validationService;
+        $this->internalApiDocumentService = $internalApiDocumentService;
     }
 
     /**
@@ -96,20 +98,9 @@ class DocumentService
         return $this->setDocumentStatus($result, $document);
     }
 
-    public function getDocumentByUid(string $documentUid, bool $includeFiles): DocumentDTO
+    public function getDocumentByUid(string $documentUid, bool $includeFiles): DocumentModelResponse
     {
-        $internalApiDocuments = $this->documentFetcher->getDocumentsByUid($documentUid, $includeFiles);
-        $documentDTO = $this->serializer->deserialize(
-            $this->serializer->serialize($internalApiDocuments[0], 'json'),
-            DocumentDTO::class,
-            'json'
-        );
-
-        if (count($internalApiDocuments) > 1) {
-            $this->addVersoData($internalApiDocuments[1], $documentDTO, $includeFiles);
-        }
-
-        return $documentDTO;
+        return $this->internalApiDocumentService->getDocumentByUid($documentUid, $includeFiles);
     }
 
     public function treatDocument($data): void
@@ -186,15 +177,5 @@ class DocumentService
         }
 
         return $result;
-    }
-
-    private function addVersoData(Document $versoDocument, DocumentDTO $documentDTO, bool $includeFiles)
-    {
-        $documentDTO->setNameVerso($versoDocument->getNom());
-        if ($includeFiles) {
-            $documentDTO->setContentVerso($versoDocument->getDocumentFile());
-        }
-
-        return $documentDTO;
     }
 }

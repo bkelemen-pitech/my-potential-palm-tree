@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Mocks\Data;
 
-use App\Model\InternalApi\Document\Document;
 use App\Model\InternalApi\Document\DocumentByFolder;
 use DateTime;
+use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
 
 class DocumentsData
 {
@@ -40,39 +40,39 @@ class DocumentsData
         return $documentsArray;
     }
 
-    public static function getInternalApiDocumentsResponse(bool $withContent = false): array
+    public static function getInternalApiDocumentsResponse(bool $withContent = false): DocumentModelResponse
     {
-        $documentData = new Document();
+        $documentData = new DocumentModelResponse();
         $documentData
             ->setDocumentId(36090)
             ->setDocumentUid("617f896a61e39")
             ->setMasterDocumentId(0)
-            ->setNom("Kbis (CompanyID)")
-            ->setStatut(1)
+            ->setName("Kbis (CompanyID)")
+            ->setStatus(1)
             ->setData("a:2:{s:20:\"agence_document_type\";s:2:\"11\";s:16:\"controle_couleur\";i:0;}")
             ->setCreation(new DateTime('2021-11-01T06:30:02+00:00'))
             ->setDocumentTypeId(51)
             ->setSize(181333)
-            ->setStatutVerification(0)
-            ->setStatutVerification2(0)
-            ->setAnomalie(null)
+            ->setStatusVerification(0)
+            ->setStatusVerification2(0)
+            ->setAnomaly(null)
             ->setUrl("_TEMP_COMPANYID_1129_617f896a61e39.jpg")
             ->setSignature("6bba0ea97392769fffb14df19f7c850ba4c0bfdf9d214b490e001d7bbdfe335f")
-            ->setCryptage(true)
-            ->setAnomalieClient(null)
-            ->setStatutVerificationPartenaire(null)
+            ->setEncryption(true)
+            ->setCustomerAnomaly(null)
+            ->setPartnerVerificationStatus(null)
             ->setSignatureInfos(null)
             ->setType("Kbis")
             ->setOrderDocument(21)
-            ->setObligatoire(null)
-            ->setPersonneDocumentId(null)
-            ->setPartenaireDocumentId("passport.jpeg");
+            ->setMandatory(null)
+            ->setPersonDocumentId(null)
+            ->setPartnerDocumentId("passport.jpeg");
 
         if ($withContent) {
-           $documentData->setDocumentFile("/9j/4AAQSkZJRgABAQEAYABg...");
+           $documentData->setContent("/9j/4AAQSkZJRgABAQEAYABg...");
         }
 
-        return [$documentData];
+        return $documentData;
     }
 
     public static function getTestFolderPersonsDocumentExpectedData(): array
