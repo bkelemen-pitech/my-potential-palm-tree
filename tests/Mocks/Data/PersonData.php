@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Mocks\Data;
 
 use App\Model\InternalApi\Person\AssignDocumentToPersonModel;
+use Kyc\InternalApiBundle\Model\InternalApi\Person\AddPersonModel;
 use Kyc\InternalApiBundle\Model\InternalApi\Person\Person;
 use Kyc\InternalApiBundle\Model\InternalApi\Person\PersonInfo;
 use Kyc\InternalApiBundle\Model\InternalApi\Person\PersonsByFolderIdResponse;
@@ -95,5 +96,15 @@ class PersonData
             ->setFolderId($data[0])
             ->setDocumentUid($data[1])
             ->setPersonUid($data[2]);
+    }
+
+    public static function createAddPersonModel(array $data): AddPersonModel
+    {
+        return (new AddPersonModel())
+            ->setAgencyId($data[0])
+            ->setFirstName($data[1])
+            ->setLastName($data[2])
+            ->setPersonTypeId($data[3])
+            ->setUserFolderId($data[4]);
     }
 }
