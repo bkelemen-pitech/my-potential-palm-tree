@@ -10,7 +10,6 @@ use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotF
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
 use Kyc\InternalApiBundle\Services\FolderService as InternalApiFolderService;
 use Kyc\InternalApiBundle\Services\DocumentService as InternalApiDocumentService;
-
 use Symfony\Component\Serializer\SerializerInterface;
 
 class FolderService
