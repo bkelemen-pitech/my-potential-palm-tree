@@ -7,7 +7,6 @@ namespace App\Facade\InternalApi;
 use App\Client\InternalApi\PersonClient;
 use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
-use App\Model\InternalApi\Person\AddPersonModel;
 use App\Model\InternalApi\Person\AssignDocumentToPersonModel;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,17 +17,6 @@ class PersonFacade
     public function __construct(PersonClient $personClient)
     {
         $this->personClient = $personClient;
-    }
-
-    public function addPerson(AddPersonModel $addPersonParams): array
-    {
-        try {
-            $addPersonResponse = $this->personClient->createPerson($addPersonParams->toArray());
-
-            return $addPersonResponse->getResource();
-        } catch (\Exception $exception) {
-            throw new InvalidDataException($exception->getMessage());
-        }
     }
 
     public function assignDocument(AssignDocumentToPersonModel $assignDocumentToPersonParams): void
