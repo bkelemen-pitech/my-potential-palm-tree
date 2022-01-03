@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Mocks\Data;
 
-use App\Model\InternalApi\Person\AddPersonResponse;
-use App\Model\InternalApi\Person\AddPersonModel;
 use App\Model\InternalApi\Person\AssignDocumentToPersonModel;
+use Kyc\InternalApiBundle\Model\InternalApi\Person\AddPersonModel;
 use Kyc\InternalApiBundle\Model\InternalApi\Person\Person;
 use Kyc\InternalApiBundle\Model\InternalApi\Person\PersonInfo;
 use Kyc\InternalApiBundle\Model\InternalApi\Person\PersonsByFolderIdResponse;
@@ -19,7 +18,6 @@ class PersonData
     public const DEFAULT_PERSON_INFO_DATA = ['dossier', '39', null];
     public const PERSON1_DATA = ['Smith', 'John', '12-01-2020', 1, '1', 30];
     public const PERSON2_DATA = ['Smithy', 'Johny', '12-03-2020', 1, '1', 31];
-    public const ADD_PERSON_DATA = [709, null, null, 1, 1];
     public const ASSIGN_DOCUMENT_DATA = [1, '6196610f9d67', '6184c9672f420'];
 
     public static function createPersonInfoModelResponse(array $data = self::DEFAULT_PERSON_INFO_DATA): PersonInfoModelResponse
@@ -92,7 +90,15 @@ class PersonData
             ->setResource($persons);
     }
 
-    public static function createAddPersonModel(array $data = self::ADD_PERSON_DATA): AddPersonModel
+    public static function createAssignDocumentToPersonModel(array $data = self::ASSIGN_DOCUMENT_DATA): AssignDocumentToPersonModel
+    {
+        return (new AssignDocumentToPersonModel())
+            ->setFolderId($data[0])
+            ->setDocumentUid($data[1])
+            ->setPersonUid($data[2]);
+    }
+
+    public static function createAddPersonModel(array $data): AddPersonModel
     {
         return (new AddPersonModel())
             ->setAgencyId($data[0])
@@ -100,19 +106,5 @@ class PersonData
             ->setLastName($data[2])
             ->setPersonTypeId($data[3])
             ->setUserFolderId($data[4]);
-    }
-
-    public static function createAddPersonResponse(array $resource): AddPersonResponse
-    {
-        return (new AddPersonResponse())
-            ->setResource($resource);
-    }
-
-    public static function createAssignDocumentToPersonModel(array $data = self::ASSIGN_DOCUMENT_DATA): AssignDocumentToPersonModel
-    {
-        return (new AssignDocumentToPersonModel())
-            ->setFolderId($data[0])
-            ->setDocumentUid($data[1])
-            ->setPersonUid($data[2]);
     }
 }
