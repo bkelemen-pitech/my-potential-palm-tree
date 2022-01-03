@@ -8,7 +8,7 @@ use App\Enum\PersonEnum;
 use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
 use App\Facade\InternalApi\DocumentFacade;
-use Kyc\InternalApiBundle\Services\FolderService as KycFolderService;
+use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
 use App\Services\PersonService;
 use App\Tests\BaseApiTest;
 use App\Tests\Enum\BaseEnum;
@@ -25,27 +25,27 @@ class FoldersControllerTest extends BaseApiTest
     public const FOLDER_ASSIGN_DOCUMENT_TO_PERSON = 'api/v1/folders/1/persons/6196610f9d67/documents/6184c9672f420';
     public const FOLDER_ASSIGN_DOCUMENT_TO_PERSON_NO_DOCUMENT = 'api/v1/folders/1/persons/6196610f9d67/documents/';
 
-    protected ObjectProphecy $kycFolderService;
+    protected ObjectProphecy $internalApiFolderService;
     protected ObjectProphecy $documentFacade;
     protected ObjectProphecy $personService;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->kycFolderService = $this->prophesize(KycFolderService::class);
+        $this->internalApiFolderService = $this->prophesize(InternalApiFolderService::class);
         $this->documentFacade = $this->prophesize(DocumentFacade::class);
         $this->personService = $this->prophesize(PersonService::class);
-        static::getContainer()->set(KycFolderService::class, $this->kycFolderService->reveal());
+        static::getContainer()->set(InternalApiFolderService::class, $this->internalApiFolderService->reveal());
         static::getContainer()->set(DocumentFacade::class, $this->documentFacade->reveal());
         static::getContainer()->set(PersonService::class, $this->personService->reveal());
     }
 
     public function testGetFolderById()
     {
-        $this->kycFolderService->getFolderById(1)
+        $this->internalApiFolderService->getFolderById(1)
             ->shouldBeCalledOnce()
             ->willReturn(FolderData::createFolderByIdModelResponse());
-        $this->kycFolderService
+        $this->internalApiFolderService
             ->getPersonsByFolderId(1, FolderData::GET_FOLDER_BY_ID_ORDER_FILTERS)
             ->shouldBeCalledOnce()
             ->willReturn(PersonData::getFolderPersonsModelResponseByIdTestData());
@@ -57,8 +57,8 @@ class FoldersControllerTest extends BaseApiTest
 
     public function testGetFolderByIdNotFound()
     {
-        $this->kycFolderService->getFolderById(1)->willThrow(new ResourceNotFoundException());
-        $this->kycFolderService
+        $this->internalApiFolderService->getFolderById(1)->willThrow(new ResourceNotFoundException());
+        $this->internalApiFolderService
             ->getPersonsByFolderId(1, FolderData::GET_FOLDER_BY_ID_ORDER_FILTERS)
             ->shouldNotBeCalled();
         $this->requestWithBody(BaseEnum::METHOD_GET, self::GET_FOLDER);

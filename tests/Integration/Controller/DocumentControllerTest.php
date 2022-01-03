@@ -11,7 +11,7 @@ use App\Model\Request\Document\TreatDocumentModel;
 use App\Tests\BaseApiTest;
 use App\Tests\Enum\BaseEnum;
 use App\Tests\Mocks\Data\DocumentsData;
-use Kyc\InternalApiBundle\Services\DocumentService as KycDocumentService;
+use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class DocumentControllerTest extends BaseApiTest
@@ -20,20 +20,20 @@ class DocumentControllerTest extends BaseApiTest
     public const TREAT_DOCUMENT_PATH = 'api/v1/documents/treat';
 
     protected ObjectProphecy $documentFacade;
-    protected ObjectProphecy $kycDocumentService;
+    protected ObjectProphecy $internalApiDocumentService;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->documentFacade = $this->prophesize(DocumentFacade::class);
         static::getContainer()->set(DocumentFacade::class, $this->documentFacade->reveal());
-        $this->kycDocumentService = $this->prophesize(KycDocumentService::class);
-        static::getContainer()->set(KycDocumentService::class, $this->kycDocumentService->reveal());
+        $this->internalApiDocumentService = $this->prophesize(InternalApiDocumentService::class);
+        static::getContainer()->set(InternalApiDocumentService::class, $this->internalApiDocumentService->reveal());
     }
 
     public function testGetDocumentByUid()
     {
-        $this->kycDocumentService
+        $this->internalApiDocumentService
             ->getDocumentByUid(DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA, false)
             ->shouldBeCalledOnce()
             ->willReturn(DocumentsData::getInternalApiDocumentsResponse());
@@ -45,7 +45,7 @@ class DocumentControllerTest extends BaseApiTest
 
     public function testGetDocumentByUidWithContent()
     {
-        $this->kycDocumentService
+        $this->internalApiDocumentService
             ->getDocumentByUid(DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA, true)
             ->shouldBeCalledOnce()
             ->willReturn(DocumentsData::getInternalApiDocumentsResponse(true));
@@ -57,7 +57,7 @@ class DocumentControllerTest extends BaseApiTest
 
     public function testGetDocumentByUidNotFound()
     {
-        $this->kycDocumentService->getDocumentByUid('1', false)->willThrow(new ResourceNotFoundException());
+        $this->internalApiDocumentService->getDocumentByUid('1', false)->willThrow(new ResourceNotFoundException());
         $this->requestWithBody(BaseEnum::METHOD_GET, self::PATH . '1');
         $this->assertEquals(404, $this->getStatusCode());
     }

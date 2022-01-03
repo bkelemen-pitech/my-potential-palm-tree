@@ -12,7 +12,7 @@ use App\Fetcher\DocumentFetcher;
 use App\Helper\DocumentHelper;
 use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
-use Kyc\InternalApiBundle\Services\DocumentService as InternalApiDocumentService;
+use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class DocumentService

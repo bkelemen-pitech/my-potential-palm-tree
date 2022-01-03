@@ -10,7 +10,7 @@ use App\Fetcher\DocumentFetcher;
 use App\Model\Request\BaseFolderFiltersModel;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotFoundException;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
-use Kyc\InternalApiBundle\Services\FolderService as InternalApiFolderService;
+use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class FolderService
