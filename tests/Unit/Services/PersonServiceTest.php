@@ -10,7 +10,7 @@ use App\Services\PersonService;
 use App\Services\ValidationService;
 use App\Tests\BaseApiTest;
 use App\Tests\Mocks\Data\PersonData;
-use Kyc\InternalApiBundle\Services\PersonService as KycPersonService;
+use Kyc\InternalApiBundle\Services\PersonService as InternalApiPersonService;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -26,7 +26,7 @@ class PersonServiceTest extends BaseApiTest
     {
         parent::setUp();
         $this->personFacade = $this->prophesize(PersonFacade::class);
-        $this->internalApiPersonService = $this->prophesize(KycPersonService::class);
+        $this->internalApiPersonService = $this->prophesize(InternalApiPersonService::class);
         $this->validationService = $this->prophesize(ValidationService::class);
         $this->serializer = static::getContainer()->get(SerializerInterface::class);
 
