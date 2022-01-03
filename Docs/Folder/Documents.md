@@ -1,6 +1,7 @@
 ### Get folder documents API  
 This API retrieves the list of all documents attached on a folder. Internally it will 
 call `internalAPI/documents/getdocuments/folder-id/`.  
+
 ---
 __Method__: GET.  
 __URL__: `/api/v1/folders/{folderId}/documents`.  
@@ -39,6 +40,7 @@ This API retrieves the details about a specific document. Internally it will
 call `internalAPI/documents?document-uid={document-uid}`. This API can be used to fetch
 the contests of a document by adding the `include_files` query param. The content is
 base64 encoded.  
+
 ---
 __Method__: GET.  
 __URL__: `/api/v1/documents/{documentId}`.  
@@ -84,6 +86,7 @@ Content-Type: application/json
 This API updates the status of a specific document. Internally it will
 call `/internalAPI/documents/treat`. This API is used to validate/invalidate a document
 by an agent. The Back-office application will send the `status=2`.
+
 ---
 __Method__: POST.  
 __URL__: `/api/v1/documents/treat`.  
