@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\DTO\Document\DocumentByFolderDTO;
-use App\Enum\DocumentEnum;
 use App\Enum\FolderEnum;
 use App\Exception\ResourceNotFoundException;
 use App\Fetcher\DocumentFetcher;
@@ -11,6 +9,7 @@ use App\Model\Request\BaseFolderFiltersModel;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotFoundException;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
 use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
+use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class FolderService
@@ -20,19 +19,22 @@ class FolderService
     protected DocumentFetcher $documentFetcher;
     protected DocumentService $documentService;
     protected InternalApiFolderService $internalApiFolderService;
+    protected InternalApiDocumentService $internalApiDocumentService;
 
     public function __construct(
         SerializerInterface $serializer,
         ValidationService $validationService,
         DocumentFetcher $documentFetcher,
         DocumentService $documentService,
-        InternalApiFolderService $internalApiFolderService
+        InternalApiFolderService $internalApiFolderService,
+        InternalApiDocumentService $internalApiDocumentService
     ) {
         $this->serializer = $serializer;
         $this->validationService = $validationService;
         $this->documentFetcher = $documentFetcher;
         $this->documentService = $documentService;
         $this->internalApiFolderService = $internalApiFolderService;
+        $this->internalApiDocumentService = $internalApiDocumentService;
     }
 
     public function getFolders(array $data): array
@@ -53,25 +55,7 @@ class FolderService
 
     public function getDocuments(int $folderId): array
     {
-        $internalApiDocuments = $this->documentFetcher->getDocumentsByFolder($folderId);
-        $documents = $this->serializer->deserialize(
-            $this->serializer->serialize($internalApiDocuments, 'json'),
-            DocumentByFolderDTO::class . '[]',
-            'json'
-        );
-        $notDeletedDocuments = array_filter(
-            $documents,
-            function ($document) {
-                return $document->getStatus() !== DocumentEnum::DELETED;
-            }
-        );
-        if (empty($notDeletedDocuments)) {
-            return  [];
-        }
-
-        $documentSetList = $this->documentService->extractDocumentList($notDeletedDocuments);
-
-        return $this->documentService->getInfoForDocuments($documentSetList);
+        return $this->internalApiDocumentService->getDocumentsByFolderId($folderId);
     }
 
     public function getFolderData(int $folderId, array $filters): FolderByIdModelResponse

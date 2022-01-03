@@ -7,14 +7,15 @@ namespace App\Tests\Integration\Controller;
 use App\Enum\PersonEnum;
 use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
-use App\Facade\InternalApi\DocumentFacade;
-use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
 use App\Services\PersonService;
 use App\Tests\BaseApiTest;
 use App\Tests\Enum\BaseEnum;
 use App\Tests\Mocks\Data\DocumentsData;
 use App\Tests\Mocks\Data\FolderData;
 use App\Tests\Mocks\Data\PersonData;
+use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
+use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
+use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalApiInvalidDataException;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class FoldersControllerTest extends BaseApiTest
@@ -26,18 +27,19 @@ class FoldersControllerTest extends BaseApiTest
     public const FOLDER_ASSIGN_DOCUMENT_TO_PERSON_NO_DOCUMENT = 'api/v1/folders/1/persons/6196610f9d67/documents/';
 
     protected ObjectProphecy $internalApiFolderService;
-    protected ObjectProphecy $documentFacade;
+    protected ObjectProphecy $internalApiDocumentService;
     protected ObjectProphecy $personService;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->internalApiFolderService = $this->prophesize(InternalApiFolderService::class);
-        $this->documentFacade = $this->prophesize(DocumentFacade::class);
+        $this->internalApiDocumentService = $this->prophesize(InternalApiDocumentService::class);
         $this->personService = $this->prophesize(PersonService::class);
         static::getContainer()->set(InternalApiFolderService::class, $this->internalApiFolderService->reveal());
-        static::getContainer()->set(DocumentFacade::class, $this->documentFacade->reveal());
+        static::getContainer()->set(InternalApiDocumentService::class, $this->internalApiDocumentService->reveal());
         static::getContainer()->set(PersonService::class, $this->personService->reveal());
+
     }
 
     public function testGetFolderById()
@@ -64,24 +66,6 @@ class FoldersControllerTest extends BaseApiTest
         $this->requestWithBody(BaseEnum::METHOD_GET, self::GET_FOLDER);
 
         $this->assertEquals(404, $this->getStatusCode());
-    }
-
-    public function testGetFolderPersonsDocuments()
-    {
-        $this->documentFacade->getDocumentsByFolderId(1)->shouldBeCalledOnce()->willReturn(DocumentsData::getInternalApiDocumentsByFolderId());
-        $this->requestWithBody(BaseEnum::METHOD_GET, self::FOLDER_GET_DOCUMENTS);
-
-        $this->assertEquals(200, $this->getStatusCode());
-        $this->assertEquals(DocumentsData::getTestFolderPersonsDocumentExpectedData(), $this->getResponseContent());
-    }
-
-    public function testGetDocumentsException()
-    {
-        $exception = new InvalidDataException('Failed.');
-        $this->documentFacade->getDocumentsByFolderId(1)->shouldBeCalledOnce()->willThrow($exception);
-        $this->requestWithBody(BaseEnum::METHOD_GET, self::FOLDER_GET_DOCUMENTS);
-
-        $this->assertEquals(400, $this->getStatusCode());
     }
 
     public function testAddPersonOk()
@@ -129,5 +113,27 @@ class FoldersControllerTest extends BaseApiTest
     {
         $this->requestWithBody(BaseEnum::METHOD_PUT, self::FOLDER_ASSIGN_DOCUMENT_TO_PERSON_NO_DOCUMENT);
         $this->assertEquals(404, $this->getStatusCode());
+    }
+
+    public function testDocumentsByFolderIdCalled()
+    {
+        $this->internalApiDocumentService->getDocumentsByFolderId(1)
+            ->shouldBeCalledOnce()
+            ->willReturn(DocumentsData::getTestDocumentByUidExpectedData());
+
+        $this->requestWithBody(BaseEnum::METHOD_GET, self::FOLDER_GET_DOCUMENTS);
+
+        $this->assertEquals(200, $this->getStatusCode());
+        $this->assertEquals(DocumentsData::getTestDocumentByUidExpectedData(), $this->getResponseContent());
+    }
+
+    public function testDocumentsByFolderIdThrowsException()
+    {
+        $this->internalApiDocumentService->getDocumentsByFolderId(1)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiInvalidDataException());
+
+        $this->requestWithBody(BaseEnum::METHOD_GET, self::FOLDER_GET_DOCUMENTS);
+        $this->assertEquals(400, $this->getStatusCode());
     }
 }

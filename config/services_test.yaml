@@ -11,6 +11,9 @@ services:
   Kyc\InternalApiBundle\Service\DocumentService:
     public: true
 
+  Kyc\InternalApiBundle\Services\DocumentService:
+    public: true
+
   App\Facade\InternalApi\DocumentFacade:
     public: true
 

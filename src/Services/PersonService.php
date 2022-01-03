@@ -7,8 +7,9 @@ namespace App\Services;
 use App\Enum\PersonEnum;
 use App\Exception\InvalidDataException;
 use App\Facade\InternalApi\PersonFacade;
-use App\Model\InternalApi\Person\AddPersonModel;
 use App\Model\InternalApi\Person\AssignDocumentToPersonModel;
+use Kyc\InternalApiBundle\Model\InternalApi\Person\AddPersonModel;
+use Kyc\InternalApiBundle\Service\PersonService as InternalApiPersonService;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PersonService
@@ -16,16 +17,19 @@ class PersonService
     protected PersonFacade $personFacade;
     protected SerializerInterface $serializer;
     protected ValidationService $validationService;
+    protected InternalApiPersonService $internalApiPersonService;
 
     public function __construct(
         PersonFacade $personFacade,
         SerializerInterface $serializer,
-        ValidationService $validationService
+        ValidationService $validationService,
+        InternalApiPersonService $internalApiPersonService
     )
     {
         $this->personFacade = $personFacade;
         $this->serializer = $serializer;
         $this->validationService = $validationService;
+        $this->internalApiPersonService = $internalApiPersonService;
     }
 
     /**
@@ -38,10 +42,8 @@ class PersonService
                 json_encode(array_merge($personData, ['userFolderId' => $folderId])),
                 AddPersonModel::class, 'json'
             );
-            $this->validationService->validate($addPersonModelData);
-            $addPersonResource = $this->personFacade->addPerson($addPersonModelData);
 
-            return $addPersonResource[PersonEnum::BEPREMS_RESPONSE_PERSON_UID];
+            return $this->internalApiPersonService->addPerson($addPersonModelData);
         } catch (\Exception $exception) {
             throw new InvalidDataException($exception->getMessage());
         }

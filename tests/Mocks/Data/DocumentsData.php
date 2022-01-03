@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Mocks\Data;
 
-use App\Model\InternalApi\Document\DocumentByFolder;
 use DateTime;
+use Kyc\InternalApiBundle\Model\Response\Document\DocumentByFolderModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
 
 class DocumentsData
@@ -23,16 +23,16 @@ class DocumentsData
 
         $documentsArray = [];
         foreach ($dataSet as $data) {
-            array_push($documentsArray, (new DocumentByFolder())
+            array_push($documentsArray, (new DocumentByFolderModelResponse())
                 ->setDocumentId($data[0])
                 ->setDocumentUid($data[1])
                 ->setMasterDocumentId($data[2])
-                ->setNom($data[3])
+                ->setName($data[3])
                 ->setDocumentTypeId($data[4])
-                ->setStatut($data[5])
-                ->setStatutVerification($data[6])
-                ->setStatutVerification2($data[7])
-                ->setPersonneId($data[8])
+                ->setStatus($data[5])
+                ->setStatusVerification($data[6])
+                ->setStatusVerification2($data[7])
+                ->setPersonId($data[8])
                 ->setPersonVerification($data[9])
                 ->setCreation($data[10]));
         }
@@ -73,39 +73,6 @@ class DocumentsData
         }
 
         return $documentData;
-    }
-
-    public static function getTestFolderPersonsDocumentExpectedData(): array
-    {
-        return [
-            [
-                'name' => "Pièce d'identité",
-                'type' => 1,
-                'status' => 'invalid',
-                'uid' => '60a550c9e64a4',
-                'documentId' => 36090,
-                'documentStatus' => '3',
-                'personId' => 18534
-            ],
-            [
-                'name' => "Pièce d'identité",
-                'type' => 1,
-                'status' => 'invalid',
-                'uid' => '60a550c9e64a4',
-                'documentId' => 36091,
-                'documentStatus' => '3',
-                'personId' => 18534
-            ],
-            [
-                'name' => "Avis d'imposition [A-1] sur le revenu [A-2]",
-                'type' => 3,
-                'status' => 'pending',
-                'uid' => '60a55118ae17b',
-                'documentId' => 36092,
-                'documentStatus' => '0',
-                'personId' => 18534
-            ],
-        ];
     }
 
     public static function getTestDocumentByUidExpectedData(bool $withContent = false): array
