@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Enum\FolderEnum;
 use App\Exception\ResourceNotFoundException;
-use App\Fetcher\DocumentFetcher;
 use App\Model\Request\BaseFolderFiltersModel;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotFoundException;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
@@ -16,7 +15,6 @@ class FolderService
 {
     protected SerializerInterface $serializer;
     protected ValidationService $validationService;
-    protected DocumentFetcher $documentFetcher;
     protected DocumentService $documentService;
     protected InternalApiFolderService $internalApiFolderService;
     protected InternalApiDocumentService $internalApiDocumentService;
@@ -24,14 +22,12 @@ class FolderService
     public function __construct(
         SerializerInterface $serializer,
         ValidationService $validationService,
-        DocumentFetcher $documentFetcher,
         DocumentService $documentService,
         InternalApiFolderService $internalApiFolderService,
         InternalApiDocumentService $internalApiDocumentService
     ) {
         $this->serializer = $serializer;
         $this->validationService = $validationService;
-        $this->documentFetcher = $documentFetcher;
         $this->documentService = $documentService;
         $this->internalApiFolderService = $internalApiFolderService;
         $this->internalApiDocumentService = $internalApiDocumentService;

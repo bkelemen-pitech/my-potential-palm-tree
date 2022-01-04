@@ -11,9 +11,4 @@ class ResponseEnum
     public const ERROR = 'error';
     public const STATUS = 'status';
     public const STATUS_CODE = 'statusCode';
-
-    // Folders
-    public const FOLDERS = 'folders';
-    public const META = 'meta';
-    public const TOTAL = 'total';
 }

@@ -6,7 +6,6 @@ namespace App\Tests\Integration\Controller;
 
 use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
-use App\Facade\InternalApi\DocumentFacade;
 use App\Tests\BaseApiTest;
 use App\Tests\Enum\BaseEnum;
 use App\Tests\Mocks\Data\DocumentsData;
@@ -19,14 +18,11 @@ class DocumentControllerTest extends BaseApiTest
     public const PATH = 'api/v1/documents/';
     public const TREAT_DOCUMENT_PATH = 'api/v1/documents/treat';
 
-    protected ObjectProphecy $documentFacade;
     protected ObjectProphecy $internalApiDocumentService;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->documentFacade = $this->prophesize(DocumentFacade::class);
-        static::getContainer()->set(DocumentFacade::class, $this->documentFacade->reveal());
         $this->internalApiDocumentService = $this->prophesize(InternalApiDocumentService::class);
         static::getContainer()->set(InternalApiDocumentService::class, $this->internalApiDocumentService->reveal());
     }
