@@ -10,7 +10,7 @@ use App\Services\PersonService;
 use App\Services\ValidationService;
 use App\Tests\BaseApiTest;
 use App\Tests\Mocks\Data\PersonData;
-use Kyc\InternalApiBundle\Services\PersonService as InternalApiPersonService;
+use Kyc\InternalApiBundle\Service\PersonService as InternalApiPersonService;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Serializer\SerializerInterface;
 
