@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Tests\Mocks\Data;
 
 use DateTime;
+use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentByFolderModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
 
 class DocumentsData
 {
     public const DEFAULT_DOCUMENT_UID_TEST_DATA = '617f896a61e39';
+    public const TREAT_DOCUMENT_DATA = [self::DEFAULT_DOCUMENT_UID_TEST_DATA, 8];
 
     public static function getInternalApiDocumentsByFolderId(): array
     {
@@ -108,5 +110,12 @@ class DocumentsData
         }
 
         return $expected;
+    }
+
+    public static function createTreatDocumentModel(array $data = self::TREAT_DOCUMENT_DATA)
+    {
+        return (new TreatDocumentModel())
+            ->setDocumentUid($data[0])
+            ->setStatusVerification2($data[1]);
     }
 }
