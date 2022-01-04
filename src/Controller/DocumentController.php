@@ -25,7 +25,7 @@ class DocumentController extends AbstractController
     public function getDocument(string $documentUid, Request $request, DocumentService $documentService): JsonResponse
     {
         try {
-            $includeFiles = boolval($request->query->get(DocumentEnum::INCLUDE_FILES_PARAM));
+            $includeFiles = filter_var($request->query->get(DocumentEnum::INCLUDE_FILES_PARAM), FILTER_VALIDATE_BOOLEAN);
             $document = $documentService->getDocumentByUid($documentUid, $includeFiles);
         } catch (ResourceNotFoundException $exception) {
             throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
