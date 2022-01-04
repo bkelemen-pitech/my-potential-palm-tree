@@ -229,16 +229,16 @@
         },
         {
             "name": "kyc/internal-api-bundle",
-            "version": "v1.0.7",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
                 "url": "git@github.com:beprems/internal_api_bundle.git",
-                "reference": "dffef37ab2d424b3a94e4e13fd8ec0c2b3a16870"
+                "reference": "02fbec88a4ac3951fd6cb687c5d895342dc0ed4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beprems/internal_api_bundle/zipball/dffef37ab2d424b3a94e4e13fd8ec0c2b3a16870",
-                "reference": "dffef37ab2d424b3a94e4e13fd8ec0c2b3a16870",
+                "url": "https://api.github.com/repos/beprems/internal_api_bundle/zipball/02fbec88a4ac3951fd6cb687c5d895342dc0ed4b",
+                "reference": "02fbec88a4ac3951fd6cb687c5d895342dc0ed4b",
                 "shasum": ""
             },
             "require": {
@@ -298,7 +298,7 @@
                 "proprietary"
             ],
             "description": "Offers the mechanism to retrieve and update data needed for kyc projects.",
-            "time": "2022-01-03T15:40:39+00:00"
+            "time": "2022-01-04T11:23:01+00:00"
         },
         {
             "name": "monolog/monolog",
