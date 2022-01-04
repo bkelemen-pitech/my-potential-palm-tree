@@ -13,8 +13,8 @@ use App\Tests\Enum\BaseEnum;
 use App\Tests\Mocks\Data\DocumentsData;
 use App\Tests\Mocks\Data\FolderData;
 use App\Tests\Mocks\Data\PersonData;
-use Kyc\InternalApiBundle\Services\FolderService as InternalApiFolderService;
-use Kyc\InternalApiBundle\Services\DocumentService as InternalApiDocumentService;
+use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
+use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalApiInvalidDataException;
 use Prophecy\Prophecy\ObjectProphecy;
 

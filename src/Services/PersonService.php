@@ -9,7 +9,7 @@ use App\Exception\InvalidDataException;
 use App\Facade\InternalApi\PersonFacade;
 use App\Model\InternalApi\Person\AssignDocumentToPersonModel;
 use Kyc\InternalApiBundle\Model\InternalApi\Person\AddPersonModel;
-use Kyc\InternalApiBundle\Services\PersonService as InternalApiPersonService;
+use Kyc\InternalApiBundle\Service\PersonService as InternalApiPersonService;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PersonService
