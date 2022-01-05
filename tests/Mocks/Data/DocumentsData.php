@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Mocks\Data;
 
-use App\Model\InternalApi\Document\Document;
-use App\Model\InternalApi\Document\DocumentByFolder;
 use DateTime;
+use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
+use Kyc\InternalApiBundle\Model\Response\Document\DocumentByFolderModelResponse;
+use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
 
 class DocumentsData
 {
     public const DEFAULT_DOCUMENT_UID_TEST_DATA = '617f896a61e39';
+    public const TREAT_DOCUMENT_DATA = [self::DEFAULT_DOCUMENT_UID_TEST_DATA, 8];
 
     public static function getInternalApiDocumentsByFolderId(): array
     {
@@ -23,16 +25,16 @@ class DocumentsData
 
         $documentsArray = [];
         foreach ($dataSet as $data) {
-            array_push($documentsArray, (new DocumentByFolder())
+            array_push($documentsArray, (new DocumentByFolderModelResponse())
                 ->setDocumentId($data[0])
                 ->setDocumentUid($data[1])
                 ->setMasterDocumentId($data[2])
-                ->setNom($data[3])
+                ->setName($data[3])
                 ->setDocumentTypeId($data[4])
-                ->setStatut($data[5])
-                ->setStatutVerification($data[6])
-                ->setStatutVerification2($data[7])
-                ->setPersonneId($data[8])
+                ->setStatus($data[5])
+                ->setStatusVerification($data[6])
+                ->setStatusVerification2($data[7])
+                ->setPersonId($data[8])
                 ->setPersonVerification($data[9])
                 ->setCreation($data[10]));
         }
@@ -40,72 +42,39 @@ class DocumentsData
         return $documentsArray;
     }
 
-    public static function getInternalApiDocumentsResponse(bool $withContent = false): array
+    public static function getInternalApiDocumentsResponse(bool $withContent = false): DocumentModelResponse
     {
-        $documentData = new Document();
+        $documentData = new DocumentModelResponse();
         $documentData
             ->setDocumentId(36090)
             ->setDocumentUid("617f896a61e39")
             ->setMasterDocumentId(0)
-            ->setNom("Kbis (CompanyID)")
-            ->setStatut(1)
+            ->setName("Kbis (CompanyID)")
+            ->setStatus(1)
             ->setData("a:2:{s:20:\"agence_document_type\";s:2:\"11\";s:16:\"controle_couleur\";i:0;}")
             ->setCreation(new DateTime('2021-11-01T06:30:02+00:00'))
             ->setDocumentTypeId(51)
             ->setSize(181333)
-            ->setStatutVerification(0)
-            ->setStatutVerification2(0)
-            ->setAnomalie(null)
+            ->setStatusVerification(0)
+            ->setStatusVerification2(0)
+            ->setAnomaly(null)
             ->setUrl("_TEMP_COMPANYID_1129_617f896a61e39.jpg")
             ->setSignature("6bba0ea97392769fffb14df19f7c850ba4c0bfdf9d214b490e001d7bbdfe335f")
-            ->setCryptage(true)
-            ->setAnomalieClient(null)
-            ->setStatutVerificationPartenaire(null)
+            ->setEncryption(true)
+            ->setCustomerAnomaly(null)
+            ->setPartnerVerificationStatus(null)
             ->setSignatureInfos(null)
             ->setType("Kbis")
             ->setOrderDocument(21)
-            ->setObligatoire(null)
-            ->setPersonneDocumentId(null)
-            ->setPartenaireDocumentId("passport.jpeg");
+            ->setMandatory(null)
+            ->setPersonDocumentId(null)
+            ->setPartnerDocumentId("passport.jpeg");
 
         if ($withContent) {
-           $documentData->setDocumentFile("/9j/4AAQSkZJRgABAQEAYABg...");
+           $documentData->setContent("/9j/4AAQSkZJRgABAQEAYABg...");
         }
 
-        return [$documentData];
-    }
-
-    public static function getTestFolderPersonsDocumentExpectedData(): array
-    {
-        return [
-            [
-                'name' => "Pièce d'identité",
-                'type' => 1,
-                'status' => 'invalid',
-                'uid' => '60a550c9e64a4',
-                'documentId' => 36090,
-                'documentStatus' => '3',
-                'personId' => 18534
-            ],
-            [
-                'name' => "Pièce d'identité",
-                'type' => 1,
-                'status' => 'invalid',
-                'uid' => '60a550c9e64a4',
-                'documentId' => 36091,
-                'documentStatus' => '3',
-                'personId' => 18534
-            ],
-            [
-                'name' => "Avis d'imposition [A-1] sur le revenu [A-2]",
-                'type' => 3,
-                'status' => 'pending',
-                'uid' => '60a55118ae17b',
-                'documentId' => 36092,
-                'documentStatus' => '0',
-                'personId' => 18534
-            ],
-        ];
+        return $documentData;
     }
 
     public static function getTestDocumentByUidExpectedData(bool $withContent = false): array
@@ -141,5 +110,12 @@ class DocumentsData
         }
 
         return $expected;
+    }
+
+    public static function createTreatDocumentModel(array $data = self::TREAT_DOCUMENT_DATA)
+    {
+        return (new TreatDocumentModel())
+            ->setDocumentUid($data[0])
+            ->setStatusVerification2($data[1]);
     }
 }

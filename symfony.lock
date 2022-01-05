@@ -17,6 +17,9 @@
     "doctrine/lexer": {
         "version": "1.2.1"
     },
+    "kyc/internal-api-bundle": {
+        "version": "v1.0.0"
+    },
     "monolog/monolog": {
         "version": "2.3.5"
     },

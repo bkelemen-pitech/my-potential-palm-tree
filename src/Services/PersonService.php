@@ -4,31 +4,27 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\DTO\Person\PersonDTO;
-use App\DTO\Person\PersonInfoDTO;
-use App\Enum\PersonEnum;
 use App\Exception\InvalidDataException;
-use App\Facade\InternalApi\PersonFacade;
-use App\Model\InternalApi\Person\Person;
-use App\Model\Person\AddPersonModel;
-use App\Model\Person\AssignDocumentToPersonModel;
+use Kyc\InternalApiBundle\Model\InternalApi\Person\AddPersonModel;
+use Kyc\InternalApiBundle\Model\InternalApi\Person\AssignDocumentToPersonModel;
+use Kyc\InternalApiBundle\Service\PersonService as InternalApiPersonService;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PersonService
 {
-    protected PersonFacade $personFacade;
     protected SerializerInterface $serializer;
     protected ValidationService $validationService;
+    protected InternalApiPersonService $internalApiPersonService;
 
     public function __construct(
-        PersonFacade $personFacade,
         SerializerInterface $serializer,
-        ValidationService $validationService
+        ValidationService $validationService,
+        InternalApiPersonService $internalApiPersonService
     )
     {
-        $this->personFacade = $personFacade;
         $this->serializer = $serializer;
         $this->validationService = $validationService;
+        $this->internalApiPersonService = $internalApiPersonService;
     }
 
     /**
@@ -41,10 +37,8 @@ class PersonService
                 json_encode(array_merge($personData, ['userFolderId' => $folderId])),
                 AddPersonModel::class, 'json'
             );
-            $this->validationService->validate($addPersonModelData);
-            $addPersonResource = $this->personFacade->addPerson($addPersonModelData);
 
-            return $addPersonResource[PersonEnum::BEPREMS_RESPONSE_PERSON_UID];
+            return $this->internalApiPersonService->addPerson($addPersonModelData);
         } catch (\Exception $exception) {
             throw new InvalidDataException($exception->getMessage());
         }
@@ -56,33 +50,6 @@ class PersonService
             json_encode($data),
             AssignDocumentToPersonModel::class, 'json'
         );
-        $this->validationService->validate($assignDocumentData);
-        $this->personFacade->assignDocument($assignDocumentData);
-    }
-
-    public function transformPersonToDTO(Person $person): PersonDTO
-    {
-        $personInfos = [];
-        foreach ($person->getPersonInfos() as $personInfo) {
-            $personInfoDTO = new PersonInfoDTO();
-            $personInfoDTO
-                ->setNameInfo($personInfo->getNomInfo())
-                ->setDataInfo($personInfo->getDataInfo())
-                ->setSource($personInfo->getSource());
-            $personInfos[] = $personInfoDTO;
-        }
-
-        $personDTO = new PersonDTO();
-        $personDTO
-            ->setPersonId($person->getPersonneId())
-            ->setLastName($person->getNom())
-            ->setFirstName($person->getPrenom())
-            ->setPersonTypeId($person->getPersonneTypeId())
-            ->setPersonUid($person->getPersonneUid())
-            ->setDateOfBirth($person->getDateNaissance())
-            ->setPersonInfo($personInfos)
-            ->setFolderId($person->getUserDossierId());
-
-        return $personDTO;
+        $this->internalApiPersonService->assignDocument($assignDocumentData);
     }
 }

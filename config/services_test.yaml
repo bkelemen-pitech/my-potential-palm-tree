@@ -5,10 +5,10 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-  App\Fetcher\FolderFetcher:
+  Kyc\InternalApiBundle\Service\FolderService:
     public: true
 
-  App\Facade\InternalApi\DocumentFacade:
+  Kyc\InternalApiBundle\Service\DocumentService:
     public: true
 
   App\Services\PersonService:

@@ -2,36 +2,35 @@
 
 namespace App\Services;
 
-use App\DTO\Document\DocumentByFolderDTO;
-use App\Enum\DocumentEnum;
 use App\Enum\FolderEnum;
 use App\Exception\ResourceNotFoundException;
-use App\Fetcher\DocumentFetcher;
-use App\Fetcher\FolderFetcher;
 use App\Model\Request\BaseFolderFiltersModel;
-use App\Model\Response\BaseResponseFolderModel;
+use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotFoundException;
+use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
+use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
+use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class FolderService
 {
     protected SerializerInterface $serializer;
     protected ValidationService $validationService;
-    protected FolderFetcher $folderFetcher;
-    protected DocumentFetcher $documentFetcher;
     protected DocumentService $documentService;
+    protected InternalApiFolderService $internalApiFolderService;
+    protected InternalApiDocumentService $internalApiDocumentService;
 
     public function __construct(
-        FolderFetcher $folderFetcher,
         SerializerInterface $serializer,
         ValidationService $validationService,
-        DocumentFetcher $documentFetcher,
-        DocumentService $documentService
+        DocumentService $documentService,
+        InternalApiFolderService $internalApiFolderService,
+        InternalApiDocumentService $internalApiDocumentService
     ) {
-        $this->folderFetcher = $folderFetcher;
         $this->serializer = $serializer;
         $this->validationService = $validationService;
-        $this->documentFetcher = $documentFetcher;
         $this->documentService = $documentService;
+        $this->internalApiFolderService = $internalApiFolderService;
+        $this->internalApiDocumentService = $internalApiDocumentService;
     }
 
     public function getFolders(array $data): array
@@ -41,45 +40,30 @@ class FolderService
             BaseFolderFiltersModel::class,
             'json'
         );
-        $this->validationService->validate($folderFiltersModel);
 
-        $data = $this->folderFetcher->getFoldersWithFilters($folderFiltersModel);
-        $restructuredFolderArray = [];
-
-        foreach ($data[FolderEnum::FOLDERS] as $folder) {
-            $restructuredFolderArray[] = $this->serializer->deserialize(
-                json_encode($folder),
-                BaseResponseFolderModel::class,
-                'json'
-            )->toArray();
-        }
+        $data = $this->internalApiFolderService->getFolders($folderFiltersModel);
 
         return [
-            FolderEnum::FOLDERS => $restructuredFolderArray,
+            FolderEnum::FOLDERS => $data[FolderEnum::FOLDERS],
             FolderEnum::META => $data[FolderEnum::META],
         ];
     }
 
     public function getDocuments(int $folderId): array
     {
-        $internalApiDocuments = $this->documentFetcher->getDocumentsByFolder($folderId);
-        $documents = $this->serializer->deserialize(
-            $this->serializer->serialize($internalApiDocuments, 'json'),
-            DocumentByFolderDTO::class . '[]',
-            'json'
-        );
-        $notDeletedDocuments = array_filter(
-            $documents,
-            function ($document) {
-                return $document->getStatus() !== DocumentEnum::DELETED;
-            }
-        );
-        if (empty($notDeletedDocuments)) {
-            return  [];
+        return $this->internalApiDocumentService->getDocumentsByFolderId($folderId);
+    }
+
+    public function getFolderData(int $folderId, array $filters): FolderByIdModelResponse
+    {
+        try {
+            $folderById = $this->internalApiFolderService->getFolderById($folderId);
+            $persons = $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters);
+            $folderById->setPersons($persons);
+
+            return $folderById;
+        } catch (KycResourceNotFoundException $exception) {
+            throw new ResourceNotFoundException($exception->getMessage());
         }
-
-        $documentSetList = $this->documentService->extractDocumentList($notDeletedDocuments);
-
-        return $this->documentService->getInfoForDocuments($documentSetList);
     }
 }
