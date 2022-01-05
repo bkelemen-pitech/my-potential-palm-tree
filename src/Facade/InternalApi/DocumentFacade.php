@@ -7,7 +7,6 @@ namespace App\Facade\InternalApi;
 use App\Client\InternalApi\DocumentClient;
 use App\Exception\InvalidDataException;
 use App\Model\InternalApi\Document\DocumentByFolder;
-use App\Model\Request\Document\TreatDocumentModel;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 
 class DocumentFacade
@@ -29,15 +28,6 @@ class DocumentFacade
             
             return $documentsResponse->getResource();
         } catch (HttpExceptionInterface $exception) {
-            throw new InvalidDataException($exception->getMessage());
-        }
-    }
-
-    public function treatDocument(TreatDocumentModel $treatDocumentParams): void
-    {
-        try {
-            $this->client->treatDocument($treatDocumentParams);
-        } catch (\Exception $exception) {
             throw new InvalidDataException($exception->getMessage());
         }
     }
