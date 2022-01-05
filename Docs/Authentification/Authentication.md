@@ -37,10 +37,12 @@ Decoding the JWT will result in something similar to this
 {
   "iat": 1527026794,
   "exp": 1527027994,
-  "role": "administrator",
+  "role": 1,
   "user_id": 123
 }
 ```
+> Users roles are defined [here](../User/README.md#users-role)  
+
 This JWT will be used to keep the user authenticated on subsequent requests,
 by sending it under the header `X-Auth-Token`.
 ```http request
