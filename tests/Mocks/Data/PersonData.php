@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Mocks\Data;
 
-use App\Model\InternalApi\Person\AssignDocumentToPersonModel;
 use Kyc\InternalApiBundle\Model\InternalApi\Person\AddPersonModel;
+use Kyc\InternalApiBundle\Model\InternalApi\Person\AssignDocumentToPersonModel;
 use Kyc\InternalApiBundle\Model\InternalApi\Person\Person;
 use Kyc\InternalApiBundle\Model\InternalApi\Person\PersonInfo;
 use Kyc\InternalApiBundle\Model\InternalApi\Person\PersonsByFolderIdResponse;

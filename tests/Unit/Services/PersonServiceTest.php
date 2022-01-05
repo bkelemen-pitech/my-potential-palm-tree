@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Services;
 
 use App\Exception\InvalidDataException;
-use App\Facade\InternalApi\PersonFacade;
 use App\Services\PersonService;
 use App\Services\ValidationService;
 use App\Tests\BaseApiTest;
@@ -16,7 +15,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class PersonServiceTest extends BaseApiTest
 {
-    private ObjectProphecy $personFacade;
     private ObjectProphecy $internalApiPersonService;
     private ObjectProphecy $validationService;
     private $serializer;
@@ -25,13 +23,11 @@ class PersonServiceTest extends BaseApiTest
     public function setUp(): void
     {
         parent::setUp();
-        $this->personFacade = $this->prophesize(PersonFacade::class);
         $this->internalApiPersonService = $this->prophesize(InternalApiPersonService::class);
         $this->validationService = $this->prophesize(ValidationService::class);
         $this->serializer = static::getContainer()->get(SerializerInterface::class);
 
         $this->personService = new PersonService(
-            $this->personFacade->reveal(),
             $this->serializer,
             $this->validationService->reveal(),
             $this->internalApiPersonService->reveal()
