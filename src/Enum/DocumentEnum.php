@@ -31,9 +31,7 @@ class DocumentEnum
     const DOCUMENT_VERIFICATION_STATUS = 'documentStatus';
 
     // Monolith routes params name
-    public const BEPREMS_DOCUMENT_STATUS = 'statut';
     public const BEPREMS_DOCUMENT_UID = 'document_uid';
-    public const BEPREMS_DOCUMENT_VERIFICATION_STATUS2 = 'statut_verification2';
 
     public const DEFAULT_MULTIPLIER = 10000000000000;
     public const MULTIPLIER = [

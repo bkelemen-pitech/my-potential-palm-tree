@@ -43,8 +43,7 @@ class DocumentService
     {
         try {
             $treatDocumentData = $this->serializer->deserialize(json_encode($data), TreatDocumentModel::class, 'json');
-            $this->validationService->validate($treatDocumentData);
-            $this->documentFacade->treatDocument($treatDocumentData);
+            $this->internalApiDocumentService->treatDocument($treatDocumentData);
         } catch (\Exception $exception) {
             throw new InvalidDataException($exception->getMessage());
         }
