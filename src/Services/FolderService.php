@@ -43,29 +43,9 @@ class FolderService
         );
 
         $data = $this->internalApiFolderService->getFolders($folderFiltersModel);
-        $folderIds = [];
-        foreach ($data[FolderEnum::FOLDERS] as $folder) {
-            $folderIds[] = $folder->getFolderId();
-        }
-
-        $filterModel = new AssignedAdministratorFilterModel();
-        $filterModel->setUserDossierIds(\array_filter(\array_unique($folderIds)));
-
-        $assignedAdministrators = $this->internalApiFolderService->getAssignedAdministrators($filterModel);
-
-        $hashedAssignedAdministrators = [];
-        foreach ($assignedAdministrators as $assignedAdministrator) {
-            $hashedAssignedAdministrators[$assignedAdministrator->getFolderId()] = $assignedAdministrator;
-        }
-
-        foreach ($data[FolderEnum::FOLDERS] as $folder) {
-            if (!empty($hashedAssignedAdministrators[$folder->getFolderId()])) {
-                $folder->setAssignedTo($hashedAssignedAdministrators[$folder->getFolderId()]->getUsername());
-            }
-        }
 
         return [
-            FolderEnum::FOLDERS => $data[FolderEnum::FOLDERS],
+            FolderEnum::FOLDERS => $this->assignAdministratorToFolders($data[FolderEnum::FOLDERS]),
             FolderEnum::META => $data[FolderEnum::META],
         ];
     }
@@ -86,5 +66,34 @@ class FolderService
         } catch (KycResourceNotFoundException $exception) {
             throw new ResourceNotFoundException($exception->getMessage());
         }
+    }
+
+    /**
+     * @return FolderByIdModelResponse[]
+     */
+    public function assignAdministratorToFolders(array $folderModelResponses): array
+    {
+        $folderIds = [];
+        foreach ($folderModelResponses as $folder) {
+            $folderIds[] = $folder->getFolderId();
+        }
+
+        $filterModel = new AssignedAdministratorFilterModel();
+        $filterModel->setUserDossierIds(\array_filter(\array_unique($folderIds)));
+
+        $assignedAdministrators = $this->internalApiFolderService->getAssignedAdministrators($filterModel);
+
+        $hashedAssignedAdministrators = [];
+        foreach ($assignedAdministrators as $assignedAdministrator) {
+            $hashedAssignedAdministrators[$assignedAdministrator->getFolderId()] = $assignedAdministrator;
+        }
+
+        foreach ($folderModelResponses as $folder) {
+            if (!empty($hashedAssignedAdministrators[$folder->getFolderId()])) {
+                $folder->setAssignedTo($hashedAssignedAdministrators[$folder->getFolderId()]->getUsername());
+            }
+        }
+
+        return $folderModelResponses;
     }
 }
