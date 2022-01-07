@@ -6,6 +6,7 @@ use App\Enum\FolderEnum;
 use App\Exception\ResourceNotFoundException;
 use App\Model\Request\BaseFolderFiltersModel;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotFoundException;
+use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilterModel;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
 use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
@@ -36,12 +37,32 @@ class FolderService
     public function getFolders(array $data): array
     {
         $folderFiltersModel = $this->serializer->deserialize(
-            json_encode($data),
+            \json_encode($data),
             BaseFolderFiltersModel::class,
             'json'
         );
 
         $data = $this->internalApiFolderService->getFolders($folderFiltersModel);
+        $folderIds = [];
+        foreach ($data[FolderEnum::FOLDERS] as $folder) {
+            $folderIds[] = $folder->getFolderId();
+        }
+
+        $filterModel = new AssignedAdministratorFilterModel();
+        $filterModel->setUserDossierIds(\array_filter(\array_unique($folderIds)));
+
+        $assignedAdministrators = $this->internalApiFolderService->getAssignedAdministrators($filterModel);
+
+        $hashedAssignedAdministrators = [];
+        foreach ($assignedAdministrators as $assignedAdministrator) {
+            $hashedAssignedAdministrators[$assignedAdministrator->getFolderId()] = $assignedAdministrator;
+        }
+
+        foreach ($data[FolderEnum::FOLDERS] as $folder) {
+            if (!empty($hashedAssignedAdministrators[$folder->getFolderId()])) {
+                $folder->setAssignedTo($hashedAssignedAdministrators[$folder->getFolderId()]->getUsername());
+            }
+        }
 
         return [
             FolderEnum::FOLDERS => $data[FolderEnum::FOLDERS],
