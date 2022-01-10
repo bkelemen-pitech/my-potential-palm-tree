@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Service;
 
 use App\Exception\InvalidDataException;
 use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;

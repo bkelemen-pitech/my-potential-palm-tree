@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Services;
+namespace App\Service;
 
 use App\Enum\FolderEnum;
 use App\Exception\ResourceNotFoundException;
 use App\Model\Request\BaseFolderFiltersModel;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotFoundException;
 use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilterModel;
+use Kyc\InternalApiBundle\Model\Response\Folder\AssignedAdministratorModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
+use Kyc\InternalApiBundle\Model\Response\Folder\FolderModelResponse;
 use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -44,8 +46,17 @@ class FolderService
 
         $data = $this->internalApiFolderService->getFolders($folderFiltersModel);
 
+        $folderIds = [];
+        foreach ($data[FolderEnum::FOLDERS] as $folder) {
+            $folderIds[] = $folder->getFolderId();
+        }
+
+        $assignedAdministrators = $this->getAssignedAdministratorsByFolderIds($folderIds);
+
+        $folders = $this->assignAdministratorsToFolders($assignedAdministrators, $data[FolderEnum::FOLDERS]);
+
         return [
-            FolderEnum::FOLDERS => $this->assignAdministratorToFolders($data[FolderEnum::FOLDERS]),
+            FolderEnum::FOLDERS => $folders,
             FolderEnum::META => $data[FolderEnum::META],
         ];
     }
@@ -69,20 +80,24 @@ class FolderService
     }
 
     /**
-     * @return FolderByIdModelResponse[]
+     * @return AssignedAdministratorModelResponse[]
      */
-    public function assignAdministratorToFolders(array $folderModelResponses): array
+    public function getAssignedAdministratorsByFolderIds(array $folderIds): array
     {
-        $folderIds = [];
-        foreach ($folderModelResponses as $folder) {
-            $folderIds[] = $folder->getFolderId();
-        }
-
         $filterModel = new AssignedAdministratorFilterModel();
         $filterModel->setUserDossierIds(\array_filter(\array_unique($folderIds)));
 
-        $assignedAdministrators = $this->internalApiFolderService->getAssignedAdministrators($filterModel);
+        return $this->internalApiFolderService->getAssignedAdministrators($filterModel);
+    }
 
+    /**
+     * @param AssignedAdministratorModelResponse[]
+     * @param FolderModelResponse[]
+     *
+     * @return FolderByIdModelResponse[]
+     */
+    public function assignAdministratorsToFolders(array $assignedAdministrators, array $folderModelResponses): array
+    {
         $hashedAssignedAdministrators = [];
         foreach ($assignedAdministrators as $assignedAdministrator) {
             $hashedAssignedAdministrators[$assignedAdministrator->getFolderId()] = $assignedAdministrator;
