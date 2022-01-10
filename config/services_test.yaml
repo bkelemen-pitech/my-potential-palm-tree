@@ -11,7 +11,7 @@ services:
   Kyc\InternalApiBundle\Service\DocumentService:
     public: true
 
-  App\Services\PersonService:
+  App\Service\PersonService:
     public: true
 
   App\Services\DocumentService:

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Services;
+namespace App\Tests\Unit\Service;
 
 use App\Exception\InvalidDataException;
-use App\Services\PersonService;
-use App\Services\ValidationService;
+use App\Service\PersonService;
+use App\Service\ValidationService;
 use App\Tests\BaseApiTest;
 use App\Tests\Mocks\Data\PersonData;
 use Kyc\InternalApiBundle\Service\PersonService as InternalApiPersonService;
