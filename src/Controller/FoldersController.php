@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Enum\BepremsEnum;
+use App\Enum\DocumentEnum;
 use App\Enum\FolderEnum;
 use App\Enum\PersonEnum;
 use App\Exception\ApiException;
 use App\Exception\ResourceNotFoundException;
+use App\Services\DocumentService;
 use App\Services\FolderService;
 use App\Services\PersonService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,13 +27,16 @@ class FoldersController extends AbstractController
 {
     protected PersonService $personService;
     protected FolderService $folderService;
+    protected DocumentService $documentService;
 
     public function __construct(
         PersonService $personService,
-        FolderService $folderService
+        FolderService $folderService,
+        DocumentService $documentService
     ) {
         $this->personService = $personService;
         $this->folderService = $folderService;
+        $this->documentService = $documentService;
     }
 
     /**
@@ -107,6 +112,20 @@ class FoldersController extends AbstractController
             $this->personService->assignDocument(array_merge($request->attributes->get('_route_params'), [FolderEnum::FOLDER_ID => $folderId]));
         } catch (ResourceNotFoundException $exception) {
             throw new NotFoundHttpException($exception->getMessage());
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Route("/{folderId}/document/merge", name="merge_documents", methods="POST")
+     */
+    public function mergeDocuments(int $folderId, Request $request): JsonResponse
+    {
+        try {
+            $this->documentService->mergeDocuments(array_merge([FolderEnum::FOLDER_ID => $folderId], $request->toArray()));
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }

@@ -564,3 +564,47 @@ nelmio_api_doc:
               ref: '#/components/responses/NotFound'
             '500':
               ref: '#/components/responses/ServerError'
+      /api/v1/folders/{folderId}/document/merge:
+        post:
+          summary: Merge the documents with ids {documentIds}.
+          tags:
+            - Folders
+          parameters:
+            - ref: '#/components/parameters/folderId'
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    personUid:
+                      type: string
+                      example: 617ff03bb7c55
+                    filename:
+                      type: string
+                      example: Fusion_33
+                    documentTypeId:
+                      type: integer
+                      example: 51
+                    documentIds:
+                      type: array
+                      example: [10144, 10145]
+                      items:
+                        type: integer
+                  required:
+                    - personUid
+                    - filename
+                    - documentTypeId
+                    - documentIds
+          responses:
+            '200':
+              description: OK
+            '400':
+              description: Invalid Request
+              ref: '#/components/responses/InvalidRequest'
+            '404':
+              description: Resource Not Found
+              ref: '#/components/responses/NotFound'
+            '500':
+              ref: '#/components/responses/ServerError'
