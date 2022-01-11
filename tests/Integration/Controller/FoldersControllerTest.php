@@ -8,13 +8,18 @@ use App\Enum\FolderEnum;
 use App\Enum\PersonEnum;
 use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
-use App\Services\DocumentService;
-use App\Services\PersonService;
+use App\Model\Request\BaseFolderFiltersModel;
+use App\Service\DocumentService;
+use App\Service\PersonService;
 use App\Tests\BaseApiTest;
 use App\Tests\Enum\BaseEnum;
 use App\Tests\Mocks\Data\DocumentsData;
 use App\Tests\Mocks\Data\FolderData;
 use App\Tests\Mocks\Data\PersonData;
+use Kyc\InternalApiBundle\Enum\AdministratorEnum;
+use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilterModel;
+use Kyc\InternalApiBundle\Model\Response\Folder\AssignedAdministratorModelResponse;
+use Kyc\InternalApiBundle\Model\Response\Folder\FolderModelResponse;
 use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalApiInvalidDataException;
@@ -22,6 +27,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 
 class FoldersControllerTest extends BaseApiTest
 {
+    public const GET_FOLDERS = 'api/v1/folders/';
     public const GET_FOLDER = 'api/v1/folders/1';
     public const FOLDER_GET_DOCUMENTS = 'api/v1/folders/1/documents';
     public const FOLDER_ADD_PERSON = 'api/v1/folders/1/add-person';
@@ -46,6 +52,72 @@ class FoldersControllerTest extends BaseApiTest
         static::getContainer()->set(InternalApiDocumentService::class, $this->internalApiDocumentService->reveal());
         static::getContainer()->set(DocumentService::class, $this->documentService->reveal());
         static::getContainer()->set(PersonService::class, $this->personService->reveal());
+    }
+
+    public function testGetFolder()
+    {
+
+        $folderFilterModel = new BaseFolderFiltersModel();
+        $folderModelResponse1 = new FolderModelResponse();
+        $folderModelResponse1
+            ->setFolderId(1)
+            ->setFolder('1a')
+            ->setFirstName('First Name 1')
+            ->setLastName('Last Name 1');
+        $folderModelResponse2 = new FolderModelResponse();
+        $folderModelResponse2
+            ->setFolderId(2)
+            ->setFolder('2a')
+            ->setFirstName('First Name 2')
+            ->setLastName('Last Name 2');
+
+        $this->internalApiFolderService->getFolders($folderFilterModel)
+            ->shouldBeCalledOnce()
+            ->willReturn([
+                FolderEnum::FOLDERS => [
+                    $folderModelResponse1,
+                    $folderModelResponse2,
+                ],
+                FolderEnum::META => 2,
+            ]);
+
+        $filterModel = new AssignedAdministratorFilterModel();
+        $filterModel->setUserDossierIds([1,2]);
+
+        $resultAssignedAdministratorModelResponse1 = (new AssignedAdministratorModelResponse())
+            ->setAdministratorId(1)
+            ->setStatus(AdministratorEnum::STATUS_IN_PROGRESS)
+            ->setUsername('Admin1')
+            ->setFolderId(1);
+
+        $resultAssignedAdministratorModelResponse2 = (new AssignedAdministratorModelResponse())
+            ->setAdministratorId(2)
+            ->setStatus(AdministratorEnum::STATUS_IN_PROGRESS)
+            ->setUsername('Admin2')
+            ->setFolderId(2);
+
+        $this->internalApiFolderService->getAssignedAdministrators($filterModel)
+            ->shouldBeCalledOnce()
+            ->willReturn([
+                $resultAssignedAdministratorModelResponse1,
+                $resultAssignedAdministratorModelResponse2,
+            ]);
+        $this->requestWithBody(BaseEnum::METHOD_GET, self::GET_FOLDERS);
+
+        $this->assertEquals(200, $this->getStatusCode());
+
+        $folderModelResponse1->setAssignedTo('Admin1');
+        $folderModelResponse2->setAssignedTo('Admin2');
+
+        $this->assertEquals([
+                FolderEnum::FOLDERS => [
+                    $folderModelResponse1->toArray(),
+                    $folderModelResponse2->toArray(),
+                ],
+                FolderEnum::META => 2,
+            ],
+            $this->getResponseContent()
+        );
     }
 
     public function testGetFolderById()

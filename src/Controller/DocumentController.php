@@ -7,7 +7,7 @@ namespace App\Controller;
 use App\Enum\DocumentEnum;
 use App\Exception\ApiException;
 use App\Exception\ResourceNotFoundException;
-use App\Services\DocumentService;
+use App\Service\DocumentService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
