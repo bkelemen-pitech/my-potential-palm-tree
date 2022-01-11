@@ -9,6 +9,7 @@ use App\Enum\PersonEnum;
 use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
 use App\Model\Request\BaseFolderFiltersModel;
+use App\Service\DocumentService;
 use App\Service\PersonService;
 use App\Tests\BaseApiTest;
 use App\Tests\Enum\BaseEnum;
