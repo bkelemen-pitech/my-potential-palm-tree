@@ -4,18 +4,14 @@ with this content
 ```
 title BO Login flow
 
-FE BO->BE BO: /api/v1/login
-BE BO->+Monolith: /internalApi/login
-Monolith->Monolith: authenticate
+FE BO->BE BO: /api/v1/users/login
+BE BO->+Monolith: /internalApi/user/login
+Monolith->Monolith: Authenticate
 alt Authorized
     Monolith->BE BO: User
-    BE BO->BE BO: check IP
-    alt IP is in the whitelist 
-        BE BO->BE BO: generate JWT
-        BE BO->FE BO: JWT
-    else IP not in the whitelist
-        BE BO->FE BO: 401 Unauthorized
-    end
+    BE BO->BE BO: Generate JWT
+    BE BO->BE BO: Store JWT in Redis
+    BE BO->FE BO: JWT
 else Invalid user or password
     Monolith->-BE BO: 401 Unauthorized
     BE BO->FE BO: 401 Unauthorized
