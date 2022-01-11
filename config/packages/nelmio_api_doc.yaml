@@ -131,6 +131,9 @@ nelmio_api_doc:
                         lastName:
                           type: string
                           example: Wayne
+                        assignedTo:
+                          type: string
+                          example: Admin1
                   meta:
                     type: object
                     properties:
