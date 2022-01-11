@@ -21,6 +21,7 @@ class FolderEnum
     public const TEXT_SEARCH_FIELDS = 'text_search_fields';
 
     // API RESPONSE
+    public const ASSIGNED_TO = 'assignedTo';
     public const FIRST_NAME = 'firstName';
     public const FOLDER_ID = 'folderId';
     public const FOLDERS = 'folders';
