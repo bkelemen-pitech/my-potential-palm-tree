@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Controller;
 
-use App\Enum\DocumentEnum;
 use App\Enum\FolderEnum;
 use App\Enum\PersonEnum;
 use App\Exception\InvalidDataException;
