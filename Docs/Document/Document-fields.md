@@ -5,7 +5,7 @@ Internally it will call `internalAPI/documents/fields`.
 > agency_id in the request. The agency_id can be retrieved from the [JWT token](../Authentification/Authentication.md#decoding-the-jwt)
 
 __Method__: GET.  
-__URL__: `/api/v1/documents/fields`.  
+__URL__: `/api/v1/document/fields`.  
 __Query params__:
 - __document_type_id__ (int) 
 - __person_type_id__ (int)   
@@ -38,7 +38,7 @@ Content-Type: application/json
 {
   "statusCode":400,
   "body":null,
-  "error":"Invalid document type id or person typ id",
+  "error":"Invalid document type id or person type id",
   "status":"error"
 }
 
@@ -53,11 +53,11 @@ Content-Type: application/json
 #### Internal API response
 The response from internalAPI needs to be mapped according to this table
 
-| InteralAPI  | Bundle | Obs |
+| InternalAPI  | Bundle | Obs |
 | ------------- | ------------- | ------------- |
 | nom_info  | db_field_name  |  |
 | libelle  | label  |  |
-| obligatoir  | mandatory  | Possible values 1 for mandatory, 2 for optional |
+| obligatoir  | mandatory  | Possible values: 1 for mandatory, 2 for optional |
 | order  | order  | The order in which the fields need to be displayed |
 | format  | format  | The values from the internalAPI should be translated to english. Eg: "Texte" -> "text"  |
 | valeur_helper  | helper_method  |  |
