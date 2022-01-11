@@ -13,4 +13,6 @@ of folders for each view we use the [folders count](./Folders_count.md).
 When an agent selects a folder from the list he is redirected to the details page,
 where he is able to see the information about that folder. The information is retrieved
 by calling the [folder details](Details.md) API. The documents attached to a specific
-folders is retrieved by calling the [folder documents](Documents.md).
+folders is retrieved by calling the [folder documents](Documents.md). Each type 
+of document can have a specific set of fields that can be retrieved with the
+[documents fields API](../Document/Document-fields.md)
