@@ -6,7 +6,7 @@ namespace App\Tests\Unit\Services;
 
 use App\Enum\FolderEnum;
 use App\Exception\InvalidDataException;
-use App\Services\DocumentService;
+use App\Service\DocumentService;
 use App\Tests\BaseApiTest;
 use App\Tests\Mocks\Data\DocumentsData;
 use Kyc\InternalApiBundle\Model\Request\Document\MergeDocumentModel;

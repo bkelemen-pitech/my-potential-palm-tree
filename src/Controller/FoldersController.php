@@ -11,6 +11,7 @@ use App\Exception\ApiException;
 use App\Exception\ResourceNotFoundException;
 use App\Service\FolderService;
 use App\Service\PersonService;
+use App\Service\DocumentService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
