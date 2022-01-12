@@ -4,6 +4,7 @@ This application consists of several APIs. In general this application will comm
 The unprotected APIs are used for authenticating the user into the application.  
 [Authentication flow](./Authentification/Authentication.md)
 ### Protected APIs
-[Folder](./Folder/README.md) actions
+- [Folder](./Folder/README.md) actions  
+- [Document](./Document/README.md) actions
 
 
