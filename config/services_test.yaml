@@ -13,3 +13,6 @@ services:
 
   App\Services\PersonService:
     public: true
+
+  App\Services\DocumentService:
+    public: true

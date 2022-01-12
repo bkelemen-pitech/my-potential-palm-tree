@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Mocks\Data;
 
 use DateTime;
+use Kyc\InternalApiBundle\Model\Request\Document\MergeDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentByFolderModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
@@ -13,6 +14,12 @@ class DocumentsData
 {
     public const DEFAULT_DOCUMENT_UID_TEST_DATA = '617f896a61e39';
     public const TREAT_DOCUMENT_DATA = [self::DEFAULT_DOCUMENT_UID_TEST_DATA, 8];
+    public const MERGE_DOCUMENTS_BODY = [
+        "personUid" => "617ff03bb7c55",
+        "filename" => "test_merge_documents",
+        "documentTypeId" => 51,
+        "documentIds" => [37441, 37442]
+    ];
 
     public static function getInternalApiDocumentsByFolderId(): array
     {
@@ -117,5 +124,15 @@ class DocumentsData
         return (new TreatDocumentModel())
             ->setDocumentUid($data[0])
             ->setStatusVerification2($data[1]);
+    }
+
+    public static function createMergeDocumentModel(array $data = self::MERGE_DOCUMENTS_BODY, int $folderId = 1): MergeDocumentModel
+    {
+        return (new MergeDocumentModel())
+            ->setFolderId($folderId)
+            ->setPersonUid($data['personUid'])
+            ->setFilename($data['filename'])
+            ->setDocumentTypeId($data['documentTypeId'])
+            ->setDocumentIds($data['documentIds']);
     }
 }
