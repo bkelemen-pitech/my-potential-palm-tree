@@ -1,6 +1,6 @@
 ## Folder Actions
-The Back-office application must give an agent the possibility to manage folders. Here 
-are described the different actions an agent can perform.
+The Back-office application must give to the user the possibility to manage folders. Here 
+are described the different actions a user can perform.
 
 ### List
 Each agent can see the list of folders. The [folders list](./Folders.md) is organised by [views](./Folders.md#views).
@@ -12,7 +12,5 @@ of folders for each view we use the [folders count](./Folders_count.md).
 ### Details
 When an agent selects a folder from the list he is redirected to the details page,
 where he is able to see the information about that folder. The information is retrieved
-by calling the [folder details](Details.md) API. The documents attached to a specific
-folders is retrieved by calling the [folder documents](Documents.md). Each type 
-of document can have a specific set of fields that can be retrieved with the
-[documents fields API](../Document/Document-fields.md)
+by calling the [folder details](Details.md) API. For details regarding the documents
+attached to a specific folders check documentation [here](../Document/Folder-documents.md). 
