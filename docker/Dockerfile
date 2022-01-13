@@ -13,6 +13,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
     && apt-get autoremove -y && apt-get clean && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Install PHP Redis extension.
+RUN pecl install redis && docker-php-ext-enable redis
 
 # Install Xdebug.
 RUN pecl install xdebug && docker-php-ext-enable xdebug

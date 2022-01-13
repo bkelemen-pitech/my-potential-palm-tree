@@ -3,6 +3,8 @@
 
 Docker setup project for KYC back-office project.
 
+## [Docs](./Docs)
+
 ## Usage
 
 For the initial install, you should use:

@@ -14,9 +14,13 @@ services:
         networks:
             - default
             - webhelp-kyc-docker_default
+    cfp_redis:
+        image: redis:latest
+        volumes: [ 'redis:/data' ]
 
 volumes:
     postgresql-volume:
+    redis:
 
 networks:
     webhelp-kyc-docker_default:
