@@ -1,7 +1,7 @@
 # Define monolith internalAPI endpoints responsibilities
 * Status: [proposed]
-* Deciders: @bkelemen-pitech, @mariuspop86, @SergiuParlea
-* Date: [2022-01-13]
+* Deciders: @bkelemen-pitech, @mariuspop86, @SergiuParlea, @fonica
+* Date: [2022-01-14]
 
 <!-- Technical Story: [description | ticket/issue URL] -->
 
@@ -31,4 +31,5 @@ request to the internalAPI
 ### Each endpoint can handle one or more related entities
 
 * Good, because one endpoint for related entities
-* Bad, because it will serve a single purpose, hard to reuse
+* Bad, because it will serve a single purpose
+* Bad, because it's hard to reuse
