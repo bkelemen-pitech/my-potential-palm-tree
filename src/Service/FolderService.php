@@ -6,12 +6,15 @@ use App\Enum\FolderEnum;
 use App\Exception\ResourceNotFoundException;
 use App\Model\Request\BaseFolderFiltersModel;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotFoundException;
+use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalAPIInvalidDataException;
 use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilterModel;
+use Kyc\InternalApiBundle\Model\Request\Administrator\UpdateStatusWorkflowModel;
 use Kyc\InternalApiBundle\Model\Response\Folder\AssignedAdministratorModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderModelResponse;
 use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class FolderService
@@ -21,19 +24,22 @@ class FolderService
     protected DocumentService $documentService;
     protected InternalApiFolderService $internalApiFolderService;
     protected InternalApiDocumentService $internalApiDocumentService;
+    protected LoggerInterface $logger;
 
     public function __construct(
         SerializerInterface $serializer,
         ValidationService $validationService,
         DocumentService $documentService,
         InternalApiFolderService $internalApiFolderService,
-        InternalApiDocumentService $internalApiDocumentService
+        InternalApiDocumentService $internalApiDocumentService,
+        LoggerInterface $logger
     ) {
         $this->serializer = $serializer;
         $this->validationService = $validationService;
         $this->documentService = $documentService;
         $this->internalApiFolderService = $internalApiFolderService;
         $this->internalApiDocumentService = $internalApiDocumentService;
+        $this->logger = $logger;
     }
 
     public function getFolders(array $data): array
@@ -72,6 +78,19 @@ class FolderService
             $folderById = $this->internalApiFolderService->getFolderById($folderId);
             $persons = $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters);
             $folderById->setPersons($persons);
+
+            if ($folderById->getWorkflowStatus() == FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP) {
+                try {
+                    // add administrator ID when login is done.
+                    $this->internalApiFolderService->updateStatusWorkflow(
+                        (new UpdateStatusWorkflowModel())
+                        ->setUserDossierId($folderId)
+                        ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP)
+                    );
+                } catch (InternalAPIInvalidDataException $exception) {
+                    $this->logger->error($exception->getMessage(), [$exception->getTrace()]);
+                }
+            }
 
             return $folderById;
         } catch (KycResourceNotFoundException $exception) {
