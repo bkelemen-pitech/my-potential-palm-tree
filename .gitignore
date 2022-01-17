@@ -21,3 +21,5 @@
 
 /coverage
 /docker-compose.override.yaml
+
+/node_modules
