@@ -64,8 +64,7 @@ __URL__: `/api/v1/documents/{documentId}`.
 Request example:
 
 ```http request
-GET {HOST_NAME}/api/v1/documents/{documentUid}
-
+DELETE {HOST_NAME}/api/v1/documents/{documentId}
 Accept: application/json 
 Content-Type: application/json 
 
@@ -84,7 +83,7 @@ Content-Type: application/json
 {
   "statusCode":404,
   "body":null,
-  "error":"No document found for documentUid 133815.",
+  "error":"No document found for documentId 133815.",
   "status":"error"
 }
 ```
