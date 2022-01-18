@@ -328,6 +328,21 @@ nelmio_api_doc:
             application/json:
               schema:
                 $ref: '#/components/schemas/401Error'
+        LoginResponse:
+          type: object
+          properties:
+            token:
+              type: string
+              example: stringJWTToken
+        LoginRequest:
+          type: object
+          properties:
+            username:
+              type: string
+              example: username
+            password:
+              type: string
+              example: password
       schemas:
         200Success:
           title: 200 Success
@@ -611,3 +626,24 @@ nelmio_api_doc:
               ref: '#/components/responses/NotFound'
             '500':
               ref: '#/components/responses/ServerError'
+      /api/v1/users/login:
+        post:
+          summary: This action is used for login
+          tags:
+            - User
+          requestBody:
+            description: Log into the system using username and password
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/LoginRequest'
+          responses:
+            200:
+              description: Returns the jwt token.
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/LoginResponse'
+            401:
+              $ref: '#/components/responses/Unauthenticated'

@@ -2,7 +2,6 @@
 
 namespace App\Security;
 
-use App\DTO\User\UserLoginDTO;
 use App\Enum\BepremsEnum;
 use App\Exception\ResourceNotFoundException;
 use Kyc\InternalApiBundle\Service\UserService;
@@ -15,7 +14,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class UserProvider implements UserProviderInterface
 {
-    const ROLE_PREFIX = 'ROLE_';
     protected UserService $userService;
     protected PasswordEncoderInterface $passwordEncrypter;
     protected SerializerInterface $serializer;
@@ -36,19 +34,14 @@ class UserProvider implements UserProviderInterface
             $loginData = (array) $identifier;
             $loginData[BepremsEnum::PASSWORD] = $this->passwordEncrypter->encodePassword($loginData[BepremsEnum::PASSWORD], null);
             $loginData[BepremsEnum::APPLICATION] = BepremsEnum::LOGIN_APPLICATION;
-            /** @var UserLoginDTO $userData */
-            $userData = $this->serializer->deserialize(
-                $this->serializer->serialize($this->userService->loginUser($loginData), 'json'),
-                UserLoginDTO::class,
-                'json'
-            );
 
+            $userData = $this->userService->loginUser($loginData);
             $user = User::createFromPayload(
                 $userData->getLogin(),
                 [
                     'password' => $userData->getPassword(),
-                    'roles' => [self::ROLE_PREFIX . $userData->getRole()],
-                    'administratorId' => $userData->getAdministratorId(),
+                    'roles' => [$userData->getRole()],
+                    'userId' => $userData->getUserId(),
                 ]
             );
         } catch (ResourceNotFoundException $exception) {

@@ -12,19 +12,19 @@ class User implements JWTUserInterface
 
     private $roles = [];
 
-    private $administratorId;
+    private $userId;
 
     /**
      * @var string The hashed password
      */
     private $password;
 
-    public function __construct($username, $password, array $roles, $administratorId)
+    public function __construct($username, $password, array $roles, $userId)
     {
         $this->username = $username;
         $this->password = $password;
         $this->roles = $roles;
-        $this->administratorId = $administratorId;
+        $this->userId = $userId;
     }
 
     /**
@@ -82,9 +82,9 @@ class User implements JWTUserInterface
         return $this;
     }
 
-    public function getAdministratorId(): int
+    public function getUserId(): int
     {
-        return $this->administratorId;
+        return $this->userId;
     }
 
     /**
@@ -111,7 +111,7 @@ class User implements JWTUserInterface
             $username,
             $payload['password'] ?? null,
             $payload['roles'],
-            $payload['administratorId'],
+            $payload['userId'],
         );
     }
 }

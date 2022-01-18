@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class AuthTokenBuilder
 {
-    public const REDIS_PREFIX = 'ADMINISTATOR_JWT_TOKEN_';
+    public const REDIS_PREFIX = 'USER_JWT_TOKEN_';
 
     protected JWTTokenManagerInterface $jwtManager;
     protected RedisStorageFacade $redisStorageFacade;
@@ -30,7 +30,7 @@ class AuthTokenBuilder
     public function createForUser(UserInterface $user, ?string $firewall = null): JWTUserToken
     {
         $payload = [
-            'administratorId' => $user->getAdministratorId(),
+            'userId' => $user->getUserId(),
         ];
 
         $token = $this->jwtManager->createFromPayload($user, $payload);
@@ -41,7 +41,6 @@ class AuthTokenBuilder
 
     public function setRedisToken(UserInterface $user, string $token)
     {
-        $this->redisStorageFacade->set(self::REDIS_PREFIX . $user->getAdministratorId(), $token, $this->authTTL);
-
+        $this->redisStorageFacade->set(self::REDIS_PREFIX . $user->getUserId(), $token, $this->authTTL);
     }
 }

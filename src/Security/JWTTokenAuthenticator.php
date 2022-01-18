@@ -29,7 +29,7 @@ class JWTTokenAuthenticator extends LexikJWTTokenAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        $key = AuthTokenBuilder::REDIS_PREFIX . $credentials->getPayload()['administratorId'];
+        $key = AuthTokenBuilder::REDIS_PREFIX . $credentials->getPayload()['userId'];
 
         return $this->redisStorageFacade->has($key)
             && $this->redisStorageFacade->get($key) === $credentials->getCredentials();
