@@ -134,6 +134,12 @@ nelmio_api_doc:
                         assignedTo:
                           type: string
                           example: Admin1
+                        dateOfBirth:
+                          type: string
+                          example: "2020-02-02"
+                        subscription:
+                          type: integer
+                          example: 10
                   meta:
                     type: object
                     properties:
