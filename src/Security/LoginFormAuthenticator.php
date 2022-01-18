@@ -103,15 +103,6 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
-//    public function start(Request $request, AuthenticationException $authException = null): JsonResponse
-//    {
-//        $data = [
-//            'message' => 'Authentication Required',
-//        ];
-//
-//        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
-//    }
-
     public function supportsRememberMe(): bool
     {
         return false;
@@ -124,44 +115,4 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
 
         return $authToken;
     }
-//    public function supports(Request $request): ?bool
-//    {
-//        return self::LOGIN_ROUTE_NAME === $request->attributes->get('_route')
-//            && $request->isMethod('POST');
-//    }
-//
-//    public function authenticate(Request $request): PassportInterface
-//    {
-//        var_dump('test');
-//        $apiToken = $request->headers->get('X-AUTH-TOKEN');
-//        if (null === $apiToken) {
-//            // The token header was empty, authentication fails with HTTP Status
-//            // Code 401 "Unauthorized"
-//            throw new CustomUserMessageAuthenticationException('No API token provided');
-//        }
-//
-//        return new SelfValidatingPassport(new UserBadge($apiToken));
-//    }
-//
-//    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-//    {
-//        var_dump('flure');
-//
-//        // on success, let the request continue
-//        return null;
-//    }
-//
-//    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
-//    {
-//        var_dump('flure');
-//        $data = [
-//            // you may want to customize or obfuscate the message first
-//            'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
-//
-//            // or to translate this message
-//            // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
-//        ];
-//
-//        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
-//    }
 }
