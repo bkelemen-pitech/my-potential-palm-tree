@@ -86,3 +86,39 @@ Content-Type: application/json
   "status":"error"
 }
 ```
+
+## Document data log
+This API will retrieve the document data logs. Internally it will
+call `internalAPI/documents/documentdatalogs` API.
+
+---
+__Method__: GET.  
+__URL__: `/api/v1/documents/document-data-logs`.  
+Request example:
+
+```http request
+GET {HOST_NAME}/api/v1/documents/document-data-logs?documentId[]=1&documentId[]=2
+Accept: application/json 
+Content-Type: application/json 
+
+200 OK
+{
+  "documentDataLogs": [
+    { 
+	  "createdAt" : "2052-01-14 09:42:38.000000",
+	  "documentId" : 2, 
+ 	  "administratorId" : 1,
+      "verification2Status" : 1,
+    },
+    ...
+  ]
+}
+
+400 BAD REQUEST
+{
+  "statusCode":400,
+  "body":null,
+  "error":"Bad request",
+  "status":"error"
+}
+```

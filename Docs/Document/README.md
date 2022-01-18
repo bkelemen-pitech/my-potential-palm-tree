@@ -17,6 +17,6 @@ To treat a document the [treat document API](./TreateDocument.md) should be call
 TBD...
 
 ## Misc actions
-There are other API endpoints that are needed by the frontend application. here is a list:  
+There are other API endpoints that are needed by the frontend application. Here is a list:  
 - [Document fields](./Document-fields.md)  
 TBD...
