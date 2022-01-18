@@ -8,7 +8,7 @@ use App\Model\Request\BaseFolderFiltersModel;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotFoundException;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalAPIInvalidDataException;
 use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilterModel;
-use Kyc\InternalApiBundle\Model\Request\Administrator\UpdateStatusWorkflowModel;
+use Kyc\InternalApiBundle\Model\Request\Folder\UpdateStatusWorkflowModel;
 use Kyc\InternalApiBundle\Model\Response\Folder\AssignedAdministratorModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderModelResponse;
@@ -82,10 +82,14 @@ class FolderService
             if ($folderById->getWorkflowStatus() == FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP) {
                 try {
                     // add administrator ID when login is done.
-                    $this->internalApiFolderService->updateStatusWorkflow(
-                        (new UpdateStatusWorkflowModel())
+                    $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+                    $updateStatusWorkflowModel
                         ->setUserDossierId($folderId)
                         ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP)
+                    ;
+
+                    $this->internalApiFolderService->updateStatusWorkflow(
+
                     );
                 } catch (InternalAPIInvalidDataException $exception) {
                     $this->logger->error($exception->getMessage(), [$exception->getTrace()]);
