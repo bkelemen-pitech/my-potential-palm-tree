@@ -10,9 +10,8 @@ Request example:
 
 ```http request
 GET {HOST_NAME}/api/v1/documents/treat
-
 Accept: application/json 
-Content-Type: application/json 
+Content-Type: application/json
 
 {
   "documentUid": "1234abc456",
