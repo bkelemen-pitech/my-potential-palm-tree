@@ -20,6 +20,12 @@ For test, you can run:
 
 Please check Makefile file for more available commands
 
+JWT
+---
+
+In order to generate keys, you can run:
+ - make generate-jwt-keys
+
 Hosts
 -----
 

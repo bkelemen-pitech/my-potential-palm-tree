@@ -18,4 +18,15 @@ class BepremsEnum
         BepremsEnum::PERSON_ORDER_BY => 'prenom,nom',
         BepremsEnum::PERSON_INFO_ORDER_BY => 'source,creation'
     ];
+
+    public const LOGIN = 'login';
+    public const PASSWORD = 'password';
+    public const USERNAME = 'username';
+    public const APPLICATION = 'application';
+    public const LOGIN_APPLICATION = 'backoffice';
+
+    public const AUTHENTICATION_REQUIRED_PARAMS = [
+        self::LOGIN,
+        self::PASSWORD,
+    ];
 }

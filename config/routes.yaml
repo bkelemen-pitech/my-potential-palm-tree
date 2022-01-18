@@ -1,3 +1,9 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+app.v1.login:
+  path: /api/v1/user/login
+  methods: [POST]
+app.v1.logout:
+  path: /api/v1/user/logout
+  methods: POST
