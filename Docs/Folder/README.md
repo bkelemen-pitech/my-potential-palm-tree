@@ -16,6 +16,6 @@ by calling the [folder details](Details.md) API. For details regarding the docum
 attached to a specific folders check documentation [here](../Document/Folder-documents.md). 
 
 ### Misc actions
-There are other API endpoints that are needed by the frontend application. here is a list:
+There are other API endpoints that are needed by the frontend application. Here is a list:
 - [Update workflow status](./Workflow_status.md)  
 
