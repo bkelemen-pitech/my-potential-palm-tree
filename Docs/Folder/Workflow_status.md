@@ -2,6 +2,7 @@
 The application must be able to update the state of a folder by updating the workflow 
 status property in the database. To update this field the application calls
 `internalAPI/folders/updatestatusworkflow` API.
+
 ---
 __Method__: POST.  
 __URL__: `/api/v1/folders/{folderId}/update-workflow-status`.  
