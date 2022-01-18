@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Security;
 
+use App\Enum\UserEnum;
 use App\Facade\RedisStorageFacade;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator as LexikJWTTokenAuthenticator;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -29,7 +30,7 @@ class JWTTokenAuthenticator extends LexikJWTTokenAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        $key = AuthTokenBuilder::REDIS_PREFIX . $credentials->getPayload()['userId'];
+        $key = AuthTokenBuilder::REDIS_PREFIX . $credentials->getPayload()[UserEnum::USER_ID];
 
         return $this->redisStorageFacade->has($key)
             && $this->redisStorageFacade->get($key) === $credentials->getCredentials();

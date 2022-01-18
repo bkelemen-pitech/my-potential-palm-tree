@@ -2,6 +2,8 @@
 
 namespace App\Security;
 
+use App\Enum\BepremsEnum;
+use App\Enum\UserEnum;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -109,9 +111,9 @@ class User implements JWTUserInterface
     {
         return new self(
             $username,
-            $payload['password'] ?? null,
-            $payload['roles'],
-            $payload['userId'],
+            $payload[BepremsEnum::PASSWORD] ?? null,
+            $payload[UserEnum::USER_ROLES],
+            $payload[UserEnum::USER_ID],
         );
     }
 }

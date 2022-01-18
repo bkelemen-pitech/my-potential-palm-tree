@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Security;
 
+use App\Enum\BepremsEnum;
 use App\Traits\ExceptionMessageTrait;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTAuthenticatedEvent;
@@ -48,7 +49,7 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
     public function getCredentials(Request $request)
     {
         $body = $request->toArray();
-        foreach (['username', 'password'] as $key) {
+        foreach ([BepremsEnum::USERNAME, BepremsEnum::PASSWORD] as $key) {
             if (!array_key_exists($key, $body)) {
                 throw new AuthenticationCredentialsNotFoundException($key);
             }
@@ -59,8 +60,8 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
         }
 
         return [
-            'username' => $body['username'],
-            'password' => $body['password'],
+            BepremsEnum::USERNAME => $body[BepremsEnum::USERNAME],
+            BepremsEnum::PASSWORD => $body[BepremsEnum::PASSWORD],
         ];
     }
 

@@ -9,7 +9,7 @@ install:
 	chmod +x .git/hooks/pre-push
 	make build
 	make configure-app
-    make generate-jwt-keys
+	make generate-jwt-keys
 
 configure-app:
 	docker-compose exec app composer install

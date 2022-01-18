@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Enum\BepremsEnum;
+use App\Enum\UserEnum;
 use App\Exception\ResourceNotFoundException;
 use Kyc\InternalApiBundle\Service\UserService;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
@@ -39,9 +40,9 @@ class UserProvider implements UserProviderInterface
             $user = User::createFromPayload(
                 $userData->getLogin(),
                 [
-                    'password' => $userData->getPassword(),
-                    'roles' => [$userData->getRole()],
-                    'userId' => $userData->getUserId(),
+                    BepremsEnum::PASSWORD => $userData->getPassword(),
+                    UserEnum::USER_ROLES => [$userData->getRole()],
+                    UserEnum::USER_ID => $userData->getUserId(),
                 ]
             );
         } catch (ResourceNotFoundException $exception) {

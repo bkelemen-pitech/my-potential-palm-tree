@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Security;
 
+use App\Enum\UserEnum;
 use App\Facade\RedisStorageFacade;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Authentication\Token\JWTUserToken;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -30,7 +31,7 @@ class AuthTokenBuilder
     public function createForUser(UserInterface $user, ?string $firewall = null): JWTUserToken
     {
         $payload = [
-            'userId' => $user->getUserId(),
+            UserEnum::USER_ID => $user->getUserId(),
         ];
 
         $token = $this->jwtManager->createFromPayload($user, $payload);
