@@ -7,6 +7,7 @@ __URL__: `/api/v1/document/fields`.
 __Query params__:
 - __document_type_id__ (int) 
 - __person_type_id__ (int)   
+- __agency_id__ (int)
 
 Request example:
 
@@ -19,13 +20,13 @@ Content-Type: application/json
 {
   "fields":{[
     { 
-      "db_field_name" : "nom",
+      "dbFieldName" : "nom",
       "label" : "Nom",
-      "mandatory' : 1,
+      "mandatory" : 1,
       "order" : 1,
       "format" : "text",
-      "helper_method" : "getCommonNom",
-      "validator_method" : "validateFormData",
+      "helperMethod" : "getCommonNom",
+      "validatorMethod" : "validateFormData",
     },
     ...
    ]}
@@ -52,10 +53,10 @@ The response from internalAPI needs to be mapped according to this table
 
 | InternalAPI  | Bundle | Obs |
 | ------------- | ------------- | ------------- |
-| nom_info  | db_field_name  |  |
+| nom_info  | dbFieldName  |  |
 | libelle  | label  |  |
 | obligatoir  | mandatory  | Possible values: 1 for mandatory, 2 for optional |
 | order  | order  | The order in which the fields need to be displayed |
 | format  | format  | The values from the internalAPI should be translated to english. Eg: "Texte" -> "text"  |
-| valeur_helper  | helper_method  |  |
-| validateur  | validator_method  |  |
+| valeur_helper  | helperMethod  |  |
+| validateur  | validatorMethod  |  |

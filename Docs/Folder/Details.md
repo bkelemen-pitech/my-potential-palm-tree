@@ -52,7 +52,7 @@ Content-Type: application/json
 {
   "statusCode":404,
   "body":null,
-  "error":"Folder with id 1072383444 not found",
+  "error":"Folder with id 1 not found",
   "status":"error"
 }
 ```

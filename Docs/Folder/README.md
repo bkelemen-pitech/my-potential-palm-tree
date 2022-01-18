@@ -14,3 +14,8 @@ When an agent selects a folder from the list he is redirected to the details pag
 where he is able to see the information about that folder. The information is retrieved
 by calling the [folder details](Details.md) API. For details regarding the documents
 attached to a specific folders check documentation [here](../Document/Folder-documents.md). 
+
+### Misc actions
+There are other API endpoints that are needed by the frontend application. here is a list:
+- [Update workflow status](./Workflow_status.md)  
+
