@@ -20,13 +20,14 @@ Content-Type: application/json
 {
   "fields":{[
     { 
-      "dbFieldName" : "nom",
-      "label" : "Nom",
-      "mandatory" : 1,
-      "order" : 1,
-      "format" : "text",
-      "helperMethod" : "getCommonNom",
-      "validatorMethod" : "validateFormData",
+      "dbFieldName": "nom",
+      "label": "Nom",
+      "mandatory": 1,
+      "order": 1,
+      "format": 1,
+      "ocr_field: 1,
+      "helperMethod": "getCommonNom",
+      "validatorMethod": "validateFormData",
     },
     ...
    ]}
@@ -39,14 +40,6 @@ Content-Type: application/json
   "error":"Invalid document type id or person type id",
   "status":"error"
 }
-
-404 NOT FOUND
-{
-  "statusCode":404,
-  "body":null,
-  "error":"Resourse not found for document type id or person type id",
-  "status":"error"
-}
 ```
 #### Internal API response
 The response from internalAPI needs to be mapped according to this table
@@ -56,7 +49,8 @@ The response from internalAPI needs to be mapped according to this table
 | nom_info  | dbFieldName  |  |
 | libelle  | label  |  |
 | obligatoir  | mandatory  | Possible values: 1 for mandatory, 2 for optional |
-| order  | order  | The order in which the fields need to be displayed |
-| format  | format  | The values from the internalAPI should be translated to english. Eg: "Texte" -> "text"  |
+| ordre  | order  | The order in which the fields need to be displayed |
+| format  | format  |  |
+| champs_ocr  | ocr_field  |  |
 | valeur_helper  | helperMethod  |  |
 | validateur  | validatorMethod  |  |
