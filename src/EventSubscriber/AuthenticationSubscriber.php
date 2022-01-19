@@ -15,7 +15,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class AuthenticationSubscriber implements EventSubscriberInterface
 {
-    public const EXTENDED_TOKEN = 'X-Extended-Token';
     public const EXTENDED_TOKEN_ROUTES_EXCLUSION = ['app.v1.login', 'app.v1.logout'];
 
     public ?UserInterface $user = null;

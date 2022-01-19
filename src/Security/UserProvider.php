@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class UserProvider implements UserProviderInterface
 {
+    const ROLE_PREFIX = 'ROLE_';
     protected UserService $userService;
     protected PasswordEncoderInterface $passwordEncrypter;
     protected SerializerInterface $serializer;
@@ -33,15 +34,15 @@ class UserProvider implements UserProviderInterface
     {
         try {
             $loginData = (array) $identifier;
-            $loginData[BepremsEnum::PASSWORD] = $this->passwordEncrypter->encodePassword($loginData[BepremsEnum::PASSWORD], null);
+            $loginData[UserEnum::PASSWORD] = $this->passwordEncrypter->encodePassword($loginData[UserEnum::PASSWORD], null);
             $loginData[BepremsEnum::APPLICATION] = BepremsEnum::LOGIN_APPLICATION;
 
             $userData = $this->userService->loginUser($loginData);
             $user = User::createFromPayload(
                 $userData->getLogin(),
                 [
-                    BepremsEnum::PASSWORD => $userData->getPassword(),
-                    UserEnum::USER_ROLES => [$userData->getRole()],
+                    UserEnum::PASSWORD => $userData->getPassword(),
+                    UserEnum::USER_ROLES => [self::ROLE_PREFIX . $userData->getRole()],
                     UserEnum::USER_ID => $userData->getUserId(),
                 ]
             );

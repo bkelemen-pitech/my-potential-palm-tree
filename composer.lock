@@ -229,16 +229,16 @@
         },
         {
             "name": "kyc/internal-api-bundle",
-            "version": "v1.1.4",
+            "version": "v1.1.6",
             "source": {
                 "type": "git",
                 "url": "git@github.com:beprems/internal_api_bundle.git",
-                "reference": "eee3f02dbe872552c1e67ed20986007ed5a8582f"
+                "reference": "dddb3594bcfcb1df0ceb67ca0a1915fbc1085fa9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beprems/internal_api_bundle/zipball/eee3f02dbe872552c1e67ed20986007ed5a8582f",
-                "reference": "eee3f02dbe872552c1e67ed20986007ed5a8582f",
+                "url": "https://api.github.com/repos/beprems/internal_api_bundle/zipball/dddb3594bcfcb1df0ceb67ca0a1915fbc1085fa9",
+                "reference": "dddb3594bcfcb1df0ceb67ca0a1915fbc1085fa9",
                 "shasum": ""
             },
             "require": {
@@ -298,7 +298,7 @@
                 "proprietary"
             ],
             "description": "Offers the mechanism to retrieve and update data needed for kyc projects.",
-            "time": "2022-01-13T13:26:39+00:00"
+            "time": "2022-01-19T05:21:26+00:00"
         },
         {
             "name": "lcobucci/clock",
