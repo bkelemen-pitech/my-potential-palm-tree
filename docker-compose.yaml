@@ -14,7 +14,7 @@ services:
         networks:
             - default
             - webhelp-kyc-docker_default
-    cfp_redis:
+    bo_redis:
         image: redis:latest
         volumes: [ 'redis:/data' ]
 
