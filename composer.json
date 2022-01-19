@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "doctrine/annotations": "^1.0",
         "kyc/internal-api-bundle": "^1.1",
+        "lexik/jwt-authentication-bundle": "^2.14",
         "nelmio/api-doc-bundle": "^4.6",
         "nelmio/cors-bundle": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -78,6 +79,7 @@
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "5.3.*",
         "symfony/css-selector": "5.3.*",
+        "symfony/maker-bundle": "^1.36",
         "symfony/phpunit-bridge": "^5.3",
         "symfony/twig-bundle": "^5.3",
         "symfony/web-profiler-bundle": "^5.3"

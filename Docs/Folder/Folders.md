@@ -34,7 +34,7 @@ Content-Type: application/json
        "folder": "TESTFOLDER",
        "firstName": "Jhon",
        "lastName": "Doe", 
-       "birthDate": "22/06/2021"
+       "dateOfBirth": "22/06/2021"
        "subscription": 10
     },
     ...

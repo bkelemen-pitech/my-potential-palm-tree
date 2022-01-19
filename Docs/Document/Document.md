@@ -11,12 +11,11 @@ return the content of the linked document also in the `contentVerso` property.
 
 ---
 __Method__: GET.  
-__URL__: `/api/v1/documents/{documentId}`.  
+__URL__: `/api/v1/documents/{documentUId}`.  
 Request example:
 
 ```http request
-GET {HOST_NAME}/api/v1/documents/{documentUid}
-
+GET {HOST_NAME}/api/v1/documents/619648c127658
 Accept: application/json 
 Content-Type: application/json 
 
@@ -50,7 +49,7 @@ Content-Type: application/json
 {
   "statusCode":404,
   "body":null,
-  "error":"No document found for documentUid 133815.",
+  "error":"No document found for documentUid 619648c127658.",
   "status":"error"
 }
 ```
@@ -64,7 +63,7 @@ __URL__: `/api/v1/documents/{documentId}`.
 Request example:
 
 ```http request
-DELETE {HOST_NAME}/api/v1/documents/{documentId}
+DELETE {HOST_NAME}/api/v1/documents/1
 Accept: application/json 
 Content-Type: application/json 
 
@@ -84,6 +83,42 @@ Content-Type: application/json
   "statusCode":404,
   "body":null,
   "error":"No document found for documentId 133815.",
+  "status":"error"
+}
+```
+
+## Document data log
+This API will retrieve the document data logs. Internally it will
+call `internalAPI/documents/documentdatalogs` API.
+
+---
+__Method__: GET.  
+__URL__: `/api/v1/documents/document-data-logs`.  
+Request example:
+
+```http request
+GET {HOST_NAME}/api/v1/documents/document-data-logs?documentId[]=1&documentId[]=2
+Accept: application/json 
+Content-Type: application/json 
+
+200 OK
+{
+  "documentDataLogs": [
+    { 
+	  "createdAt" : "2052-01-14 09:42:38.000000",
+	  "documentId" : 2, 
+ 	  "administratorId" : 1,
+      "verification2Status" : 1,
+    },
+    ...
+  ]
+}
+
+400 BAD REQUEST
+{
+  "statusCode":400,
+  "body":null,
+  "error":"Bad request",
   "status":"error"
 }
 ```

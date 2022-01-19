@@ -35,10 +35,13 @@ __401 Unauthorized__
 Decoding the JWT will result in something similar to this
 ```JSON
 {
-  "iat": 1527026794,
-  "exp": 1527027994,
-  "role": 1,
-  "user_id": 123
+  "iat": 1642508293,
+  "exp": 1642561200,
+  "roles": [
+    "ROLE_1"
+  ],
+  "userId": 1,
+  "username": "peter-parker"
 }
 ```
 > Users roles are defined [here](../User/README.md#users-role)  
@@ -46,7 +49,7 @@ Decoding the JWT will result in something similar to this
 This JWT will be used to keep the user authenticated on subsequent requests,
 by sending it under the header `X-Auth-Token`.
 ```http request
-GET {HOST_NAME}/api/v1/fodlers
+GET {HOST_NAME}/api/v1/folders
 Accept: application/json 
 X-Auth-Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYX...
 ```

@@ -18,4 +18,7 @@ class BepremsEnum
         BepremsEnum::PERSON_ORDER_BY => 'prenom,nom',
         BepremsEnum::PERSON_INFO_ORDER_BY => 'source,creation'
     ];
+
+    public const APPLICATION = 'application';
+    public const LOGIN_APPLICATION = 'backoffice';
 }
