@@ -35,10 +35,13 @@ __401 Unauthorized__
 Decoding the JWT will result in something similar to this
 ```JSON
 {
-  "iat": 1527026794,
-  "exp": 1527027994,
-  "role": 1,
-  "user_id": 123
+  "iat": 1642508293,
+  "exp": 1642561200,
+  "roles": [
+    1
+  ],
+  "userId": 1,
+  "username": "peter-parker"
 }
 ```
 > Users roles are defined [here](../User/README.md#users-role)  
