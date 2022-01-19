@@ -39,14 +39,6 @@ class FoldersController extends AbstractController
     }
 
     /**
-     * @Route("/test", name="test")
-     */
-    public function test(): Response
-    {
-        return $this->json(['test' => 'test']);
-    }
-
-    /**
      * @Route("/", name="get_folders", methods="GET")
      */
     public function getFolders(Request $request): JsonResponse
