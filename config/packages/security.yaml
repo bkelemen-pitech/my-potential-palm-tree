@@ -29,6 +29,8 @@ security:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
                 provider: jwt
+            logout:
+                path: app.v1.logout
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
