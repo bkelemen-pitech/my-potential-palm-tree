@@ -92,12 +92,16 @@ This API will retrieve the document data logs. Internally it will
 call `internalAPI/documents/documentdatalogs` API.
 
 ---
-__Method__: GET.  
-__URL__: `/api/v1/documents/document-data-logs`.  
+__Method__: GET  
+__URL__: `/api/v1/documents/document-data-logs`  
+__Query params__:
+- __documentId__ (array) - the document Ids, at least one id must be provided
+- __administratorId__ (int) - the administrator id, _optional_  
+
 Request example:
 
 ```http request
-GET {HOST_NAME}/api/v1/documents/document-data-logs?documentId[]=1&documentId[]=2
+GET {HOST_NAME}/api/v1/documents/document-data-logs?documentId[]=1&documentId[]=2&administratorId=1
 Accept: application/json 
 Content-Type: application/json 
 
@@ -105,9 +109,9 @@ Content-Type: application/json
 {
   "documentDataLogs": [
     { 
-	  "createdAt" : "2052-01-14 09:42:38.000000",
-	  "documentId" : 2, 
- 	  "administratorId" : 1,
+      "createdAt" : "2052-01-14 09:42:38.000000",
+      "documentId" : 2, 
+      "administratorId" : 1,
       "verification2Status" : 1,
     },
     ...
