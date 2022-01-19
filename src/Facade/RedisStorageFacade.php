@@ -30,7 +30,7 @@ class RedisStorageFacade
         return 1 === $this->client->exists($key);
     }
 
-    public function del($key)
+    public function delete($key)
     {
         return $this->client->del($key);
     }

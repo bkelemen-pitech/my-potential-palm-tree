@@ -652,3 +652,13 @@ nelmio_api_doc:
               $ref: '#/components/responses/LoginResponse'
             401:
               $ref: '#/components/responses/Unauthenticated'
+      /api/v1/users/logout:
+        post:
+          summary: This action is used for logout
+          tags:
+            - User
+          responses:
+            204:
+              description: No content
+            401:
+              $ref: '#/components/responses/Unauthenticated'
