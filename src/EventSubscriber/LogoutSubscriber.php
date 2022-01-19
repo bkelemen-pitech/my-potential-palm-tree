@@ -54,7 +54,7 @@ class LogoutSubscriber implements EventSubscriberInterface
         }
 
         $key = AuthTokenBuilder::REDIS_PREFIX . $payload[UserEnum::USER_ID];
-        $this->redisStorageFacade->del($key);
+        $this->redisStorageFacade->delete($key);
 
         $response = $event->getResponse();
         $response->setStatusCode(Response::HTTP_NO_CONTENT);
