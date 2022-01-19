@@ -21,7 +21,6 @@ class FolderService
 {
     protected SerializerInterface $serializer;
     protected ValidationService $validationService;
-    protected DocumentService $documentService;
     protected InternalApiFolderService $internalApiFolderService;
     protected InternalApiDocumentService $internalApiDocumentService;
     protected LoggerInterface $logger;
@@ -29,14 +28,12 @@ class FolderService
     public function __construct(
         SerializerInterface $serializer,
         ValidationService $validationService,
-        DocumentService $documentService,
         InternalApiFolderService $internalApiFolderService,
         InternalApiDocumentService $internalApiDocumentService,
         LoggerInterface $logger
     ) {
         $this->serializer = $serializer;
         $this->validationService = $validationService;
-        $this->documentService = $documentService;
         $this->internalApiFolderService = $internalApiFolderService;
         $this->internalApiDocumentService = $internalApiDocumentService;
         $this->logger = $logger;
@@ -89,8 +86,10 @@ class FolderService
                     ;
 
                     $this->internalApiFolderService->updateStatusWorkflow(
-
+                        $updateStatusWorkflowModel
                     );
+
+                    $folderById->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP);
                 } catch (InternalAPIInvalidDataException $exception) {
                     $this->logger->error($exception->getMessage(), [$exception->getTrace()]);
                 }
