@@ -11,6 +11,8 @@ use App\Security\JWTTokenAuthenticator;
 use App\Service\FolderService;
 use App\Service\ValidationService;
 use App\Tests\BaseApiTest;
+use App\Tests\Mocks\Data\FolderData;
+use App\Tests\Mocks\Data\PersonData;
 use Kyc\InternalApiBundle\Enum\BepremsEnum;
 use Kyc\InternalApiBundle\Model\Request\Folder\UpdateStatusWorkflowModel;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
@@ -57,17 +59,12 @@ class FolderServiceTest extends BaseApiTest
         $folderId = 1;
         $filters = BepremsEnum::DEFAULT_FOLDER_BY_ID_FILTERS;
 
-        $folderByIdModelResponse = new FolderByIdModelResponse();
-        $folderByIdModelResponse
-            ->setId($folderId)
-            ->setLogin('Test')
-            ->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP);
+        $folderByIdModelResponse = FolderData::createFolderByIdModelResponse();
+        $folderByIdModelResponse->setId($folderId);
+        $folderByIdModelResponse->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP);
 
-        $personModelResponse = new PersonModelResponse();
-        $personModelResponse
-            ->setFolderId($folderId)
-            ->setFirstName('first')
-            ->setLastName('last');
+        $personModelResponse = PersonData::createPersonModelResponse();
+        $personModelResponse->setFolderId($folderId);
 
         $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
         $updateStatusWorkflowModel
@@ -89,7 +86,7 @@ class FolderServiceTest extends BaseApiTest
 
         $folderById = $this->folderService->getFolderData($folderId, $filters);
         $this->assertEquals($folderId, $folderById->getId());
-        $this->assertEquals('Test', $folderById->getLogin());
+        $this->assertEquals('Test login', $folderById->getLogin());
         $this->assertEquals(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP, $folderById->getWorkflowStatus());
         $this->assertEquals([$personModelResponse], $folderById->getPersons());
     }
@@ -99,17 +96,12 @@ class FolderServiceTest extends BaseApiTest
         $folderId = 1;
         $filters = BepremsEnum::DEFAULT_FOLDER_BY_ID_FILTERS;
 
-        $folderByIdModelResponse = new FolderByIdModelResponse();
-        $folderByIdModelResponse
-            ->setId($folderId)
-            ->setLogin('Test')
-            ->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP);
+        $folderByIdModelResponse = FolderData::createFolderByIdModelResponse();
+        $folderByIdModelResponse->setId($folderId);
+        $folderByIdModelResponse->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP);
 
-        $personModelResponse = new PersonModelResponse();
-        $personModelResponse
-            ->setFolderId($folderId)
-            ->setFirstName('first')
-            ->setLastName('last');
+        $personModelResponse = PersonData::createPersonModelResponse();
+        $personModelResponse->setFolderId($folderId);
 
         $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
         $updateStatusWorkflowModel
@@ -131,7 +123,7 @@ class FolderServiceTest extends BaseApiTest
 
         $folderById = $this->folderService->getFolderData($folderId, $filters);
         $this->assertEquals($folderId, $folderById->getId());
-        $this->assertEquals('Test', $folderById->getLogin());
+        $this->assertEquals('Test login', $folderById->getLogin());
         $this->assertEquals(FolderEnum::WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP, $folderById->getWorkflowStatus());
         $this->assertEquals([], $folderById->getPersons());
     }
@@ -144,17 +136,12 @@ class FolderServiceTest extends BaseApiTest
         $folderId = 1;
         $filters = BepremsEnum::DEFAULT_FOLDER_BY_ID_FILTERS;
 
-        $folderByIdModelResponse = new FolderByIdModelResponse();
-        $folderByIdModelResponse
-            ->setId($folderId)
-            ->setLogin('Test')
-            ->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP);
+        $folderByIdModelResponse = FolderData::createFolderByIdModelResponse();
+        $folderByIdModelResponse->setId($folderId);
+        $folderByIdModelResponse->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP);
 
-        $personModelResponse = new PersonModelResponse();
-        $personModelResponse
-            ->setFolderId($folderId)
-            ->setFirstName('first')
-            ->setLastName('last');
+        $personModelResponse = PersonData::createPersonModelResponse();
+        $personModelResponse->setFolderId($folderId);
 
         $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
         $updateStatusWorkflowModel
