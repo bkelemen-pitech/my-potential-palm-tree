@@ -6,9 +6,11 @@ namespace App\Tests\Integration\Controller;
 
 use App\Enum\FolderEnum;
 use App\Enum\PersonEnum;
+use App\Enum\UserEnum;
 use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
 use App\Model\Request\BaseFolderFiltersModel;
+use App\Security\JWTTokenAuthenticator;
 use App\Service\DocumentService;
 use App\Service\PersonService;
 use App\Tests\BaseApiTest;
@@ -40,6 +42,7 @@ class FoldersControllerTest extends BaseApiTest
     protected ObjectProphecy $internalApiDocumentService;
     protected ObjectProphecy $documentService;
     protected ObjectProphecy $personService;
+    protected ObjectProphecy $authenticator;
 
     public function setUp(): void
     {
@@ -48,10 +51,12 @@ class FoldersControllerTest extends BaseApiTest
         $this->internalApiDocumentService = $this->prophesize(InternalApiDocumentService::class);
         $this->documentService = $this->prophesize(DocumentService::class);
         $this->personService = $this->prophesize(PersonService::class);
+//        $this->authenticator = $this->prophesize(JWTTokenAuthenticator::class);
         static::getContainer()->set(InternalApiFolderService::class, $this->internalApiFolderService->reveal());
         static::getContainer()->set(InternalApiDocumentService::class, $this->internalApiDocumentService->reveal());
         static::getContainer()->set(DocumentService::class, $this->documentService->reveal());
         static::getContainer()->set(PersonService::class, $this->personService->reveal());
+//        static::getContainer()->set(JWTTokenAuthenticator::class, $this->authenticator->reveal());
     }
 
     public function testGetFolder()
@@ -133,6 +138,12 @@ class FoldersControllerTest extends BaseApiTest
             ->getPersonsByFolderId(1, FolderData::GET_FOLDER_BY_ID_ORDER_FILTERS)
             ->shouldBeCalledOnce()
             ->willReturn(PersonData::getFolderPersonsModelResponseByIdTestData());
+//        $this->authenticator
+//            ->getLoggedUserData()
+//            ->shouldBeCalledOnce()
+//            ->willReturn([UserEnum::USER_ID => 1]);
+//        $this->internalApiFolderService
+//            ->assignAdministratorToFolder(1, 1)->shouldBeCalledOnce();
         $this->requestWithBody(BaseEnum::METHOD_GET, self::GET_FOLDER);
 
         $this->assertEquals(200, $this->getStatusCode());
