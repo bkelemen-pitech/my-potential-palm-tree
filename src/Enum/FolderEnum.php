@@ -154,6 +154,11 @@ class FolderEnum
     public const WORKFLOW_STATUS_DATE = 'workflow_status_date';
     public const WORKFLOW_STATUS_DATE_FR = 'date_statut_workflow';
 
+
+    public const WORKFLOW_STATUS_PROCESSED_BY_WEBHELP = 10300;
+    public const WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP = 10301;
+    public const WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP = 10302 ;
+
     public const FOLDER_ENTITY_PROPERTIES = [
         self::ACTIVE_SCREENING,
         self::AGENCY_ID_REFERENCE,
