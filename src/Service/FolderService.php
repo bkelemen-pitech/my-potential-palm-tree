@@ -85,18 +85,9 @@ class FolderService
                 try {
                     $administratorId = $this->authenticator->getLoggedUserData()[UserEnum::USER_ID];
 
-                    $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
-                    $updateStatusWorkflowModel
-                        ->setUserDossierId($folderId)
-                        ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP)
-                        ->setAdministratorId($administratorId)
-                    ;
+                    $this->internalApiFolderService->assignAdministratorToFolder($administratorId, $folderId);
 
-                    $this->internalApiFolderService->updateStatusWorkflow(
-                        $updateStatusWorkflowModel
-                    );
-
-                    $folderById->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP);
+                    $folderById = $this->updateStatusWorkflow($folderById, $administratorId);
                 } catch (InternalAPIInvalidDataException $exception) {
                     $this->logger->error($exception->getMessage(), [$exception->getTrace()]);
                 }
@@ -139,5 +130,22 @@ class FolderService
         }
 
         return $folderModelResponses;
+    }
+
+    private function updateStatusWorkflow(FolderByIdModelResponse $folderById, int $administratorId): FolderByIdModelResponse
+    {
+        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+        $updateStatusWorkflowModel
+            ->setUserDossierId($folderById->getId())
+            ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP)
+            ->setAdministratorId($administratorId);
+
+        $this->internalApiFolderService->updateStatusWorkflow(
+            $updateStatusWorkflowModel
+        );
+
+        $folderById->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP);
+
+        return $folderById;
     }
 }

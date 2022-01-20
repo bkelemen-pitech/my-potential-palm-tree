@@ -14,6 +14,7 @@ use App\Tests\BaseApiTest;
 use App\Tests\Mocks\Data\FolderData;
 use App\Tests\Mocks\Data\PersonData;
 use Kyc\InternalApiBundle\Enum\BepremsEnum;
+use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalAPIInvalidDataException;
 use Kyc\InternalApiBundle\Model\Request\Folder\UpdateStatusWorkflowModel;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Person\PersonModelResponse;
@@ -84,6 +85,8 @@ class FolderServiceTest extends BaseApiTest
 
         $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn([UserEnum::USER_ID => 1]);
 
+        $this->internalApiFolderService->assignAdministratorToFolder(1, $folderId)->shouldBeCalledOnce();
+
         $folderById = $this->folderService->getFolderData($folderId, $filters);
         $this->assertEquals($folderId, $folderById->getId());
         $this->assertEquals('Test login', $folderById->getLogin());
@@ -120,6 +123,8 @@ class FolderServiceTest extends BaseApiTest
         $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldNotBeCalled();
 
         $this->authenticator->getLoggedUserData()->shouldNotBeCalled();
+
+        $this->internalApiFolderService->assignAdministratorToFolder(1, $folderId)->shouldNotBeCalled();
 
         $folderById = $this->folderService->getFolderData($folderId, $filters);
         $this->assertEquals($folderId, $folderById->getId());
@@ -159,6 +164,54 @@ class FolderServiceTest extends BaseApiTest
 
         $this->authenticator->getLoggedUserData()->shouldNotBeCalled();
 
+        $this->internalApiFolderService->assignAdministratorToFolder(1, $folderId)->shouldNotBeCalled();
+
         $this->folderService->getFolderData($folderId, $filters);
+    }
+
+    public function testAssignAdministratorFails()
+    {
+        $folderId = 1;
+        $filters = BepremsEnum::DEFAULT_FOLDER_BY_ID_FILTERS;
+
+        $folderByIdModelResponse = new FolderByIdModelResponse();
+        $folderByIdModelResponse
+            ->setId($folderId)
+            ->setLogin('Test')
+            ->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP);
+
+        $personModelResponse = new PersonModelResponse();
+        $personModelResponse
+            ->setFolderId($folderId)
+            ->setFirstName('first')
+            ->setLastName('last');
+
+        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+        $updateStatusWorkflowModel
+            ->setUserDossierId($folderId)
+            ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP)
+            ->setAdministratorId(1);
+
+        $this->internalApiFolderService->getFolderById($folderId)
+            ->shouldBeCalledOnce()
+            ->willReturn($folderByIdModelResponse);
+
+        $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters)
+            ->shouldBeCalledOnce()
+            ->willReturn([$personModelResponse]);
+
+        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldNotBeCalled();
+
+        $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn([UserEnum::USER_ID => 1]);
+
+        $this->internalApiFolderService->assignAdministratorToFolder(1, $folderId)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalAPIInvalidDataException('Third party error.'));
+
+        $folderById = $this->folderService->getFolderData($folderId, $filters);
+        $this->assertEquals($folderId, $folderById->getId());
+        $this->assertEquals('Test', $folderById->getLogin());
+        $this->assertEquals(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP, $folderById->getWorkflowStatus());
+        $this->assertEquals([$personModelResponse], $folderById->getPersons());
     }
 }
