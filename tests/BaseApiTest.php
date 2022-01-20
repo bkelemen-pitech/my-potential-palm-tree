@@ -27,7 +27,6 @@ abstract class BaseApiTest extends WebTestCase
     {
         $this->client = static::createClient();
         $this->tokenManager = static::getContainer()->get(JWTTokenManagerInterface::class);
-
     }
 
     protected function requestWithBody(

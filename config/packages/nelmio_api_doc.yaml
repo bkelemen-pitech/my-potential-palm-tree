@@ -421,6 +421,8 @@ nelmio_api_doc:
           type: apiKey
           name: X-Auth-Token
           in: header
+    security:
+      - apiAuth: []
     paths:
       /api/v1/folders/:
         get:
@@ -644,5 +646,15 @@ nelmio_api_doc:
             200:
               description: Returns the jwt token.
               $ref: '#/components/responses/LoginResponse'
+            401:
+              $ref: '#/components/responses/Unauthenticated'
+      /api/v1/users/logout:
+        post:
+          summary: This action is used for logout
+          tags:
+            - User
+          responses:
+            204:
+              description: No content
             401:
               $ref: '#/components/responses/Unauthenticated'

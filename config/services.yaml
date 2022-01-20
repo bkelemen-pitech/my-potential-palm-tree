@@ -42,5 +42,10 @@ services:
     Symfony\Component\Security\Core\User\UserProviderInterface:
         class: App\Security\UserProvider
 
+    App\EventSubscriber\LogoutSubscriber:
+        tags:
+            - name: kernel.event_subscriber
+              dispatcher: security.event_dispatcher.api
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

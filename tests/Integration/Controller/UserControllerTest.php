@@ -14,6 +14,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 class UserControllerTest extends BaseApiTest
 {
     public const USER_LOGIN_PATH = 'api/v1/users/login';
+    public const USER_LOGOUT_PATH = 'api/v1/users/logout';
 
     protected ObjectProphecy $userService;
 
@@ -183,5 +184,44 @@ class UserControllerTest extends BaseApiTest
         $this->assertArrayHasKey('token', $this->getResponseContent());
         $headers = $this->client->getResponse()->headers->all();
         $this->assertArrayNotHasKey('x-extended-token', $headers);
+    }
+
+    public function testLogoutSuccess()
+    {
+        $this->requestWithBody(
+            BaseEnum::METHOD_POST,
+            self::USER_LOGOUT_PATH
+        );
+
+        $this->assertEquals(204, $this->getStatusCode());
+        $headers = $this->client->getResponse()->headers->all();
+        $this->assertArrayNotHasKey('x-extended-token', $headers);
+        $this->assertArrayNotHasKey('x-auth-token', $headers);
+    }
+
+    public function testLogoutWrongToken()
+    {
+        $this->requestWithBody(
+            BaseEnum::METHOD_POST,
+            self::USER_LOGOUT_PATH,
+            [],
+            ['HTTP_X-Auth-Token' => 'invalidToken']
+        );
+
+        $this->assertEquals(401, $this->getStatusCode());
+        $this->assertEquals($this->buildExceptionResponse(401, null, 'Invalid JWT Token'), $this->getResponseContent());
+    }
+
+    public function testLogoutTokenNotFound()
+    {
+        $this->requestWithBody(
+            BaseEnum::METHOD_POST,
+            self::USER_LOGOUT_PATH,
+            [],
+            ['HTTP_X-Auth-Token' => null]
+        );
+
+        $this->assertEquals(401, $this->getStatusCode());
+        $this->assertEquals($this->buildExceptionResponse(401, null, 'JWT Token not found'), $this->getResponseContent());
     }
 }
