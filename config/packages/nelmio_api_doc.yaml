@@ -322,6 +322,39 @@ nelmio_api_doc:
                   nameVerso:
                     type: string
                     example: "Carte nationale d'identité (verso)"
+        DocumentFieldsResponse:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    dbFieldName:
+                      type: string
+                      example: nom
+                    label:
+                      type: string
+                      example: nom
+                    mandatory:
+                      type: integer
+                      example: 1
+                    order:
+                      type: integer
+                      example: 1
+                    format:
+                      type: integer
+                      example: 1
+                    helperMethod:
+                      type: string
+                      example: 'getCommonNom'
+                    ocrFields:
+                      type: integer
+                      example: 1
+                    validatorMethod:
+                      type: string
+                      example: 'validateFormData'
         Unauthenticated:
           description: Authentication failed
           content:
@@ -517,6 +550,35 @@ nelmio_api_doc:
               description: No Content
             '400':
               description: Invalid Request
+              ref: '#/components/responses/InvalidRequest'
+            '500':
+              ref: '#/components/responses/ServerError'
+      /api/v1/documents/fields:
+        get:
+          summary: Get the document fields based on agency id, document type id and person type id
+          tags:
+            - Documents
+          parameters:
+            agency_id:
+              name: agency_id
+              in: query
+              description: The agency id
+              required: true
+            document_type_id:
+              name: document_type_id
+              in: query
+              description: The document type id
+              required: true
+            person_type_id:
+              name: person_type_id
+              in: query
+              description: The person type id
+              required: true
+          responses:
+            '200':
+              description: OK
+              ref: '#/components/responses/DocumentFieldsResponse'
+            '400':
               ref: '#/components/responses/InvalidRequest'
             '500':
               ref: '#/components/responses/ServerError'
