@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Controller;
 
-use App\Exception\ResourceNotFoundException;
 use App\Tests\BaseApiTest;
 use App\Tests\Enum\BaseEnum;
+use Kyc\InternalApiBundle\Exception\ResourceNotFoundException;
 use Kyc\InternalApiBundle\Model\Response\User\UserLoginModelResponse;
 use Kyc\InternalApiBundle\Service\UserService;
 use Prophecy\Prophecy\ObjectProphecy;

@@ -4,7 +4,7 @@ namespace App\Security;
 
 use App\Enum\BepremsEnum;
 use App\Enum\UserEnum;
-use App\Exception\ResourceNotFoundException;
+use Kyc\InternalApiBundle\Exception\ResourceNotFoundException;
 use Kyc\InternalApiBundle\Service\UserService;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
