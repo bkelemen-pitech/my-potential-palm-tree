@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Service;
 
 use App\Enum\FolderEnum;
+use App\Enum\UserEnum;
 use App\Exception\ResourceNotFoundException;
+use App\Security\JWTTokenAuthenticator;
 use App\Service\FolderService;
 use App\Service\ValidationService;
 use App\Tests\BaseApiTest;
@@ -27,6 +29,7 @@ class FolderServiceTest extends BaseApiTest
     private ObjectProphecy $internalApiFolderService;
     private ObjectProphecy $internalApiDocumentService;
     private ObjectProphecy $logger;
+    private ObjectProphecy $authenticator;
     private FolderService $folderService;
 
     public function setUp(): void
@@ -37,13 +40,15 @@ class FolderServiceTest extends BaseApiTest
         $this->internalApiFolderService = $this->prophesize(InternalApiFolderService::class);
         $this->internalApiDocumentService = $this->prophesize(InternalApiDocumentService::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->authenticator = $this->prophesize(JWTTokenAuthenticator::class);
 
         $this->folderService = new FolderService(
             $this->serializer->reveal(),
             $this->validationService->reveal(),
             $this->internalApiFolderService->reveal(),
             $this->internalApiDocumentService->reveal(),
-            $this->logger->reveal()
+            $this->logger->reveal(),
+            $this->authenticator->reveal()
         );
     }
 
@@ -68,8 +73,7 @@ class FolderServiceTest extends BaseApiTest
         $updateStatusWorkflowModel
             ->setUserDossierId($folderId)
             ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP)
-            //TODO add admin too
-        ;
+            ->setAdministratorId(1);
 
         $this->internalApiFolderService->getFolderById($folderId)
             ->shouldBeCalledOnce()
@@ -80,6 +84,8 @@ class FolderServiceTest extends BaseApiTest
             ->willReturn([$personModelResponse]);
 
         $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldBeCalledOnce();
+
+        $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn([UserEnum::USER_ID => 1]);
 
         $folderById = $this->folderService->getFolderData($folderId, $filters);
         $this->assertEquals($folderId, $folderById->getId());
@@ -109,8 +115,7 @@ class FolderServiceTest extends BaseApiTest
         $updateStatusWorkflowModel
             ->setUserDossierId($folderId)
             ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP)
-            //TODO add admin too
-        ;
+            ->setAdministratorId(1);
 
         $this->internalApiFolderService->getFolderById($folderId)
             ->shouldBeCalledOnce()
@@ -121,6 +126,8 @@ class FolderServiceTest extends BaseApiTest
             ->willReturn([]);
 
         $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldNotBeCalled();
+
+        $this->authenticator->getLoggedUserData()->shouldNotBeCalled();
 
         $folderById = $this->folderService->getFolderData($folderId, $filters);
         $this->assertEquals($folderId, $folderById->getId());
@@ -153,8 +160,7 @@ class FolderServiceTest extends BaseApiTest
         $updateStatusWorkflowModel
             ->setUserDossierId($folderId)
             ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP)
-            //TODO add admin too
-        ;
+            ->setAdministratorId(1);
 
         $this->internalApiFolderService->getFolderById($folderId)
             ->shouldBeCalledOnce()
@@ -163,6 +169,8 @@ class FolderServiceTest extends BaseApiTest
         $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters)->shouldNotBeCalled();
 
         $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldNotBeCalled();
+
+        $this->authenticator->getLoggedUserData()->shouldNotBeCalled();
 
         $this->folderService->getFolderData($folderId, $filters);
     }
