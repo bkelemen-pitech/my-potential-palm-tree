@@ -84,7 +84,7 @@ class FolderService
             if ($folderById->getWorkflowStatus() == FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP) {
                 try {
                     $administratorId = $this->authenticator->getLoggedUserData()[UserEnum::USER_ID];
-                    // add administrator ID when login is done.
+
                     $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
                     $updateStatusWorkflowModel
                         ->setUserDossierId($folderId)
