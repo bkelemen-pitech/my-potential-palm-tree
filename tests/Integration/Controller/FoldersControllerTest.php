@@ -63,13 +63,17 @@ class FoldersControllerTest extends BaseApiTest
             ->setFolderId(1)
             ->setFolder('1a')
             ->setFirstName('First Name 1')
-            ->setLastName('Last Name 1');
+            ->setLastName('Last Name 1')
+            ->setDateOfBirth('2020-02-02')
+            ->setSubscription(10);
         $folderModelResponse2 = new FolderModelResponse();
         $folderModelResponse2
             ->setFolderId(2)
             ->setFolder('2a')
             ->setFirstName('First Name 2')
-            ->setLastName('Last Name 2');
+            ->setLastName('Last Name 2')
+            ->setDateOfBirth('2020-02-02')
+            ->setSubscription(20);
 
         $this->internalApiFolderService->getFolders($folderFilterModel)
             ->shouldBeCalledOnce()

@@ -11,6 +11,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\TokenExtractorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class JWTTokenAuthenticator extends LexikJWTTokenAuthenticator
@@ -34,5 +35,10 @@ class JWTTokenAuthenticator extends LexikJWTTokenAuthenticator
 
         return $this->redisStorageFacade->has($key)
             && $this->redisStorageFacade->get($key) === $credentials->getCredentials();
+    }
+
+    public function getLoggedUserData()
+    {
+        return $this->getJwtManager()->decode($this->getPreAuthenticationTokenStorage()->getToken());
     }
 }

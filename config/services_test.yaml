@@ -23,3 +23,5 @@ services:
   Kyc\InternalApiBundle\Service\UserService:
     public: true
 
+  App\Security\JWTTokenAuthenticator:
+    public: true

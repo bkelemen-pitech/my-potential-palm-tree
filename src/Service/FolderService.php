@@ -3,37 +3,45 @@
 namespace App\Service;
 
 use App\Enum\FolderEnum;
+use App\Enum\UserEnum;
 use App\Exception\ResourceNotFoundException;
 use App\Model\Request\BaseFolderFiltersModel;
+use App\Security\JWTTokenAuthenticator;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotFoundException;
+use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalAPIInvalidDataException;
 use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilterModel;
+use Kyc\InternalApiBundle\Model\Request\Folder\UpdateStatusWorkflowModel;
 use Kyc\InternalApiBundle\Model\Response\Folder\AssignedAdministratorModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderModelResponse;
 use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class FolderService
 {
     protected SerializerInterface $serializer;
     protected ValidationService $validationService;
-    protected DocumentService $documentService;
     protected InternalApiFolderService $internalApiFolderService;
     protected InternalApiDocumentService $internalApiDocumentService;
+    protected LoggerInterface $logger;
+    protected JWTTokenAuthenticator $authenticator;
 
     public function __construct(
         SerializerInterface $serializer,
         ValidationService $validationService,
-        DocumentService $documentService,
         InternalApiFolderService $internalApiFolderService,
-        InternalApiDocumentService $internalApiDocumentService
+        InternalApiDocumentService $internalApiDocumentService,
+        LoggerInterface $logger,
+        JWTTokenAuthenticator $authenticator
     ) {
         $this->serializer = $serializer;
         $this->validationService = $validationService;
-        $this->documentService = $documentService;
         $this->internalApiFolderService = $internalApiFolderService;
         $this->internalApiDocumentService = $internalApiDocumentService;
+        $this->logger = $logger;
+        $this->authenticator = $authenticator;
     }
 
     public function getFolders(array $data): array
@@ -73,6 +81,18 @@ class FolderService
             $persons = $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters);
             $folderById->setPersons($persons);
 
+            if ($folderById->getWorkflowStatus() == FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP) {
+                try {
+                    $administratorId = $this->authenticator->getLoggedUserData()[UserEnum::USER_ID];
+
+                    $this->internalApiFolderService->assignAdministratorToFolder($administratorId, $folderId);
+
+                    $folderById = $this->updateStatusWorkflow($folderById, $administratorId);
+                } catch (InternalAPIInvalidDataException $exception) {
+                    $this->logger->error($exception->getMessage(), [$exception->getTrace()]);
+                }
+            }
+
             return $folderById;
         } catch (KycResourceNotFoundException $exception) {
             throw new ResourceNotFoundException($exception->getMessage());
@@ -110,5 +130,22 @@ class FolderService
         }
 
         return $folderModelResponses;
+    }
+
+    private function updateStatusWorkflow(FolderByIdModelResponse $folderById, int $administratorId): FolderByIdModelResponse
+    {
+        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+        $updateStatusWorkflowModel
+            ->setUserDossierId($folderById->getId())
+            ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP)
+            ->setAdministratorId($administratorId);
+
+        $this->internalApiFolderService->updateStatusWorkflow(
+            $updateStatusWorkflowModel
+        );
+
+        $folderById->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP);
+
+        return $folderById;
     }
 }

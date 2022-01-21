@@ -17,20 +17,29 @@ class FolderData
         'person-info-order-by' => 'source,creation'
     ];
 
-    public const FOLDER_BY_ID_DATA = [1, '2', 3, 1400, 2, 20, 7];
+    public const FOLDER_BY_ID_DATA = [
+        'folderId' => 1,
+        'partnerFolderId' => '2',
+        'status' => 3,
+        'workflowStatus' => 1400,
+        'label' => 2,
+        'subscription' => 20,
+        'agencyId' => 7,
+        'login' => 'Test login',
+    ];
 
     public static function createFolderByIdModelResponse(array $data = self::FOLDER_BY_ID_DATA): FolderByIdModelResponse
     {
         return (new FolderByIdModelResponse())
-            ->setId($data[0])
-            ->setPartnerFolderId($data[1])
-            ->setStatus($data[2])
-            ->setWorkflowStatus($data[3])
-            ->setLabel($data[4])
-            ->setSubscription($data[5])
-            ->setAgencyId($data[6]);
+            ->setId($data['folderId'])
+            ->setPartnerFolderId($data['partnerFolderId'])
+            ->setStatus($data['status'])
+            ->setWorkflowStatus($data['workflowStatus'])
+            ->setLabel($data['label'])
+            ->setSubscription($data['subscription'])
+            ->setAgencyId($data['agencyId'])
+            ->setLogin($data['login']);
     }
-
 
     public static function createInternalApiFolderByIdResponse(FolderById $resource): GetFolderByIdResponse
     {
@@ -75,7 +84,8 @@ class FolderData
                     'personInfo' => [],
                 ],
             ],
-            'agencyId' => 7
+            'agencyId' => 7,
+            'login' => 'Test login',
         ];
     }
 }
