@@ -18,11 +18,13 @@ use App\Tests\Mocks\Data\FolderData;
 use App\Tests\Mocks\Data\PersonData;
 use Kyc\InternalApiBundle\Enum\AdministratorEnum;
 use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilterModel;
+use Kyc\InternalApiBundle\Model\Request\Folder\UpdateStatusWorkflowModel;
 use Kyc\InternalApiBundle\Model\Response\Folder\AssignedAdministratorModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderModelResponse;
 use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalApiInvalidDataException;
+use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as InternalApiResourceNotFoundException;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class FoldersControllerTest extends BaseApiTest
@@ -35,6 +37,7 @@ class FoldersControllerTest extends BaseApiTest
     public const FOLDER_ASSIGN_DOCUMENT_TO_PERSON_NO_DOCUMENT = 'api/v1/folders/1/persons/6196610f9d67/documents/';
     public const FOLDER_MERGE_DOCUMENTS = 'api/v1/folders/1/document/merge';
     public const FOLDER_MERGE_DOCUMENTS_NO_FOLDER_ID = 'api/v1/folders//document/merge';
+    public const FOLDER_UPDATE_WORKFLOW_STATUS = 'api/v1/folders/1/update-workflow-status';
 
     protected ObjectProphecy $internalApiFolderService;
     protected ObjectProphecy $internalApiDocumentService;
@@ -235,5 +238,68 @@ class FoldersControllerTest extends BaseApiTest
     {
         $this->requestWithBody(BaseEnum::METHOD_POST, self::FOLDER_MERGE_DOCUMENTS_NO_FOLDER_ID);
         $this->assertEquals(404, $this->getStatusCode());
+    }
+
+    public function testUpdateWorkflowStatusSuccess()
+    {
+        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+        $updateStatusWorkflowModel
+            ->setUserDossierId(1)
+            ->setStatusWorkflow(10350)
+            ->setAdministratorId(1);
+
+        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldBeCalledOnce();
+
+        $this->requestWithBody(BaseEnum::METHOD_POST, self::FOLDER_UPDATE_WORKFLOW_STATUS, ['workflowStatus' => 10350]);
+
+        $this->assertEquals(204, $this->getStatusCode());
+        $this->assertEquals(null, $this->getResponseContent());
+    }
+
+    public function testUpdateWorkflowStatusInvalidRequestException()
+    {
+        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+        $updateStatusWorkflowModel
+            ->setUserDossierId(1)
+            ->setAdministratorId(1);
+
+        $this->internalApiFolderService
+            ->updateStatusWorkflow($updateStatusWorkflowModel)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiInvalidDataException(json_encode(['statusWorkflow' => 'This value should not be blank.'])));
+
+        $this->requestWithBody(BaseEnum::METHOD_POST, self::FOLDER_UPDATE_WORKFLOW_STATUS, []);
+
+        $this->assertEquals(400, $this->getStatusCode());
+        $expectedErrorMessage = [
+            'statusWorkflow' => 'This value should not be blank.'
+        ];
+        $this->assertEquals(
+            $this->buildExceptionResponse(400, $expectedErrorMessage, json_encode($expectedErrorMessage)),
+            $this->getResponseContent()
+        );
+    }
+
+    public function testUpdateWorkflowStatusNotFoundException()
+    {
+        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+        $updateStatusWorkflowModel
+            ->setUserDossierId(1)
+            ->setStatusWorkflow(10300)
+            ->setAdministratorId(1);
+
+        $this->internalApiFolderService
+            ->updateStatusWorkflow($updateStatusWorkflowModel)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiResourceNotFoundException('Folder with id 1 not found'));
+
+        $this->requestWithBody(BaseEnum::METHOD_POST, self::FOLDER_UPDATE_WORKFLOW_STATUS, ['workflowStatus' => 10300]);
+
+        $this->assertEquals(404, $this->getStatusCode());
+
+        $this->assertEquals(
+            $this->buildExceptionResponse(404, null, 'Folder with id 1 not found'),
+            $this->getResponseContent()
+        );
     }
 }

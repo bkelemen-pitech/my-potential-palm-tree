@@ -7,6 +7,7 @@ use App\Enum\UserEnum;
 use App\Exception\ResourceNotFoundException;
 use App\Model\Request\BaseFolderFiltersModel;
 use App\Security\JWTTokenAuthenticator;
+use Kyc\InternalApiBundle\Enum\FolderEnum as InternalApiFolderEnum;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotFoundException;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalAPIInvalidDataException;
 use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilterModel;
@@ -87,7 +88,12 @@ class FolderService
 
                     $this->internalApiFolderService->assignAdministratorToFolder($administratorId, $folderId);
 
-                    $folderById = $this->updateStatusWorkflow($folderById, $administratorId);
+                    $this->updateWorkflowStatus(
+                        $folderById->getId(),
+                        [InternalApiFolderEnum::WORKFLOW_STATUS_CAMEL_CASE => FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP],
+                        $administratorId
+                    );
+                    $folderById->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP);
                 } catch (InternalAPIInvalidDataException $exception) {
                     $this->logger->error($exception->getMessage(), [$exception->getTrace()]);
                 }
@@ -132,20 +138,16 @@ class FolderService
         return $folderModelResponses;
     }
 
-    private function updateStatusWorkflow(FolderByIdModelResponse $folderById, int $administratorId): FolderByIdModelResponse
+    public function updateWorkflowStatus(int $folderId, array $data, ?int $administratorId = null): void
     {
+        $administratorId = $administratorId ?: $this->authenticator->getLoggedUserData()[UserEnum::USER_ID];
+
         $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
         $updateStatusWorkflowModel
-            ->setUserDossierId($folderById->getId())
-            ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP)
-            ->setAdministratorId($administratorId);
+            ->setUserDossierId($folderId)
+            ->setAdministratorId($administratorId)
+            ->setStatusWorkflow($data[InternalApiFolderEnum::WORKFLOW_STATUS_CAMEL_CASE] ?? null);
 
-        $this->internalApiFolderService->updateStatusWorkflow(
-            $updateStatusWorkflowModel
-        );
-
-        $folderById->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP);
-
-        return $folderById;
+        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel);
     }
 }
