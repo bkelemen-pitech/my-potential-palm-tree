@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Exception\InvalidDataException;
+use Kyc\InternalApiBundle\Model\Request\Document\DocumentFieldsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\MergeDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
+use Kyc\InternalApiBundle\Model\Response\Document\DocumentByFolderModelResponse;
+use Kyc\InternalApiBundle\Model\Response\Document\DocumentFieldsModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -45,6 +48,20 @@ class DocumentService
         try {
             $mergeDocumentModelData = $this->serializer->deserialize(json_encode($data), MergeDocumentModel::class, 'json');
             $this->internalApiDocumentService->mergeDocuments($mergeDocumentModelData);
+        } catch (\Exception $exception) {
+            throw new InvalidDataException($exception->getMessage());
+        }
+    }
+
+    /**
+     * @return DocumentFieldsModelResponse[]
+     */
+    public function getDocumentFields(array $data): array
+    {
+        try {
+            $documentFieldsModelRequest = $this->serializer->deserialize(json_encode($data), DocumentFieldsModel::class, 'json');
+
+            return $this->internalApiDocumentService->getDocumentFields($documentFieldsModelRequest);
         } catch (\Exception $exception) {
             throw new InvalidDataException($exception->getMessage());
         }

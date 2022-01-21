@@ -9,6 +9,7 @@ use App\Exception\ResourceNotFoundException;
 use App\Tests\BaseApiTest;
 use App\Tests\Enum\BaseEnum;
 use App\Tests\Mocks\Data\DocumentsData;
+use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalApiInvalidDataException;
 use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -17,6 +18,7 @@ class DocumentControllerTest extends BaseApiTest
 {
     public const PATH = 'api/v1/documents/';
     public const TREAT_DOCUMENT_PATH = 'api/v1/documents/treat';
+    public const DOCUMENT_FIELDS_PATH = 'api/v1/documents/fields';
 
     protected ObjectProphecy $internalApiDocumentService;
 
@@ -88,6 +90,63 @@ class DocumentControllerTest extends BaseApiTest
 
         $this->internalApiDocumentService->treatDocument($treatDocumentModel)->willThrow(new InvalidDataException());
         $this->requestWithBody(BaseEnum::METHOD_POST, self::TREAT_DOCUMENT_PATH, $body);
+        $this->assertEquals(400, $this->getStatusCode());
+    }
+
+    public function testGetDocumentFieldsSuccess()
+    {
+        $documentFieldsModelRequest = DocumentsData::createDocumentFieldsRequestModel();
+        $documentFieldsModelResponse = DocumentsData::createDocumentFieldsModelResponse();
+
+        $this->internalApiDocumentService
+            ->getDocumentFields($documentFieldsModelRequest)
+            ->shouldBeCalledOnce()
+            ->willReturn($documentFieldsModelResponse);
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::DOCUMENT_FIELDS_PATH,
+            [],
+            [],
+            true,
+            ['agency_id' => 1, 'document_type_id' => 1, 'person_type_id' => 1]
+        );
+        $this->assertEquals(200, $this->getStatusCode());
+
+        $this->assertEquals(
+            [
+                [
+                    'dbFieldName' => 'nom',
+                    'label' => 'Nom',
+                    'order' => 1,
+                    'format' => 1,
+                    'mandatory' => 1,
+                    'helperMethod' => 'test',
+                    'ocrField' => 1,
+                    'validatorMethod' => 'validator',
+                ]
+            ],
+            $this->getResponseContent()
+        );
+    }
+
+    public function testGetDocumentFieldsException()
+    {
+        $documentFieldsModelRequest = DocumentsData::createDocumentFieldsRequestModel();
+
+        $this->internalApiDocumentService
+            ->getDocumentFields($documentFieldsModelRequest)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiInvalidDataException('Invalid request'));
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::DOCUMENT_FIELDS_PATH,
+            [],
+            [],
+            true,
+            ['agency_id' => 1, 'document_type_id' => 1, 'person_type_id' => 1]
+        );
         $this->assertEquals(400, $this->getStatusCode());
     }
 }
