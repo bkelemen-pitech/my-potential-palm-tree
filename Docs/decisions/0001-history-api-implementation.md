@@ -1,8 +1,8 @@
 # History API implementation
 
 * Status: [accepted] <!-- optional -->
-* Deciders: [[Bela Kelemen](/bkelemen-pitech), [Marius Pop](/mariuspop86), [Sergiu Parlea](/SergiuParlea), [Florin 
-  Onica](/fonica)]
+* Deciders: [[Bela Kelemen](https://github.com/bkelemen-pitech), [Marius Pop](https://github.com/mariuspop86), [Sergiu Parlea](https://github.com/SergiuParlea), [Florin 
+  Onica](https://github.com/fonica)]
 * Date: [2021-01-18] <!-- optional -->
 
 <!-- Technical Story: [description | ticket/issue URL]  optional -->
