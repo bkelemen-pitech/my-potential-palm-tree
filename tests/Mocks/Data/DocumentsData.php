@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Tests\Mocks\Data;
 
 use DateTime;
+use Kyc\InternalApiBundle\Model\Request\Document\DocumentFieldsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\MergeDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentByFolderModelResponse;
+use Kyc\InternalApiBundle\Model\Response\Document\DocumentFieldsModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
 
 class DocumentsData
@@ -134,5 +136,35 @@ class DocumentsData
             ->setFilename($data['filename'])
             ->setDocumentTypeId($data['documentTypeId'])
             ->setDocumentIds($data['documentIds']);
+    }
+
+    public static function createDocumentFieldsRequestModel(): DocumentFieldsModel
+    {
+        $documentFieldsModelRequest = new DocumentFieldsModel();
+        $documentFieldsModelRequest
+            ->setAgencyId(1)
+            ->setDocumentTypeId(1)
+            ->setPersonTypeId(1);
+
+        return $documentFieldsModelRequest;
+    }
+
+    /**
+     * @return DocumentFieldsModelResponse[]
+     */
+    public static function createDocumentFieldsModelResponse(): array
+    {
+        $documentFieldsModelResponse = new DocumentFieldsModelResponse();
+        $documentFieldsModelResponse
+            ->setDbFieldName('nom')
+            ->setLabel('Nom')
+            ->setMandatory(1)
+            ->setFormat(1)
+            ->setOrder(1)
+            ->setHelperMethod('test')
+            ->setOcrField(1)
+            ->setValidatorMethod('validator');
+
+        return [$documentFieldsModelResponse];
     }
 }

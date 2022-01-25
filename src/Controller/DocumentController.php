@@ -47,4 +47,18 @@ class DocumentController extends AbstractController
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
     }
+
+    /**
+     * @Route("/fields", name="document_fields", methods="GET", priority=2)
+     */
+    public function getDocumentFields(Request $request, DocumentService $documentService): JsonResponse
+    {
+        try {
+            $documentFields = $documentService->getDocumentFields($request->query->all());
+
+            return $this->json($documentFields);
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+    }
 }

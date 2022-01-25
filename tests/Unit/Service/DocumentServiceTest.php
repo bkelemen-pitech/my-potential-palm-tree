@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Services;
+namespace App\Tests\Unit\Service;
 
 use App\Enum\FolderEnum;
 use App\Exception\InvalidDataException;
 use App\Service\DocumentService;
 use App\Tests\BaseApiTest;
 use App\Tests\Mocks\Data\DocumentsData;
-use Kyc\InternalApiBundle\Model\Request\Document\MergeDocumentModel;
+use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalApiInvalidDataException;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -17,17 +17,17 @@ use Symfony\Component\Serializer\SerializerInterface;
 class DocumentServiceTest extends BaseApiTest
 {
     private ObjectProphecy $internalApiDocumentService;
-    private ObjectProphecy $serializer;
+    private $serializer;
     private DocumentService $documentService;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->internalApiDocumentService = $this->prophesize(InternalApiDocumentService::class);
-        $this->serializer = $this->prophesize(SerializerInterface::class);
+        $this->serializer = static::getContainer()->get(SerializerInterface::class);
 
         $this->documentService = new DocumentService(
-            $this->serializer->reveal(),
+            $this->serializer,
             $this->internalApiDocumentService->reveal()
         );
     }
@@ -36,9 +36,6 @@ class DocumentServiceTest extends BaseApiTest
     {
         $mergeData = array_merge([FolderEnum::FOLDER_ID => 1], DocumentsData::MERGE_DOCUMENTS_BODY);
         $mergeDocumentModel = DocumentsData::createMergeDocumentModel(DocumentsData::MERGE_DOCUMENTS_BODY);
-        $this->serializer->deserialize(json_encode($mergeData), MergeDocumentModel::class, 'json')
-            ->shouldBeCalledOnce()
-            ->willReturn($mergeDocumentModel);
 
         $this->internalApiDocumentService
             ->mergeDocuments($mergeDocumentModel)
@@ -51,9 +48,6 @@ class DocumentServiceTest extends BaseApiTest
     {
         $mergeData = array_merge([FolderEnum::FOLDER_ID => 1], DocumentsData::MERGE_DOCUMENTS_BODY, ['filename' => null]);
         $mergeDocumentModel = DocumentsData::createMergeDocumentModel(array_merge(DocumentsData::MERGE_DOCUMENTS_BODY, ['filename' => null]));
-        $this->serializer->deserialize(json_encode($mergeData), MergeDocumentModel::class, 'json')
-            ->shouldBeCalledOnce()
-            ->willReturn($mergeDocumentModel);
 
         $this->internalApiDocumentService
             ->mergeDocuments($mergeDocumentModel)
@@ -64,5 +58,35 @@ class DocumentServiceTest extends BaseApiTest
         $this->expectExceptionMessage('{"filename": "This value should not be blank."}');
 
         $this->documentService->mergeDocuments($mergeData);
+    }
+
+    public function testGetDocumentFieldsSuccess()
+    {
+        $documentFieldsModelRequest = DocumentsData::createDocumentFieldsRequestModel();
+        $documentFieldsModelResponse = DocumentsData::createDocumentFieldsModelResponse();
+
+        $this->internalApiDocumentService
+            ->getDocumentFields($documentFieldsModelRequest)
+            ->shouldBeCalledOnce()
+            ->willReturn([$documentFieldsModelResponse]);
+
+        $this->assertEquals(
+            [$documentFieldsModelResponse],
+            $this->documentService->getDocumentFields(['agency_id' => 1, 'document_type_id' => 1, 'person_type_id' => 1])
+        );
+    }
+
+    public function testGetDocumentFieldsException()
+    {
+        $documentFieldsModelRequest = DocumentsData::createDocumentFieldsRequestModel();
+
+        $this->internalApiDocumentService
+            ->getDocumentFields($documentFieldsModelRequest)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiInvalidDataException('Invalid request'));
+
+        $this->expectException(InvalidDataException::class);
+        $this->expectExceptionMessage('Invalid request');
+        $this->documentService->getDocumentFields(['agency_id' => 1, 'document_type_id' => 1, 'person_type_id' => 1]);
     }
 }
