@@ -654,6 +654,8 @@ nelmio_api_doc:
             '400':
               description: Invalid Request
               ref: '#/components/responses/InvalidRequest'
+            '404':
+              ref: '#/components/responses/NotFound'
             '500':
               ref: '#/components/responses/ServerError'
       /api/v1/users/login:
