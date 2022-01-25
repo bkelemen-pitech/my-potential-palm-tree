@@ -12,10 +12,12 @@ use App\Exception\ResourceNotFoundException;
 use App\Service\FolderService;
 use App\Service\PersonService;
 use App\Service\DocumentService;
+use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as InternalApiResourceNotFound;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -117,6 +119,22 @@ class FoldersController extends AbstractController
     {
         try {
             $this->documentService->mergeDocuments(array_merge([FolderEnum::FOLDER_ID => $folderId], $request->toArray()));
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Route("/{id}/update-workflow-status", name="update_workflow_status", methods="POST")
+     */
+    public function updateWorkflowStatus(int $id, Request $request): JsonResponse
+    {
+        try {
+            $this->folderService->updateWorkflowStatus($id, $request->toArray());
+        } catch (InternalApiResourceNotFound $exception) {
+            throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
