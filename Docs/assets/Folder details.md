@@ -14,9 +14,6 @@ else Folder found
     opt IF workflowStatus = 10300
         BE BO->+Monolith: internalAPI assign folder to user
         Monolith->-BE BO: 204
-        
-        BE BO->+Monolith: internalAPI update folder workflowStatus to 10301
-        Monolith->-BE BO: 204 
     end
 BE BO->-FE BO: 200 - folder
 end
