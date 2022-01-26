@@ -1,9 +1,9 @@
 # [short title of solved problem and solution]
 
-* Status: [proposed | rejected | accepted | deprecated | … | superseded by [ADR-0005](0005-example.md)] <!-- optional -->
+* Status: [proposed] <!-- optional -->
 * Deciders: [[Bela Kelemen](https://github.com/bkelemen-pitech), [Marius Pop](https://github.com/mariuspop86), [Sergiu Parlea](https://github.com/SergiuParlea), [Florin
   Onica](https://github.com/fonica)]
-* Date: [YYYY-MM-DD when the decision was last updated] <!-- optional -->
+* Date: [2021-01-18] <!-- optional -->
 
 Technical Story: [description | ticket/issue URL] <!-- optional -->
 
