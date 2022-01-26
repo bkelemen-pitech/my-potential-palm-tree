@@ -88,11 +88,6 @@ class FolderService
 
                     $this->internalApiFolderService->assignAdministratorToFolder($administratorId, $folderId);
 
-                    $this->updateWorkflowStatus(
-                        $folderById->getId(),
-                        [InternalApiFolderEnum::WORKFLOW_STATUS_CAMEL_CASE => FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP],
-                        $administratorId
-                    );
                     $folderById->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP);
                 } catch (InternalAPIInvalidDataException $exception) {
                     $this->logger->error($exception->getMessage(), [$exception->getTrace()]);

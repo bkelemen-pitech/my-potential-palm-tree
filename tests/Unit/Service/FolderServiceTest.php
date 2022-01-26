@@ -65,12 +65,6 @@ class FolderServiceTest extends BaseApiTest
         $personModelResponse = PersonData::createPersonModelResponse();
         $personModelResponse->setFolderId($folderId);
 
-        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
-        $updateStatusWorkflowModel
-            ->setUserDossierId($folderId)
-            ->setStatusWorkflow(10301)
-            ->setAdministratorId(1);
-
         $this->internalApiFolderService->getFolderById($folderId)
             ->shouldBeCalledOnce()
             ->willReturn($folderByIdModelResponse);
@@ -78,8 +72,6 @@ class FolderServiceTest extends BaseApiTest
         $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters)
             ->shouldBeCalledOnce()
             ->willReturn([$personModelResponse]);
-
-        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldBeCalledOnce();
 
         $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn(['userId' => 1]);
 
@@ -104,12 +96,6 @@ class FolderServiceTest extends BaseApiTest
         $personModelResponse = PersonData::createPersonModelResponse();
         $personModelResponse->setFolderId($folderId);
 
-        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
-        $updateStatusWorkflowModel
-            ->setUserDossierId($folderId)
-            ->setStatusWorkflow(10300)
-            ->setAdministratorId(1);
-
         $this->internalApiFolderService->getFolderById($folderId)
             ->shouldBeCalledOnce()
             ->willReturn($folderByIdModelResponse);
@@ -117,8 +103,6 @@ class FolderServiceTest extends BaseApiTest
         $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters)
             ->shouldBeCalledOnce()
             ->willReturn([]);
-
-        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldNotBeCalled();
 
         $this->authenticator->getLoggedUserData()->shouldNotBeCalled();
 
@@ -146,19 +130,11 @@ class FolderServiceTest extends BaseApiTest
         $personModelResponse = PersonData::createPersonModelResponse();
         $personModelResponse->setFolderId($folderId);
 
-        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
-        $updateStatusWorkflowModel
-            ->setUserDossierId($folderId)
-            ->setStatusWorkflow(10300)
-            ->setAdministratorId(1);
-
         $this->internalApiFolderService->getFolderById($folderId)
             ->shouldBeCalledOnce()
             ->willThrow(new KycResourceNotFoundException(sprintf('Folder with id %d not found', $folderId)));
 
         $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters)->shouldNotBeCalled();
-
-        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldNotBeCalled();
 
         $this->authenticator->getLoggedUserData()->shouldNotBeCalled();
 
@@ -184,12 +160,6 @@ class FolderServiceTest extends BaseApiTest
             ->setFirstName('first')
             ->setLastName('last');
 
-        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
-        $updateStatusWorkflowModel
-            ->setUserDossierId($folderId)
-            ->setStatusWorkflow(10301)
-            ->setAdministratorId(1);
-
         $this->internalApiFolderService->getFolderById($folderId)
             ->shouldBeCalledOnce()
             ->willReturn($folderByIdModelResponse);
@@ -197,8 +167,6 @@ class FolderServiceTest extends BaseApiTest
         $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters)
             ->shouldBeCalledOnce()
             ->willReturn([$personModelResponse]);
-
-        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldNotBeCalled();
 
         $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn(['userId' => 1]);
 
