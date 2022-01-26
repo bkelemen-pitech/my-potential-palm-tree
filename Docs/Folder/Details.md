@@ -59,9 +59,7 @@ Content-Type: application/json
 #### Assign folder to user
 This API will also assign the folder to the active user by calling the 
 `/internalAPI/folders/assign` in [Monolith](../Monolith.md). The active user id can be retrieved
-by decoding the [JWT token](../Authentification/Authentication.md#decoding-the-jwt).
-In the Monolith the `setAffectation` method is called in order to assign folder to the administrator,
-where the workflow status update to 10301 will happen automatically. 
+by decoding the [JWT token](../Authentification/Authentication.md#decoding-the-jwt)
 
 ### Flow
 ![Folder details](../assets/Folder%20details.png)
