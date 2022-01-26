@@ -3,14 +3,28 @@
 * Status: [accepted] <!-- optional -->
 * Deciders: [[Bela Kelemen](https://github.com/bkelemen-pitech), [Marius Pop](https://github.com/mariuspop86), [Sergiu Parlea](https://github.com/SergiuParlea), [Florin 
   Onica](https://github.com/fonica)]
-* Date: [2021-01-18] <!-- optional -->
+* Date: [2021-01-26] <!-- optional -->
 
 <!-- Technical Story: [description | ticket/issue URL]  optional -->
 
 ## Context and Problem Statement
 
 The history API data is composed of multiple sources and the logic to merge the data can be done either in the 
-bundle or the application. 
+bundle or the application.  
+For BO application the history data is composed of these entities:
+- personne
+- document
+- document_data_log
+- historique_statut_workflow  
+
+For Core Front Pro application the history data is composed of these entities:
+- personne
+- personne_info
+- agent_dossier
+- historique_statut_workflow
+
+>For the moment for Core front pro there is an internalAPI endpoint that merge the data 
+`/folders/gethistory/folder-id/{folderId}` that needs to be refactored by splitting it into endpoints for each entity.
 
 ## Decision Drivers <!-- optional -->
 
@@ -25,6 +39,8 @@ bundle or the application.
 
 Chosen option: "data should be merged by the application", because it keeps the logic inside the application and not in 
 the bundle making it unaware of the application using it. It is easier to maintain/update/refactor.
+Extracting this type of reusable business logic into a separate bundle (not the internalAPI one) can be reconsidered in 
+the future if needed.
 
 ## Pros and Cons of the Options <!-- optional -->
 
@@ -38,8 +54,7 @@ parameter it should return the correct data for each use case or application(Bac
 * Bad, because it hides the implementation from the application
 * Bad, because it's harder to maintain or update without introducing regressions
 * Bad, because it changes the scope of the bundle(the initial scope was that it should be an interface for the 
-  data 
-  source in this case the monolith and the applications that communicate with it)
+  data source in this case the monolith and the applications that communicate with it)
 * Bad, because it increases the logic with the extra parameter
 
 ### Data should be merged by the application
