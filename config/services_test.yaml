@@ -1,0 +1,27 @@
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    public: true
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  Kyc\InternalApiBundle\Service\FolderService:
+    public: true
+
+  Kyc\InternalApiBundle\Service\DocumentService:
+    public: true
+
+  App\Service\PersonService:
+    public: true
+
+  App\Service\DocumentService:
+    public: true
+
+  lexik_jwt_authentication.jwt_token_authenticator:
+    class: Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator
+
+  Kyc\InternalApiBundle\Service\UserService:
+    public: true
+
+  App\Security\JWTTokenAuthenticator:
+    public: true

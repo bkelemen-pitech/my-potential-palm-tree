@@ -12,11 +12,12 @@ alt Folder not found
 else Folder found
     Monolith->-BE BO: 200 - folder
     opt IF workflowStatus = 10300
+        BE BO->+Monolith: internalAPI assign folder to user
+        Monolith->-BE BO: 204
+        
         BE BO->+Monolith: internalAPI update folder workflowStatus to 10301
         Monolith->-BE BO: 204 
     end
-    BE BO->+Monolith: internalAPI assign folder to user
-    Monolith->-BE BO: 204
-    BE BO->-FE BO: 200 - folder
+BE BO->-FE BO: 200 - folder
 end
 ```

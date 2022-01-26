@@ -38,7 +38,7 @@ Decoding the JWT will result in something similar to this
   "iat": 1642508293,
   "exp": 1642561200,
   "roles": [
-    1
+    "ROLE_1"
   ],
   "userId": 1,
   "username": "peter-parker"
@@ -49,7 +49,7 @@ Decoding the JWT will result in something similar to this
 This JWT will be used to keep the user authenticated on subsequent requests,
 by sending it under the header `X-Auth-Token`.
 ```http request
-GET {HOST_NAME}/api/v1/fodlers
+GET {HOST_NAME}/api/v1/folders
 Accept: application/json 
 X-Auth-Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYX...
 ```

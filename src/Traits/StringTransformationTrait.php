@@ -6,6 +6,16 @@ namespace App\Traits;
 
 trait StringTransformationTrait
 {
+    public function snakeToCamel(string $str): string
+    {
+        return lcfirst(str_replace(' ', '', ucwords(str_replace(['_', '-'], ' ', $str))));
+    }
+
+    protected function camelToSnake(string $str): string
+    {
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $str));
+    }
+
     protected function obfuscateData(array $data, array $obfuscateData): array
     {
         foreach ($obfuscateData as $key) {

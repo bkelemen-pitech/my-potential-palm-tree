@@ -6,7 +6,6 @@ namespace App\Exception;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class ClientException extends HttpException
+class ApiException extends HttpException
 {
-
 }

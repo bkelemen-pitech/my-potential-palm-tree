@@ -10,12 +10,17 @@ services:
             - '8090:80'
         volumes:
             - ./:/var/www/html
+            - ~/.ssh:/root/.ssh
         networks:
             - default
             - webhelp-kyc-docker_default
+    bo_redis:
+        image: redis:latest
+        volumes: [ 'redis:/data' ]
 
 volumes:
     postgresql-volume:
+    redis:
 
 networks:
     webhelp-kyc-docker_default:
