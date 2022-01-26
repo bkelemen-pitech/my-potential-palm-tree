@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Service;
 
-use App\Enum\FolderEnum;
-use App\Enum\UserEnum;
 use App\Exception\ResourceNotFoundException;
 use App\Security\JWTTokenAuthenticator;
 use App\Service\FolderService;
@@ -62,7 +60,7 @@ class FolderServiceTest extends BaseApiTest
 
         $folderByIdModelResponse = FolderData::createFolderByIdModelResponse();
         $folderByIdModelResponse->setId($folderId);
-        $folderByIdModelResponse->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP);
+        $folderByIdModelResponse->setWorkflowStatus(10300);
 
         $personModelResponse = PersonData::createPersonModelResponse();
         $personModelResponse->setFolderId($folderId);
@@ -70,7 +68,7 @@ class FolderServiceTest extends BaseApiTest
         $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
         $updateStatusWorkflowModel
             ->setUserDossierId($folderId)
-            ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP)
+            ->setStatusWorkflow(10301)
             ->setAdministratorId(1);
 
         $this->internalApiFolderService->getFolderById($folderId)
@@ -83,14 +81,14 @@ class FolderServiceTest extends BaseApiTest
 
         $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldBeCalledOnce();
 
-        $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn([UserEnum::USER_ID => 1]);
+        $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn(['userId' => 1]);
 
         $this->internalApiFolderService->assignAdministratorToFolder(1, $folderId)->shouldBeCalledOnce();
 
         $folderById = $this->folderService->getFolderData($folderId, $filters);
         $this->assertEquals($folderId, $folderById->getId());
         $this->assertEquals('Test login', $folderById->getLogin());
-        $this->assertEquals(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP, $folderById->getWorkflowStatus());
+        $this->assertEquals(10301, $folderById->getWorkflowStatus());
         $this->assertEquals([$personModelResponse], $folderById->getPersons());
     }
 
@@ -101,7 +99,7 @@ class FolderServiceTest extends BaseApiTest
 
         $folderByIdModelResponse = FolderData::createFolderByIdModelResponse();
         $folderByIdModelResponse->setId($folderId);
-        $folderByIdModelResponse->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP);
+        $folderByIdModelResponse->setWorkflowStatus(10302);
 
         $personModelResponse = PersonData::createPersonModelResponse();
         $personModelResponse->setFolderId($folderId);
@@ -109,7 +107,7 @@ class FolderServiceTest extends BaseApiTest
         $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
         $updateStatusWorkflowModel
             ->setUserDossierId($folderId)
-            ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP)
+            ->setStatusWorkflow(10300)
             ->setAdministratorId(1);
 
         $this->internalApiFolderService->getFolderById($folderId)
@@ -129,7 +127,7 @@ class FolderServiceTest extends BaseApiTest
         $folderById = $this->folderService->getFolderData($folderId, $filters);
         $this->assertEquals($folderId, $folderById->getId());
         $this->assertEquals('Test login', $folderById->getLogin());
-        $this->assertEquals(FolderEnum::WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP, $folderById->getWorkflowStatus());
+        $this->assertEquals(10302, $folderById->getWorkflowStatus());
         $this->assertEquals([], $folderById->getPersons());
     }
 
@@ -143,7 +141,7 @@ class FolderServiceTest extends BaseApiTest
 
         $folderByIdModelResponse = FolderData::createFolderByIdModelResponse();
         $folderByIdModelResponse->setId($folderId);
-        $folderByIdModelResponse->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP);
+        $folderByIdModelResponse->setWorkflowStatus(10300);
 
         $personModelResponse = PersonData::createPersonModelResponse();
         $personModelResponse->setFolderId($folderId);
@@ -151,7 +149,7 @@ class FolderServiceTest extends BaseApiTest
         $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
         $updateStatusWorkflowModel
             ->setUserDossierId($folderId)
-            ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP)
+            ->setStatusWorkflow(10300)
             ->setAdministratorId(1);
 
         $this->internalApiFolderService->getFolderById($folderId)
@@ -178,7 +176,7 @@ class FolderServiceTest extends BaseApiTest
         $folderByIdModelResponse
             ->setId($folderId)
             ->setLogin('Test')
-            ->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP);
+            ->setWorkflowStatus(10300);
 
         $personModelResponse = new PersonModelResponse();
         $personModelResponse
@@ -189,7 +187,7 @@ class FolderServiceTest extends BaseApiTest
         $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
         $updateStatusWorkflowModel
             ->setUserDossierId($folderId)
-            ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP)
+            ->setStatusWorkflow(10301)
             ->setAdministratorId(1);
 
         $this->internalApiFolderService->getFolderById($folderId)
@@ -202,7 +200,7 @@ class FolderServiceTest extends BaseApiTest
 
         $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldNotBeCalled();
 
-        $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn([UserEnum::USER_ID => 1]);
+        $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn(['userId' => 1]);
 
         $this->internalApiFolderService->assignAdministratorToFolder(1, $folderId)
             ->shouldBeCalledOnce()
@@ -211,7 +209,35 @@ class FolderServiceTest extends BaseApiTest
         $folderById = $this->folderService->getFolderData($folderId, $filters);
         $this->assertEquals($folderId, $folderById->getId());
         $this->assertEquals('Test', $folderById->getLogin());
-        $this->assertEquals(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP, $folderById->getWorkflowStatus());
+        $this->assertEquals(10300, $folderById->getWorkflowStatus());
         $this->assertEquals([$personModelResponse], $folderById->getPersons());
+    }
+
+    /**
+     * @dataProvider updateWorkflowStatusDataProvider
+     */
+    public function testUpdateWorkflowStatus(int $folderId, int $workflowStatus, ?int $administratorId)
+    {
+        if (!$administratorId) {
+            $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn(['userId' => $administratorId]);
+        }
+
+        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+        $updateStatusWorkflowModel
+            ->setUserDossierId($folderId)
+            ->setStatusWorkflow($workflowStatus)
+            ->setAdministratorId($administratorId);
+
+        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldBeCalledOnce();
+
+        $this->folderService->updateWorkflowStatus($folderId, ['workflowStatus' => $workflowStatus], $administratorId);
+    }
+
+    public function updateWorkflowStatusDataProvider(): array
+    {
+        return [
+            [1, 10301, 1],
+            [2, 10350, null],
+        ];
     }
 }
