@@ -67,12 +67,6 @@ class FolderServiceTest extends BaseApiTest
         $personModelResponse = PersonData::createPersonModelResponse();
         $personModelResponse->setFolderId($folderId);
 
-        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
-        $updateStatusWorkflowModel
-            ->setUserDossierId($folderId)
-            ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP)
-            ->setAdministratorId(1);
-
         $this->internalApiFolderService->getFolderById($folderId)
             ->shouldBeCalledOnce()
             ->willReturn($folderByIdModelResponse);
@@ -80,8 +74,6 @@ class FolderServiceTest extends BaseApiTest
         $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters)
             ->shouldBeCalledOnce()
             ->willReturn([$personModelResponse]);
-
-        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldBeCalledOnce();
 
         $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn([UserEnum::USER_ID => 1]);
 
@@ -106,12 +98,6 @@ class FolderServiceTest extends BaseApiTest
         $personModelResponse = PersonData::createPersonModelResponse();
         $personModelResponse->setFolderId($folderId);
 
-        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
-        $updateStatusWorkflowModel
-            ->setUserDossierId($folderId)
-            ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP)
-            ->setAdministratorId(1);
-
         $this->internalApiFolderService->getFolderById($folderId)
             ->shouldBeCalledOnce()
             ->willReturn($folderByIdModelResponse);
@@ -119,8 +105,6 @@ class FolderServiceTest extends BaseApiTest
         $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters)
             ->shouldBeCalledOnce()
             ->willReturn([]);
-
-        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldNotBeCalled();
 
         $this->authenticator->getLoggedUserData()->shouldNotBeCalled();
 
@@ -148,19 +132,11 @@ class FolderServiceTest extends BaseApiTest
         $personModelResponse = PersonData::createPersonModelResponse();
         $personModelResponse->setFolderId($folderId);
 
-        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
-        $updateStatusWorkflowModel
-            ->setUserDossierId($folderId)
-            ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP)
-            ->setAdministratorId(1);
-
         $this->internalApiFolderService->getFolderById($folderId)
             ->shouldBeCalledOnce()
             ->willThrow(new KycResourceNotFoundException(sprintf('Folder with id %d not found', $folderId)));
 
         $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters)->shouldNotBeCalled();
-
-        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldNotBeCalled();
 
         $this->authenticator->getLoggedUserData()->shouldNotBeCalled();
 
@@ -186,12 +162,6 @@ class FolderServiceTest extends BaseApiTest
             ->setFirstName('first')
             ->setLastName('last');
 
-        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
-        $updateStatusWorkflowModel
-            ->setUserDossierId($folderId)
-            ->setStatusWorkflow(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP)
-            ->setAdministratorId(1);
-
         $this->internalApiFolderService->getFolderById($folderId)
             ->shouldBeCalledOnce()
             ->willReturn($folderByIdModelResponse);
@@ -199,8 +169,6 @@ class FolderServiceTest extends BaseApiTest
         $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters)
             ->shouldBeCalledOnce()
             ->willReturn([$personModelResponse]);
-
-        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldNotBeCalled();
 
         $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn([UserEnum::USER_ID => 1]);
 

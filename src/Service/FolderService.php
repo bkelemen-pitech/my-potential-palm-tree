@@ -87,7 +87,7 @@ class FolderService
 
                     $this->internalApiFolderService->assignAdministratorToFolder($administratorId, $folderId);
 
-                    $folderById = $this->updateStatusWorkflow($folderById, $administratorId);
+                    $folderById->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP);
                 } catch (InternalAPIInvalidDataException $exception) {
                     $this->logger->error($exception->getMessage(), [$exception->getTrace()]);
                 }
