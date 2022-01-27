@@ -52,6 +52,11 @@ nelmio_api_doc:
           in: query
           description: "'user_dossier' database property used to order the results by"
           required: false
+        order_by_login:
+          name: orderBy
+          in: query
+          description: "'login' or other database properties can be used to order the results by"
+          required: false
         page:
           name: page
           in: query
@@ -377,6 +382,33 @@ nelmio_api_doc:
                   token:
                     type: string
                     example: stringJWTToken
+        SuccessAdministrators:
+          description: Success response example for the GET administrators API call
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  administrators:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 12
+                        login:
+                          type: string
+                          example: alice
+                        role:
+                          type: integer
+                          example: 1
+                        email:
+                          type: string
+                          example: marketing@beprems.com
+                        groupId:
+                          type: integer
+                          example: 1
       schemas:
         200Success:
           title: 200 Success
@@ -755,3 +787,24 @@ nelmio_api_doc:
               description: No content
             401:
               $ref: '#/components/responses/Unauthenticated'
+      /api/v1/administrators:
+        get:
+          description: Get administrators with or without parameters
+          parameters:
+            - ref: '#/components/parameters/order_by_login'
+            - ref: '#/components/parameters/order'
+          tags:
+            - Administrators
+          responses:
+            '200':
+              description: OK
+              ref: '#/components/responses/SuccessAdministrators'
+            '400':
+              description: Invalid Request
+              ref: '#/components/responses/InvalidRequest'
+            '401':
+              description: Invalid Request
+              ref: '#/components/responses/Unauthenticated'
+            '500':
+              description: Invalid Request
+              ref: '#/components/responses/ServerError'
