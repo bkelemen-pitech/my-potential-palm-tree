@@ -11,6 +11,7 @@ services:
         volumes:
             - ./:/var/www/html
             - ~/.ssh:/root/.ssh
+            - ../internal_api_bundle:/var/www/internal_api_bundle
         networks:
             - default
             - webhelp-kyc-docker_default

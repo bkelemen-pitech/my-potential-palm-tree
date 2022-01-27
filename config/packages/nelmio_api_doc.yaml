@@ -53,7 +53,7 @@ nelmio_api_doc:
           description: "'user_dossier' database property used to order the results by"
           required: false
         order_by_login:
-          name: orderBy
+          name: order-by
           in: query
           description: "'login' or other database properties can be used to order the results by"
           required: false
