@@ -25,3 +25,6 @@ services:
 
   App\Security\JWTTokenAuthenticator:
     public: true
+
+  Kyc\InternalApiBundle\Service\WorkflowStatusHistoryService:
+    public: true

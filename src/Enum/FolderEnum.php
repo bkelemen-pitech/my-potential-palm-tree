@@ -11,6 +11,8 @@ class FolderEnum
     public const DEFAULT_ORDER_BY = 'modification';
     public const DEFAULT_ORDER = 'DESC';
 
+    public const WORKFLOW_STATUS_HISTORY = 'workflowStatusHistory';
+
     // API PARAMETERS
     public const FILTERS = 'filters';
     public const LIMIT = 'limit';
