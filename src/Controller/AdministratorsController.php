@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enum\AdministratorEnum;
 use App\Exception\ApiException;
 use App\Service\AdministratorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,6 +29,6 @@ class AdministratorsController extends AbstractController
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
 
-        return $this->json($administrators);
+        return $this->json([AdministratorEnum::ADMINISTRATORS => $administrators]);
     }
 }

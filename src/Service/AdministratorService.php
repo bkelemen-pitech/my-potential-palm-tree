@@ -28,10 +28,6 @@ class AdministratorService
             'json'
         );
 
-        $administrators = $this->internalApiAdministratorService->getAdministrators($administratorFiltersModel);
-
-        return [
-            AdministratorEnum::ADMINISTRATORS => $administrators,
-        ];
+        return $this->internalApiAdministratorService->getAdministrators($administratorFiltersModel);
     }
 }
