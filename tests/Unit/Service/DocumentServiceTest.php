@@ -89,4 +89,34 @@ class DocumentServiceTest extends BaseApiTest
         $this->expectExceptionMessage('Invalid request');
         $this->documentService->getDocumentFields(['agency_id' => 1, 'document_type_id' => 1, 'person_type_id' => 1]);
     }
+
+    public function testGetDocumentDataLogsSuccess()
+    {
+        $documentDataLogsModelRequest = DocumentsData::createDocumentDataLogsRequestModel();
+        $documentDataLogsModelResponse = DocumentsData::createDocumentDataLogsModelResponse();
+
+        $this->internalApiDocumentService
+            ->getDocumentDataLogs($documentDataLogsModelRequest)
+            ->shouldBeCalledOnce()
+            ->willReturn($documentDataLogsModelResponse);
+
+        $this->assertEquals(
+            $documentDataLogsModelResponse,
+            $this->documentService->getDocumentDataLogs(['administrator-id' => 1, 'document-ids' => [1, 2]])
+        );
+    }
+
+    public function testGetDocumentDataLogsException()
+    {
+        $documentDataLogsModelRequest = DocumentsData::createDocumentDataLogsRequestModel();
+
+        $this->internalApiDocumentService
+            ->getDocumentDataLogs($documentDataLogsModelRequest)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiInvalidDataException('Invalid request'));
+
+        $this->expectException(InvalidDataException::class);
+        $this->expectExceptionMessage('Invalid request');
+        $this->documentService->getDocumentDataLogs(['administrator-id' => 1, 'document-ids' => [1, 2]]);
+    }
 }
