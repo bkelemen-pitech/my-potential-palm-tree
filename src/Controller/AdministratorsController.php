@@ -17,21 +17,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AdministratorsController extends AbstractController
 {
-    protected AdministratorService $administratorService;
-
-    public function __construct(
-        AdministratorService $administratorService
-    ) {
-        $this->administratorService = $administratorService;
-    }
-
     /**
      * @Route(name="get_administrators", methods="GET")
      */
-    public function getAdministrators(Request $request): JsonResponse
+    public function getAdministrators(Request $request, AdministratorService $administratorService): JsonResponse
     {
         try {
-            $administrators = $this->administratorService->getAdministrators($request->query->all());
+            $administrators = $administratorService->getAdministrators($request->query->all());
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }

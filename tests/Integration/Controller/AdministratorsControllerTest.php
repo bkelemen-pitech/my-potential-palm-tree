@@ -8,6 +8,7 @@ use App\Model\Request\AdministratorModel;
 use App\Tests\BaseApiTest;
 use App\Tests\Enum\BaseEnum;
 use App\Tests\Mocks\Data\AdministratorData;
+use Kyc\InternalApiBundle\Exception\ResourceNotFoundException;
 use Kyc\InternalApiBundle\Service\AdministratorService as InternalApiAdministratorService;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -24,7 +25,7 @@ class AdministratorsControllerTest extends BaseApiTest
         static::getContainer()->set(InternalApiAdministratorService::class, $this->internalApiAdministratorService->reveal());
     }
 
-    public function testGetAdministrators()
+    public function testGetAdministratorsSuccess()
     {
         $administratorFilterModel = (new AdministratorModel())
             ->setRoles([1, 4, 6]);
@@ -38,5 +39,20 @@ class AdministratorsControllerTest extends BaseApiTest
         $this->requestWithBody(BaseEnum::METHOD_GET, self::BASE_PATH);
         $this->assertEquals(200, $this->getStatusCode());
         $this->assertEquals(AdministratorData::getAdministrators(), $this->getResponseContent());
+    }
+
+    public function testGetAdministratorsThrowsException()
+    {
+        $administratorFilterModel = (new AdministratorModel())
+            ->setRoles([1, 4, 6]);
+
+        $this->internalApiAdministratorService
+            ->getAdministrators($administratorFilterModel)
+            ->shouldBeCalledOnce()
+            ->willThrow(new ResourceNotFoundException());
+
+        $this->requestWithBody(BaseEnum::METHOD_GET, self::BASE_PATH);
+        $this->assertEquals(400, $this->getStatusCode());
+        $this->assertEquals(AdministratorData::EXCEPTION, $this->getResponseContent());
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Mocks\Data;
 
+use Kyc\InternalApiBundle\Model\InternalApi\Administrator\Administrator;
 use Kyc\InternalApiBundle\Model\Response\Administrator\AdministratorModelResponse;
 
 class AdministratorData
@@ -42,4 +43,25 @@ class AdministratorData
             ],
         ];
     }
+
+    public static function getAdministratorsObject(): array
+    {
+        return [
+            "administrators" => [
+                (new AdministratorModelResponse())
+                    ->setId(12)
+                    ->setLogin("alice")
+                    ->setRole(1)
+                    ->setEmail("marketing@beprems.com")
+                    ->setGroupId(1),
+            ],
+        ];
+    }
+
+    public const EXCEPTION = [
+        'statusCode' => 400,
+        'body' => null,
+        'error' => '',
+        'status' => 'error',
+    ];
 }
