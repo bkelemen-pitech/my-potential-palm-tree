@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Enum\AdministratorEnum;
 use App\Model\Request\AdministratorModel;
 use Kyc\InternalApiBundle\Service\AdministratorService as InternalApiAdministratorService;
 use Symfony\Component\Serializer\SerializerInterface;

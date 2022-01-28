@@ -13,4 +13,13 @@ class UserEnum
     public const PASSWORD = 'password';
     public const USERNAME = 'username';
     public const LOGIN = 'login';
+
+    // ROLES
+    public const USER_ROLE_1 = 1;
+    public const USER_ROLE_2 = 2;
+    public const USER_ROLE_3 = 3;
+    public const USER_ROLE_4 = 4;
+    public const USER_ROLE_5 = 5;
+    public const USER_ROLE_6 = 6;
+    public const USER_ROLE_7 = 7;
 }
