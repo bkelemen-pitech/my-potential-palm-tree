@@ -25,7 +25,7 @@ Content-Type: application/json
       "mandatory": 1,
       "order": 1,
       "format": 1,
-      "ocr_field: 1,
+      "ocr_field": 1,
       "helperMethod": "getCommonNom",
       "validatorMethod": "validateFormData",
     },

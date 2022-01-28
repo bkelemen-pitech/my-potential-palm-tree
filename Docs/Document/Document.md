@@ -55,15 +55,15 @@ Content-Type: application/json
 ```
 ## Delete document
 This API will soft delete a document. Internally it will
-call `internalAPI/documents/delete/document-id/{documentId}` API.
+call `internalAPI/documents/deletebydocumentuid/document-uid/{document-uid}` API.
 
 ---
 __Method__: DELETE.  
-__URL__: `/api/v1/documents/{documentId}`.  
+__URL__: `/api/v1/documents/{document_uid}`.  
 Request example:
 
 ```http request
-DELETE {HOST_NAME}/api/v1/documents/1
+DELETE {HOST_NAME}/api/v1/documents/619648c127658
 Accept: application/json 
 Content-Type: application/json 
 
@@ -82,7 +82,7 @@ Content-Type: application/json
 {
   "statusCode":404,
   "body":null,
-  "error":"No document found for documentId 133815.",
+  "error":"No document found for document_uid 619648c127658.",
   "status":"error"
 }
 ```
@@ -95,13 +95,13 @@ call `internalAPI/documents/documentdatalogs` API.
 __Method__: GET  
 __URL__: `/api/v1/documents/document-data-logs`  
 __Query params__:
-- __documentId__ (array) - the document Ids, at least one id must be provided
+- __documentIds__ (array) - the document Ids, at least one id must be provided
 - __administratorId__ (int) - the administrator id, _optional_  
 
 Request example:
 
 ```http request
-GET {HOST_NAME}/api/v1/documents/document-data-logs?documentId[]=1&documentId[]=2&administratorId=1
+GET {HOST_NAME}/api/v1/documents/document-data-logs?documentIds[]=1&documentIds[]=2&administratorId=1
 Accept: application/json 
 Content-Type: application/json 
 
@@ -113,6 +113,26 @@ Content-Type: application/json
       "documentId" : 2, 
       "administratorId" : 1,
       "verification2Status" : 1,
+      "data": {
+        "agence_document_type": "1_T00022",
+        "date_delivrance": "01/02/2009",
+        "nom": "JOHN",
+        "prenom": "Doe",
+        "date_naissance": "01/01/2021",
+        "lieu_naissance": "CITY",
+        "mrz1": "XXXXX",
+        "mrz2": "XXXXX",
+        "mrz3": NULL,
+        "nationalite": "FRA",
+        "pays_emetteur": "FRA",
+        "autorite_emettrice": "PREFECTURE DE POLICE - PARIS",
+        "type_id": "ID",
+        "sexe": "M",
+        "numero": "090999999999",
+        "verso": true,
+        "controle_couleur": 1,
+        "expirationdate": "01/01/2031",
+      }
     },
     ...
   ]
@@ -126,3 +146,4 @@ Content-Type: application/json
   "status":"error"
 }
 ```
+> Obs: the `data` property is dynamic, it's a serialized string and the application won't apply any formatting on this
