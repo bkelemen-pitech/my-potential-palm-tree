@@ -57,10 +57,13 @@ class FoldersControllerTest extends BaseApiTest
         static::getContainer()->set(PersonService::class, $this->personService->reveal());
     }
 
-    public function testGetFolder()
+    public function testGetFolders()
     {
 
         $folderFilterModel = new BaseFolderFiltersModel();
+        $folderFilterModel
+            ->setTextSearchFields('date_of_birth')
+            ->setFilters('person_type_id:1');
         $folderModelResponse1 = new FolderModelResponse();
         $folderModelResponse1
             ->setFolderId(1)
@@ -109,7 +112,14 @@ class FoldersControllerTest extends BaseApiTest
                 $resultAssignedAdministratorModelResponse1,
                 $resultAssignedAdministratorModelResponse2,
             ]);
-        $this->requestWithBody(BaseEnum::METHOD_GET, self::GET_FOLDERS);
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::GET_FOLDERS,
+            [],
+            [],
+            true,
+            ['text_search_fields' => 'date_of_birth']
+        );
 
         $this->assertEquals(200, $this->getStatusCode());
 
