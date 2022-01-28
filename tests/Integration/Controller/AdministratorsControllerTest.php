@@ -13,7 +13,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 
 class AdministratorsControllerTest extends BaseApiTest
 {
-    public const PATH = 'api/v1/administrators/';
+    public const BASE_PATH = 'api/v1/administrators';
 
     protected ObjectProphecy $internalApiAdministratorService;
 
@@ -24,7 +24,7 @@ class AdministratorsControllerTest extends BaseApiTest
         static::getContainer()->set(InternalApiAdministratorService::class, $this->internalApiAdministratorService->reveal());
     }
 
-    public function testGetDocumentByUid()
+    public function testGetAdministrators()
     {
         $administratorFilterModel = (new AdministratorModel())
             ->setRoles([1, 4, 6]);
@@ -35,7 +35,7 @@ class AdministratorsControllerTest extends BaseApiTest
             ->shouldBeCalledOnce()
             ->willReturn($administratorModelResponse);
 
-        $this->requestWithBody(BaseEnum::METHOD_GET, self::PATH);
+        $this->requestWithBody(BaseEnum::METHOD_GET, self::BASE_PATH);
         $this->assertEquals(200, $this->getStatusCode());
         $this->assertEquals(AdministratorData::getAdministrators(), $this->getResponseContent());
     }

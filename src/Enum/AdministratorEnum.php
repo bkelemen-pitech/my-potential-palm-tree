@@ -2,12 +2,8 @@
 
 namespace App\Enum;
 
-class AdministrationEnum
+class AdministratorEnum extends BaseEnum
 {
-    // API PARAMETERS
-    public const ORDER = 'order';
-    public const PAGE = 'page';
-
     // API RESPONSE
     public const ADMINISTRATORS = 'administrators';
 

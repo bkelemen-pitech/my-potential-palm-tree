@@ -26,7 +26,7 @@ class AdministratorsController extends AbstractController
     }
 
     /**
-     * @Route("/", name="get_administrators", methods="GET")
+     * @Route(name="get_administrators", methods="GET")
      */
     public function getAdministrators(Request $request): JsonResponse
     {

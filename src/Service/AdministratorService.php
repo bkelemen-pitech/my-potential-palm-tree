@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Enum\AdministrationEnum;
+use App\Enum\AdministratorEnum;
 use App\Model\Request\AdministratorModel;
 use Kyc\InternalApiBundle\Service\AdministratorService as InternalApiAdministratorService;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -31,7 +31,7 @@ class AdministratorService
         $administrators = $this->internalApiAdministratorService->getAdministrators($administratorFiltersModel);
 
         return [
-            AdministrationEnum::ADMINISTRATORS => $administrators,
+            AdministratorEnum::ADMINISTRATORS => $administrators,
         ];
     }
 }

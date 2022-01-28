@@ -52,7 +52,7 @@ nelmio_api_doc:
           in: query
           description: "'user_dossier' database property used to order the results by"
           required: false
-        order_by_login:
+        order_by_kebab_case:
           name: order-by
           in: query
           description: "'login' or other database properties can be used to order the results by"
@@ -791,7 +791,7 @@ nelmio_api_doc:
         get:
           description: Get administrators with or without parameters
           parameters:
-            - ref: '#/components/parameters/order_by_login'
+            - ref: '#/components/parameters/order_by_kebab_case'
             - ref: '#/components/parameters/order'
           tags:
             - Administrators
