@@ -180,7 +180,7 @@ class UserControllerTest extends BaseApiTest
             false
         );
 
-        $this->assertEquals(201, $this->getStatusCode());
+        $this->assertEquals(200, $this->getStatusCode());
         $this->assertArrayHasKey('token', $this->getResponseContent());
         $headers = $this->client->getResponse()->headers->all();
         $this->assertArrayNotHasKey('x-extended-token', $headers);
