@@ -15,11 +15,11 @@ class UserEnum
     public const LOGIN = 'login';
 
     // ROLES
-    public const USER_ROLE_1 = 1;
-    public const USER_ROLE_2 = 2;
-    public const USER_ROLE_3 = 3;
-    public const USER_ROLE_4 = 4;
-    public const USER_ROLE_5 = 5;
-    public const USER_ROLE_6 = 6;
-    public const USER_ROLE_7 = 7;
+    public const ROLE_ADMINISTRATOR = 1;
+    public const ROLE_SEIZER = 2;
+    public const ROLE_MANAGER = 3;
+    public const ROLE_SUPERVISOR = 4;
+    public const ROLE_GUEST = 5;
+    public const ROLE_AGENT = 6;
+    public const ROLE_AGENT_HISTORICAL = 7;
 }

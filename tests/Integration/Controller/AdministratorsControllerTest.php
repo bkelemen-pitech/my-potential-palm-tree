@@ -53,6 +53,8 @@ class AdministratorsControllerTest extends BaseApiTest
 
         $this->requestWithBody(BaseEnum::METHOD_GET, self::BASE_PATH);
         $this->assertEquals(400, $this->getStatusCode());
-        $this->assertEquals(AdministratorData::EXCEPTION, $this->getResponseContent());
+        $this->assertEquals(
+            $this->buildExceptionResponse(400, null, ''),
+            $this->getResponseContent());
     }
 }

@@ -55,11 +55,4 @@ class AdministratorData
                 ->setGroupId(1),
         ];
     }
-
-    public const EXCEPTION = [
-        'statusCode' => 400,
-        'body' => null,
-        'error' => '',
-        'status' => 'error',
-    ];
 }

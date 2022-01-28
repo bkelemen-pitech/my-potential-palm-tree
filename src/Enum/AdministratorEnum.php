@@ -8,8 +8,8 @@ class AdministratorEnum extends BaseEnum
     public const ADMINISTRATORS = 'administrators';
 
     public const ADMINISTRATOR_ROLES = [
-        UserEnum::USER_ROLE_1,
-        UserEnum::USER_ROLE_4,
-        UserEnum::USER_ROLE_6,
+        UserEnum::ROLE_ADMINISTRATOR,
+        UserEnum::ROLE_SUPERVISOR,
+        UserEnum::ROLE_AGENT,
     ];
 }
