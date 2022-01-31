@@ -74,6 +74,8 @@ Content-Type: application/json
   "status":"error"
 }
 ```
+> Obs: the `data` property is dynamic, it's a serialized string and the application won't apply any formatting on this
+
 ### Document subtype
 If the document type id is `1` the subtype is under `data.type_id` (this is an optional field).
 | Document subtype | Label |

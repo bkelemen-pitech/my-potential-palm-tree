@@ -20,8 +20,22 @@ Content-Type: application/json
   "types":{[
     { 
       "document_type_id": 1,
+      "sub_document_type_id": 1
       "label": "Pièce d'identité",
+      "sub_label": "Carte Nationale d’Identité",
       "treatment_instruction": "Consigne de traitement carte Nationale d’Identité"
+    },
+    { 
+      "document_type_id": 1,
+      "sub_document_type_id": 2
+      "label": "Pièce d'identité",
+      "sub_label": "Passeport",
+      "treatment_instruction": ""
+    },
+    { 
+      "document_type_id": 2,
+      "label": "RIB",
+      "treatment_instruction": ""
     },
     ...
    ]}
@@ -180,3 +194,12 @@ Content-Type: application/json
 | 164 | Justificatif économique |
 | 170 | Justificatif de cotation sur un portail d'information financière de référence |
 | 171 | Copie du décret en Conseil d'État reconnaissant l'utilité publique |
+
+#### Sub document type mapping
+
+| Sub document type Id | Label |
+| ------------- | ------------- |
+| 1 | Carte Nationale d’Identité |
+| 2 | Passeport |
+| 3 | Livret de famille |
+| 4 | Titre de séjour |
