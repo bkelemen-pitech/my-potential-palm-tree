@@ -21,6 +21,7 @@ Content-Type: application/json
     { 
       "document_type_id": 1,
       "label": "Pièce d'identité",
+      "treatment_instruction": "Consigne de traitement carte Nationale d’Identité"
     },
     ...
    ]}
