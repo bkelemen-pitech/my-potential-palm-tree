@@ -14,7 +14,7 @@ The document details can be retrieved by calling the
 To treat a document the [treat document API](./TreateDocument.md) should be called. 
 
 ### Merge document
-TBD...
+To merge a document the [merge document API](./MergeDocument.md) should be called.
 
 ## Misc actions
 There are other API endpoints that are needed by the frontend application. Here is a list:  
