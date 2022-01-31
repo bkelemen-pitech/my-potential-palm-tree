@@ -14,8 +14,9 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "documentUid": "1234abc456",
-  "statusVerification2": 2
+  "agency_id": 1,
+  "document_uid": "1234abc456",
+  "verification2_status": 2
 }
 
 204 NO CONTENT
@@ -29,3 +30,4 @@ Content-Type: application/json
   "status":"error"
 }
 ```
+> Obs: the agency_id is needed for the event DOC_TRAITE.
