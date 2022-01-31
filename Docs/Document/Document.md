@@ -183,3 +183,43 @@ Content-Type: application/json
 }
 ```
 > Obs: the `data` property is dynamic, it's a serialized string and the application won't apply any formatting on this
+
+## Update document type
+This API will update a document type or subtype. Internally it will
+call `internalAPI/documents/updatetype/document-uid/{document_uid}` API.
+
+---
+__Method__: PATCH.  
+__URL__: `/api/v1/documents/{document_uid}`.  
+Request example:
+
+```http request
+PATCH {HOST_NAME}/api/v1/documents/619648c127658
+Accept: application/json 
+Content-Type: application/json 
+
+{ 
+  "document_type_id": 1,
+  "sub_document_type_id": 2
+}
+
+204 NO CONTENT
+{}
+
+400 BAD REQUEST
+{
+  "statusCode":400,
+  "body":null,
+  "error":"Bad request",
+  "status":"error"
+}
+
+404 NOT FOUND
+{
+  "statusCode":404,
+  "body":null,
+  "error":"No document found for document_uid 619648c127658.",
+  "status":"error"
+}
+```
+The `sub_document_type_id` is mandatory only for `document_type_id` 1.
