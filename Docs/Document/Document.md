@@ -74,6 +74,14 @@ Content-Type: application/json
   "status":"error"
 }
 ```
+### Document subtype
+If the document type id is `1` the subtype is under `data.type_id` (this is an optional field).
+| Document subtype | Label |
+| ------------- | ------------- |
+| ID | Carte Nationale d’Identité |
+| P | Passeport |
+| RP | Titre de séjour |
+
 ## Delete document
 This API will soft delete a document. Internally it will
 call `internalAPI/documents/deletebydocumentuid/document-uid/{document-uid}` API.
