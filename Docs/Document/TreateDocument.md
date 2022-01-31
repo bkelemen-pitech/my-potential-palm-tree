@@ -29,4 +29,4 @@ Content-Type: application/json
   "status":"error"
 }
 ```
-> Obs: the agency_id is needed for the event DOC_TRAITE.
+> Obs: the agency_id and administrator_id is needed for the event DOC_TRAITE.

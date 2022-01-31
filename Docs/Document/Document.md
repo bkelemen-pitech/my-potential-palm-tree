@@ -90,6 +90,7 @@ Content-Type: application/json
   "status":"error"
 }
 ```
+> Obs: the agency_id and administrator_id is needed for the event SUPPRIME_DOCUMENT.
 
 ## Document data log
 This API will retrieve the document data logs. Internally it will
