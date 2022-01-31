@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-class FolderEnum
+class FolderEnum extends BaseEnum
 {
     // PAGINATION
     public const DEFAULT_PAGE = '0';
@@ -16,9 +16,7 @@ class FolderEnum
     // API PARAMETERS
     public const FILTERS = 'filters';
     public const LIMIT = 'limit';
-    public const ORDER = 'order';
     public const ORDER_BY = 'order_by';
-    public const PAGE = 'page';
     public const TEXT_SEARCH = 'text_search';
     public const TEXT_SEARCH_FIELDS = 'text_search_fields';
 
