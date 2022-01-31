@@ -11,7 +11,7 @@ return the content of the linked document also in the `contentVerso` property.
 
 ---
 __Method__: GET.  
-__URL__: `/api/v1/documents/{documentUId}`.  
+__URL__: `/api/v1/documents/{document_uid}`.  
 Request example:
 
 ```http request
@@ -21,20 +21,41 @@ Content-Type: application/json
 
 200 OK
 {
-  "documentId":133809,
-  "documentUid":"619648c127658",
-  "masterDocumentId":0,
+  "document_id":133809,
+  "document_uid":"619648c127658",
+  "master_documentId":0,
   "name":"Statuts entreprise (company articles)",
-  "statusVerification":0,
-  "statusVerification2":0,
+  "verification_status":0,
+  "verification2_status":0,
   "status":1,
   "creation":"2021-11-18T13:36:17+00:00",
-  "personDocumentId":null,
-  "documentTypeId":53,
+  "person_document_id":null,
+  "document_type_id":51,
   "encryption":true,
   "content":"JVBERi0xLjQKJeLjz9MK...",
-  "type":"Statuts",
-  "contentVerso":"JVBERi0xLjQKJc=",
+  "data": {
+    "agence_document_type": "1_T00022",
+    "date_delivrance": "01/02/2009",
+    "nom": "JOHN",
+    "prenom": "Doe",
+    "date_naissance": "01/01/2021",
+    "lieu_naissance": "CITY",
+    "mrz1": "XXXXX",
+    "mrz2": "XXXXX",
+    "mrz3": NULL,
+    "nationalite": "FRA",
+    "pays_emetteur": "FRA",
+    "autorite_emettrice": "PREFECTURE DE POLICE - PARIS",
+    "type_id": "ID",
+    "sexe": "M",
+    "numero": "090999999999",
+    "verso": true,
+    "controle_couleur": 1,
+    "expirationdate": "01/01/2031",
+  }
+  "size": 81818
+  "type":"Kbis",
+  "content_verso":"JVBERi0xLjQKJc=...",
 }
 
 400 BAD REQUEST
@@ -49,7 +70,7 @@ Content-Type: application/json
 {
   "statusCode":404,
   "body":null,
-  "error":"No document found for documentUid 619648c127658.",
+  "error":"No document found for document_uid 619648c127658.",
   "status":"error"
 }
 ```
