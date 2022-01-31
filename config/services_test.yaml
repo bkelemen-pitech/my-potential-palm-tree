@@ -31,3 +31,6 @@ services:
 
   App\Service\AdministratorService:
     public: true
+
+  Kyc\InternalApiBundle\Service\WorkflowStatusHistoryService:
+    public: true
