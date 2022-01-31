@@ -5,17 +5,16 @@ by an agent. The Back-office application will send the `status=2`.
 
 ---
 __Method__: POST.  
-__URL__: `/api/v1/documents/treat`.  
+__URL__: `/api/v1/documents/{document_uid}/treat`.  
 Request example:
 
 ```http request
-GET {HOST_NAME}/api/v1/documents/treat
+POST {HOST_NAME}/api/v1/documents/1234abc456/treat
 Accept: application/json 
 Content-Type: application/json
 
 {
   "agency_id": 1,
-  "document_uid": "1234abc456",
   "verification2_status": 2
 }
 

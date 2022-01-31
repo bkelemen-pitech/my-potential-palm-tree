@@ -67,6 +67,10 @@ DELETE {HOST_NAME}/api/v1/documents/619648c127658
 Accept: application/json 
 Content-Type: application/json 
 
+{ 
+  "agency_id": 1
+}
+
 204 NO CONTENT
 {}
 
