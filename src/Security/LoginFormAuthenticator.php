@@ -77,7 +77,7 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName)
     {
-        return new JsonResponse(['token' => $token->getCredentials()], Response::HTTP_CREATED);
+        return new JsonResponse(['token' => $token->getCredentials()], Response::HTTP_OK);
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $authException)
