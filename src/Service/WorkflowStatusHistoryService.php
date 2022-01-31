@@ -16,6 +16,7 @@ class WorkflowStatusHistoryService
     ) {
         $this->internalApiWorkflowStatusHistoryService = $internalApiWorkflowStatusHistoryService;
     }
+    
     public function getWorkflowStatusHistory(int $folderId, ?int $administratorId): array
     {
         $workflowStatusHistoryModel = new WorkflowStatusHistoryModel();
