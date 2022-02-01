@@ -21,20 +21,16 @@ Content-Type: application/json
     { 
       "document_type_id": 1,
       "sub_document_type_id": 1
-      "label": "Pièce d'identité",
-      "sub_label": "Carte Nationale d’Identité",
       "treatment_instruction": "Consigne de traitement carte Nationale d’Identité"
     },
     { 
       "document_type_id": 1,
       "sub_document_type_id": 2
-      "label": "Pièce d'identité",
-      "sub_label": "Passeport",
       "treatment_instruction": ""
     },
     { 
       "document_type_id": 2,
-      "label": "RIB",
+      "sub_document_type_id": null
       "treatment_instruction": ""
     },
     ...
