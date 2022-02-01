@@ -61,4 +61,18 @@ class DocumentController extends AbstractController
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
     }
+
+    /**
+     * @Route("/document-data-logs", name="document_data_logs", methods="GET", priority=2)
+     */
+    public function getDocumentDataLogs(Request $request, DocumentService $documentService): JsonResponse
+    {
+        try {
+            $documentDataLogs = $documentService->getDocumentDataLogs($request->query->all());
+
+            return $this->json([DocumentEnum::DOCUMENT_DATA_LOGS => $documentDataLogs]);
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+    }
 }
