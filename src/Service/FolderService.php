@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Enum\FolderEnum;
+use App\Enum\PersonEnum;
 use App\Enum\UserEnum;
 use App\Exception\ResourceNotFoundException;
 use App\Model\Request\BaseFolderFiltersModel;
@@ -47,6 +48,7 @@ class FolderService
 
     public function getFolders(array $data): array
     {
+        $data = $this->setExtraFilters($data);
         $folderFiltersModel = $this->serializer->deserialize(
             \json_encode($data),
             BaseFolderFiltersModel::class,
@@ -149,5 +151,29 @@ class FolderService
             ->setStatusWorkflow($data[InternalApiFolderEnum::WORKFLOW_STATUS_CAMEL_CASE] ?? null);
 
         $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel);
+    }
+
+    private function setExtraFilters(array $data): array
+    {
+        if (isset($data[InternalApiFolderEnum::TEXT_SEARCH_FIELDS])) {
+            $textSearchFields = explode(',', $data[InternalApiFolderEnum::TEXT_SEARCH_FIELDS]);
+            if (in_array(InternalApiFolderEnum::PERSON_DATE_OF_BIRTH, $textSearchFields)) {
+                if (isset($data[InternalApiFolderEnum::FILTERS])) {
+                    $data[InternalApiFolderEnum::FILTERS] .= sprintf(
+                        ',%s:%s',
+                        InternalApiFolderEnum::PERSON_TYPE_ID,
+                        PersonEnum::MAIN_PHYSICAL_PERSON_TYPE_ID
+                    );
+                } else {
+                    $data[InternalApiFolderEnum::FILTERS] = sprintf(
+                        '%s:%s',
+                        InternalApiFolderEnum::PERSON_TYPE_ID,
+                        PersonEnum::MAIN_PHYSICAL_PERSON_TYPE_ID
+                    );
+                }
+            }
+        }
+
+        return $data;
     }
 }
