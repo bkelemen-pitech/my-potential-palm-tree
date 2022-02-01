@@ -112,7 +112,7 @@ Content-Type: application/json
       "createdAt" : "2021-11-01T06:30:02+00:00",
       "documentId" : 2, 
       "administratorId" : 1,
-      "statusVerification2" : 1,
+      "verification2status" : 1,
     },
     ...
   ]

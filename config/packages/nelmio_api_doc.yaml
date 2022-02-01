@@ -407,11 +407,11 @@ nelmio_api_doc:
                       example: 1
                     createdAt:
                       type: string
-                      example: 2021-11-01T06:30:02+00:00
+                      example: '2021-11-01T06:30:02+00:00'
                     administratorId:
                       type: integer
                       example: 1
-                    statusVerification2:
+                    verification2Status:
                       type: integer
                       example: 1
         Unauthenticated:
