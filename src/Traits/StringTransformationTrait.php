@@ -27,4 +27,14 @@ trait StringTransformationTrait
 
         return $data;
     }
+
+    /**
+     * This method transform recursively all numeric values (int or numeric strings) of an array to integers
+     */
+    public function transformNumericValuesToInt(array $data): array
+    {
+        array_walk_recursive($data, function (&$value) { $value = is_numeric($value) ? (int) $value : $value; });
+
+        return $data;
+    }
 }
