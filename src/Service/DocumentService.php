@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Enum\UserEnum;
 use App\Exception\InvalidDataException;
+use App\Security\JWTTokenAuthenticator;
 use App\Traits\StringTransformationTrait;
+use Kyc\InternalApiBundle\Enum\AdministratorEnum;
+use Kyc\InternalApiBundle\Model\Request\Document\DeleteDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\DocumentDataLogsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\DocumentFieldsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\MergeDocumentModel;
@@ -21,13 +25,16 @@ class DocumentService
 
     protected SerializerInterface $serializer;
     protected ValidationService $validationService;
+    protected JWTTokenAuthenticator $authenticator;
     protected InternalApiDocumentService $internalApiDocumentService;
 
     public function __construct(
         SerializerInterface $serializer,
+        JWTTokenAuthenticator $authenticator,
         InternalApiDocumentService $internalApiDocumentService
     ) {
         $this->serializer = $serializer;
+        $this->authenticator = $authenticator;
         $this->internalApiDocumentService = $internalApiDocumentService;
     }
 
@@ -36,7 +43,7 @@ class DocumentService
         return $this->internalApiDocumentService->getDocumentByUid($documentUid, $includeFiles);
     }
 
-    public function treatDocument($data): void
+    public function treatDocument(array $data): void
     {
         try {
             $treatDocumentData = $this->serializer->deserialize(json_encode($data), TreatDocumentModel::class, 'json');
@@ -46,7 +53,7 @@ class DocumentService
         }
     }
 
-    public function mergeDocuments($data): void
+    public function mergeDocuments(array $data): void
     {
         try {
             $mergeDocumentModelData = $this->serializer->deserialize(json_encode($data), MergeDocumentModel::class, 'json');
@@ -86,5 +93,17 @@ class DocumentService
         } catch (\Exception $exception) {
             throw new InvalidDataException($exception->getMessage());
         }
+    }
+
+    public function deleteDocument(array $data): void
+    {
+        $loggedUser = $this->authenticator->getLoggedUserData();
+        $deleteDocumentModelData = $this->serializer->deserialize(
+            json_encode(array_merge($data, [AdministratorEnum::ADMINISTRATOR_ID => $loggedUser[UserEnum::USER_ID]])),
+            DeleteDocumentModel::class,
+            'json'
+        );
+
+        $this->internalApiDocumentService->deleteDocument($deleteDocumentModelData);
     }
 }

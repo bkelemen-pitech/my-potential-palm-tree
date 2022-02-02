@@ -6,12 +6,13 @@ namespace App\Controller;
 
 use App\Enum\DocumentEnum;
 use App\Exception\ApiException;
-use App\Exception\ResourceNotFoundException;
 use App\Service\DocumentService;
+use Kyc\InternalApiBundle\Exception\ResourceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -71,6 +72,22 @@ class DocumentController extends AbstractController
             $documentDataLogs = $documentService->getDocumentDataLogs($request->query->all());
 
             return $this->json([DocumentEnum::DOCUMENT_DATA_LOGS => $documentDataLogs]);
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+    }
+
+    /**
+     * @Route("/{document_uid}", name="delete_document", methods="DELETE")
+     */
+    public function deleteDocument(string $document_uid, DocumentService $documentService)
+    {
+        try {
+            $documentService->deleteDocument([DocumentEnum::DOCUMENT_UID => $document_uid]);
+
+            return $this->json(null, Response::HTTP_NO_CONTENT);
+        } catch (ResourceNotFoundException $exception) {
+            throw new NotFoundHttpException($exception->getMessage());
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }

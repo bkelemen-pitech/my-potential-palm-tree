@@ -141,7 +141,7 @@ nelmio_api_doc:
                           example: Admin1
                         dateOfBirth:
                           type: string
-                          example: "2020-02-02"
+                          example: "1970-01-01T00:00:00+00:00"
                         subscription:
                           type: integer
                           example: 10
@@ -696,6 +696,20 @@ nelmio_api_doc:
               ref: '#/components/responses/DocumentDataLogs'
             '400':
               ref: '#/components/responses/InvalidRequest'
+            '500':
+              ref: '#/components/responses/ServerError'
+      /api/v1/documents/{document_uid}:
+        delete:
+          summary: Delete document(s) by uid.
+          tags:
+            - Documents
+          responses:
+            '204':
+              description: No Content
+            '400':
+              ref: '#/components/responses/InvalidRequest'
+            '404':
+              ref: '#/components/responses/NotFound'
             '500':
               ref: '#/components/responses/ServerError'
       /api/v1/folders/{id}/add-person:
