@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Mocks\Data;
 
 use DateTime;
+use Kyc\InternalApiBundle\Model\Request\Document\DeleteDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\DocumentDataLogsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\DocumentFieldsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\MergeDocumentModel;
@@ -190,5 +191,12 @@ class DocumentsData
             ->setVerification2Status(2);
 
         return [$documentDataLogsModelResponse];
+    }
+
+    public static function createDeleteDocumentModel(): DeleteDocumentModel
+    {
+        return (new DeleteDocumentModel())
+            ->setDocumentUid(self::DEFAULT_DOCUMENT_UID_TEST_DATA)
+            ->setAdministratorId(1);
     }
 }

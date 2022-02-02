@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Controller;
 
 use App\Exception\InvalidDataException;
-use App\Exception\ResourceNotFoundException;
 use App\Tests\BaseApiTest;
 use App\Tests\Enum\BaseEnum;
 use App\Tests\Mocks\Data\DocumentsData;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalApiInvalidDataException;
+use Kyc\InternalApiBundle\Exception\ResourceNotFoundException;
+use Kyc\InternalApiBundle\Model\Request\Document\DeleteDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -20,6 +21,7 @@ class DocumentControllerTest extends BaseApiTest
     public const TREAT_DOCUMENT_PATH = 'api/v1/documents/treat';
     public const DOCUMENT_FIELDS_PATH = 'api/v1/documents/fields';
     public const DOCUMENT_DATA_LOGS_PATH = 'api/v1/documents/document-data-logs';
+    public const DELETE_DOCUMENT_PATH = 'api/v1/documents/617f896a61e39';
 
     protected ObjectProphecy $internalApiDocumentService;
 
@@ -201,6 +203,30 @@ class DocumentControllerTest extends BaseApiTest
             true,
             ['administrator-id' => 1, 'document-ids' => [1, 2]]
         );
+        $this->assertEquals(400, $this->getStatusCode());
+    }
+
+
+    public function testDeleteDocumentOk()
+    {
+        $this->internalApiDocumentService
+            ->deleteDocument(DocumentsData::createDeleteDocumentModel())
+            ->shouldBeCalledOnce();
+
+        $this->requestWithBody(BaseEnum::METHOD_DELETE, self::DELETE_DOCUMENT_PATH);
+        $this->assertEquals(204, $this->getStatusCode());
+        $this->assertEquals(null, $this->getResponseContent());
+    }
+
+    public function testDeleteDocumentThrowException()
+    {
+        $deleteDocumentModel = new DeleteDocumentModel();
+        $deleteDocumentModel
+            ->setDocumentUid(DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA)
+            ->setAdministratorId('1');
+
+        $this->internalApiDocumentService->deleteDocument($deleteDocumentModel)->willThrow(new InvalidDataException());
+        $this->requestWithBody(BaseEnum::METHOD_DELETE, self::DELETE_DOCUMENT_PATH);
         $this->assertEquals(400, $this->getStatusCode());
     }
 }
