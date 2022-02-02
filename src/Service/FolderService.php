@@ -162,8 +162,6 @@ class FolderService
         if ($folder->getWorkflowStatus() <= FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP) {
             throw new InvalidDataException('The folder cannot be dissociated.');
         }
-        $dissociateFolderModel = new DissociateFolderModel();
-        $dissociateFolderModel->setFolderId($folderId);
 
         try {
             $this->updateWorkflowStatus(
@@ -176,6 +174,9 @@ class FolderService
         } catch (\Exception $exception) {
             throw new InvalidDataException('The folder cannot be dissociated because of its workflow status.');
         }
+
+        $dissociateFolderModel = new DissociateFolderModel();
+        $dissociateFolderModel->setFolderId($folderId);
         $this->internalApiFolderService->dissociateFolder($dissociateFolderModel);
     }
 
