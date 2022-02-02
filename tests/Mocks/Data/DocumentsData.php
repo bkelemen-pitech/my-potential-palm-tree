@@ -25,6 +25,10 @@ class DocumentsData
         "documentTypeId" => 51,
         "documentIds" => [37441, 37442]
     ];
+    public const DELETE_DOCUMENT_MODEL_DATA = [
+        'documentUid' => self::DEFAULT_DOCUMENT_UID_TEST_DATA,
+        'administratorId' => 1
+    ];
 
     public static function getInternalApiDocumentsByFolderId(): array
     {
@@ -193,10 +197,10 @@ class DocumentsData
         return [$documentDataLogsModelResponse];
     }
 
-    public static function createDeleteDocumentModel(): DeleteDocumentModel
+    public static function createDeleteDocumentModel(array $data = self::DELETE_DOCUMENT_MODEL_DATA): DeleteDocumentModel
     {
         return (new DeleteDocumentModel())
-            ->setDocumentUid(self::DEFAULT_DOCUMENT_UID_TEST_DATA)
-            ->setAdministratorId(1);
+            ->setDocumentUid($data['documentUid'])
+            ->setAdministratorId($data['administratorId']);
     }
 }

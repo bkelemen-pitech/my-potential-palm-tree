@@ -95,7 +95,7 @@ class DocumentService
         }
     }
 
-    public function deleteDocument(array $data): void
+    public function deleteDocumentByUid(array $data): void
     {
         $loggedUser = $this->authenticator->getLoggedUserData();
         $deleteDocumentModelData = $this->serializer->deserialize(
@@ -104,6 +104,6 @@ class DocumentService
             'json'
         );
 
-        $this->internalApiDocumentService->deleteDocument($deleteDocumentModelData);
+        $this->internalApiDocumentService->deleteDocumentByUid($deleteDocumentModelData);
     }
 }

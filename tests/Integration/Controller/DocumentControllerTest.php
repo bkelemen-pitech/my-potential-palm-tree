@@ -210,7 +210,7 @@ class DocumentControllerTest extends BaseApiTest
     public function testDeleteDocumentOk()
     {
         $this->internalApiDocumentService
-            ->deleteDocument(DocumentsData::createDeleteDocumentModel())
+            ->deleteDocumentByUid(DocumentsData::createDeleteDocumentModel())
             ->shouldBeCalledOnce();
 
         $this->requestWithBody(BaseEnum::METHOD_DELETE, self::DELETE_DOCUMENT_PATH);
@@ -220,13 +220,27 @@ class DocumentControllerTest extends BaseApiTest
 
     public function testDeleteDocumentThrowException()
     {
+        $deleteDocumentModelData = [
+          'documentUid' => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA,
+          'administratorId' => '1'
+        ];
+
+        $this->internalApiDocumentService
+            ->deleteDocumentByUid(DocumentsData::createDeleteDocumentModel($deleteDocumentModelData))
+            ->willThrow(new InternalApiInvalidDataException());
+        $this->requestWithBody(BaseEnum::METHOD_DELETE, self::DELETE_DOCUMENT_PATH);
+        $this->assertEquals(400, $this->getStatusCode());
+    }
+
+    public function testDeleteDocumentThrowNotFoundException()
+    {
         $deleteDocumentModel = new DeleteDocumentModel();
         $deleteDocumentModel
             ->setDocumentUid(DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA)
             ->setAdministratorId('1');
 
-        $this->internalApiDocumentService->deleteDocument($deleteDocumentModel)->willThrow(new InvalidDataException());
+        $this->internalApiDocumentService->deleteDocumentByUid($deleteDocumentModel)->willThrow(new ResourceNotFoundException());
         $this->requestWithBody(BaseEnum::METHOD_DELETE, self::DELETE_DOCUMENT_PATH);
-        $this->assertEquals(400, $this->getStatusCode());
+        $this->assertEquals(404, $this->getStatusCode());
     }
 }

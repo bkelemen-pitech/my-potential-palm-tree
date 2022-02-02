@@ -134,10 +134,10 @@ class DocumentServiceTest extends BaseApiTest
             ->willReturn(['userId' => 1]);
 
         $this->internalApiDocumentService
-            ->deleteDocument($deleteDocumentModel)
+            ->deleteDocumentByUid($deleteDocumentModel)
             ->shouldBeCalledOnce();
 
-        $this->documentService->deleteDocument(['documentUid' => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA]);
+        $this->documentService->deleteDocumentByUid(['documentUid' => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA]);
     }
 
     public function testDeleteDocumentThrowsException()
@@ -149,13 +149,13 @@ class DocumentServiceTest extends BaseApiTest
             ->willReturn(['userId' => null]);
 
         $this->internalApiDocumentService
-            ->deleteDocument($deleteDocumentModel)
+            ->deleteDocumentByUid($deleteDocumentModel)
             ->shouldBeCalledOnce()
-            ->willThrow(new InvalidDataException('{"administratorId": "This value should not be blank."}'));
+            ->willThrow(new InternalApiInvalidDataException('{"administratorId": "This value should not be blank."}'));
 
-        $this->expectException(InvalidDataException::class);
+        $this->expectException(InternalApiInvalidDataException::class);
         $this->expectExceptionMessage('{"administratorId": "This value should not be blank."}');
 
-        $this->documentService->deleteDocument(['documentUid' => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA]);
+        $this->documentService->deleteDocumentByUid(['documentUid' => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA]);
     }
 }

@@ -7,7 +7,7 @@ namespace App\Controller;
 use App\Enum\DocumentEnum;
 use App\Exception\ApiException;
 use App\Service\DocumentService;
-use Kyc\InternalApiBundle\Exception\ResourceNotFoundException;
+use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as InternalApiResourceNotFound;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +28,7 @@ class DocumentController extends AbstractController
         try {
             $includeFiles = filter_var($request->query->get(DocumentEnum::INCLUDE_FILES_PARAM), FILTER_VALIDATE_BOOLEAN);
             $document = $documentService->getDocumentByUid($documentUid, $includeFiles);
-        } catch (ResourceNotFoundException $exception) {
+        } catch (InternalApiResourceNotFound $exception) {
             throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
         }
 
@@ -78,15 +78,15 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/{document_uid}", name="delete_document", methods="DELETE")
+     * @Route("/{uid}", name="delete_document_by_uid", methods="DELETE")
      */
-    public function deleteDocument(string $document_uid, DocumentService $documentService)
+    public function deleteDocument(string $uid, DocumentService $documentService)
     {
         try {
-            $documentService->deleteDocument([DocumentEnum::DOCUMENT_UID => $document_uid]);
+            $documentService->deleteDocumentByUid([DocumentEnum::DOCUMENT_UID_CAMEL_CASE => $uid]);
 
             return $this->json(null, Response::HTTP_NO_CONTENT);
-        } catch (ResourceNotFoundException $exception) {
+        } catch (InternalApiResourceNotFound $exception) {
             throw new NotFoundHttpException($exception->getMessage());
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());

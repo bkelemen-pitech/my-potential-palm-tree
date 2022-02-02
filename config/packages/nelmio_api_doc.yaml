@@ -77,6 +77,14 @@ nelmio_api_doc:
           in: query
           description: Fields in which the text_search should be searched
           required: false
+        uid:
+          name: uid
+          in: path
+          description: The uid of the document
+          schema:
+            type: string
+            example: 'testDocumentUid'
+          required: true
       responses:
         InvalidRequest:
           description: Invalid request
@@ -698,11 +706,13 @@ nelmio_api_doc:
               ref: '#/components/responses/InvalidRequest'
             '500':
               ref: '#/components/responses/ServerError'
-      /api/v1/documents/{document_uid}:
+      /api/v1/documents/{uid}:
         delete:
           summary: Delete document(s) by uid.
           tags:
             - Documents
+          parameters:
+            - ref: '#/components/parameters/uid'
           responses:
             '204':
               description: No Content
