@@ -19,6 +19,7 @@ class DocumentControllerTest extends BaseApiTest
     public const PATH = 'api/v1/documents/';
     public const TREAT_DOCUMENT_PATH = 'api/v1/documents/treat';
     public const DOCUMENT_FIELDS_PATH = 'api/v1/documents/fields';
+    public const DOCUMENT_DATA_LOGS_PATH = 'api/v1/documents/document-data-logs';
 
     protected ObjectProphecy $internalApiDocumentService;
 
@@ -146,6 +147,59 @@ class DocumentControllerTest extends BaseApiTest
             [],
             true,
             ['agency_id' => 1, 'document_type_id' => 1, 'person_type_id' => 1]
+        );
+        $this->assertEquals(400, $this->getStatusCode());
+    }
+
+    public function testGetDocumentDataLogsSuccess()
+    {
+        $documentDataLogsModelRequest = DocumentsData::createDocumentDataLogsRequestModel();
+        $documentDataLogsModelResponse = DocumentsData::createDocumentDataLogsModelResponse();
+
+        $this->internalApiDocumentService
+            ->getDocumentDataLogs($documentDataLogsModelRequest)
+            ->shouldBeCalledOnce()
+            ->willReturn($documentDataLogsModelResponse);
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::DOCUMENT_DATA_LOGS_PATH,
+            [],
+            [],
+            true,
+            ['administrator-id' => 1, 'document-ids' => [1, 2]]
+        );
+        $this->assertEquals(200, $this->getStatusCode());
+
+        $this->assertEquals(
+            ['documentDataLogs' => [
+                [
+                    'documentId' => 1,
+                    'verification2Status' => 2,
+                    'administratorId' => 1,
+                    'createdAt' => '2020-02-02T00:00:00+00:00',
+                ]
+            ]],
+            $this->getResponseContent()
+        );
+    }
+
+    public function testGetDocumentDataLogsException()
+    {
+        $documentDataLogsModelRequest = DocumentsData::createDocumentDataLogsRequestModel();
+
+        $this->internalApiDocumentService
+            ->getDocumentDataLogs($documentDataLogsModelRequest)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiInvalidDataException('Invalid request'));
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::DOCUMENT_DATA_LOGS_PATH,
+            [],
+            [],
+            true,
+            ['administrator-id' => 1, 'document-ids' => [1, 2]]
         );
         $this->assertEquals(400, $this->getStatusCode());
     }

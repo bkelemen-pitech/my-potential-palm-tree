@@ -393,6 +393,27 @@ nelmio_api_doc:
                     administratorId:
                       type: integer
                       example: 1
+        DocumentDataLogs:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    documentId:
+                      type: integer
+                      example: 1
+                    createdAt:
+                      type: string
+                      example: '2021-11-01T06:30:02+00:00'
+                    administratorId:
+                      type: integer
+                      example: 1
+                    verification2Status:
+                      type: integer
+                      example: 1
         Unauthenticated:
           description: Authentication failed
           content:
@@ -645,6 +666,34 @@ nelmio_api_doc:
             '200':
               description: OK
               ref: '#/components/responses/DocumentFieldsResponse'
+            '400':
+              ref: '#/components/responses/InvalidRequest'
+            '500':
+              ref: '#/components/responses/ServerError'
+      /api/v1/documents/document-data-logs:
+        get:
+          summary: Get the document data logs
+          tags:
+            - Documents
+          parameters:
+            document-ids:
+              name: document-ids
+              in: query
+              description: The list of document ids
+              required: true
+              schema:
+                type: array
+                items:
+                  type: integer
+            administrator-id:
+              name: administrator-id
+              in: query
+              description: The administrator id
+              required: false
+          responses:
+            '200':
+              description: OK
+              ref: '#/components/responses/DocumentDataLogs'
             '400':
               ref: '#/components/responses/InvalidRequest'
             '500':
