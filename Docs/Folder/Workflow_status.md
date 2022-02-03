@@ -47,25 +47,29 @@ This API will retrieve the workflow status history. Internally it will call
 __Method__: GET  
 __URL__: `/api/v1/folders/{folderId}/workflow-status-history`  
 __Query params__:
-- __administratorId__ (int) - the administrator id, _optional_    
+- __administrator_id__ (int) - the administrator id, _optional_
+- __workflow_status__ (array) - an array of workflow statuses to filter. If a range is needed set the `start` and
+`end` keys. If only the `start` key is provided, the API will filter by workflow_status higher or equal with the 
+  value provided. If only the `end` key is provided, the API will filter by workflow_status lower or equal with the
+  value provided. 
 
 Request example:
 
 ```http request
-GET {HOST_NAME}/api/v1/folders/1/workflow-status-history?administratorId=1
+GET {HOST_NAME}/api/v1/folders/1/workflow-status-history?administratorId=1&workflow_status[start]=10300&workflow_status[end]=10399
 Accept: application/json 
 Content-Type: application/json
 
 200 OK
 {
-  "workflowStatusHistory": [
+  "workflow_status_history": [
     { 
-        "workflowStatus" : 10000,
-        "folderId" : 123,
-        "createdAt" : "2022-01-14 09:42:38.000000",
-        "updatedAt" : "2022-01-14 09:43:38.000000",
-        "agentId" : 2, 
-        "administratorId" : 1
+        "workflow_status" : 10300,
+        "folder_id" : 123,
+        "created_at" : "2022-01-14 09:42:38.000000",
+        "updated_at" : "2022-01-14 09:43:38.000000",
+        "agent_id" : 2, 
+        "administrator_id" : 1
     },
     ...
   ]
