@@ -151,10 +151,13 @@ class DocumentControllerTest extends BaseApiTest
         $this->assertEquals(400, $this->getStatusCode());
     }
 
-    public function testGetDocumentDataLogsSuccess()
+    /**
+     * @dataProvider getDocumentDataLogsDataProvider
+     */
+    public function testGetDocumentDataLogsSuccess(?string $internalApiDataValue, ?array $responseValue)
     {
         $documentDataLogsModelRequest = DocumentsData::createDocumentDataLogsRequestModel();
-        $documentDataLogsModelResponse = DocumentsData::createDocumentDataLogsModelResponse();
+        $documentDataLogsModelResponse = DocumentsData::createDocumentDataLogsModelResponse($internalApiDataValue);
 
         $this->internalApiDocumentService
             ->getDocumentDataLogs($documentDataLogsModelRequest)
@@ -178,10 +181,29 @@ class DocumentControllerTest extends BaseApiTest
                     'verification2Status' => 2,
                     'administratorId' => 1,
                     'createdAt' => '2020-02-02T00:00:00+00:00',
+                    'data' => $responseValue,
                 ]
             ]],
             $this->getResponseContent()
         );
+    }
+
+    public function getDocumentDataLogsDataProvider(): array
+    {
+        return [
+            [
+                'a:3:{s:3:"nom";s:3:"Nom";i:0;s:6:"prenom";s:7:"type_id";s:2:"ID";}',
+                [
+                    'nom' => 'Nom',
+                    'prenom' => null,
+                    'type_id' => "ID"
+                ]
+            ],
+            [null, null],
+            ['test', null],
+            ["[]", null],
+            ["a:0:{}", null]
+        ];
     }
 
     public function testGetDocumentDataLogsException()
