@@ -878,6 +878,23 @@ nelmio_api_doc:
               ref: '#/components/responses/InvalidRequest'
             '500':
               ref: '#/components/responses/ServerError'
+      /api/v1/folders/{id}/dissociate:
+        post:
+          summary: Dissociate any user associated to the folder
+          tags:
+            - Folders
+          parameters:
+            - ref: '#/components/parameters/id'
+          responses:
+            204:
+              description: No content
+            '400':
+              description: Invalid Request
+              ref: '#/components/responses/InvalidRequest'
+            '404':
+              ref: '#/components/responses/NotFound'
+            '500':
+              ref: '#/components/responses/ServerError'
       /api/v1/users/login:
         post:
           summary: This action is used for login
