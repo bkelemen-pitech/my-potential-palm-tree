@@ -18,7 +18,7 @@ For project permissions, you can run:
 For test, you can run:
 - make run-test
 
-Please check Makefile file for more available commands
+Please check Makefile file for more available commands.
 
 JWT
 ---
