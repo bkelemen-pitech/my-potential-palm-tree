@@ -78,12 +78,12 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/{uid}", name="delete_document_by_uid", methods="DELETE")
+     * @Route("/{documentUid}", name="delete_document_by_uid", methods="DELETE")
      */
-    public function deleteDocument(string $uid, DocumentService $documentService)
+    public function deleteDocument(string $documentUid, DocumentService $documentService)
     {
         try {
-            $documentService->deleteDocumentByUid([DocumentEnum::DOCUMENT_UID_CAMEL_CASE => $uid]);
+            $documentService->deleteDocumentByUid([DocumentEnum::DOCUMENT_UID_CAMEL_CASE => $documentUid]);
 
             return $this->json(null, Response::HTTP_NO_CONTENT);
         } catch (InternalApiResourceNotFound $exception) {

@@ -77,14 +77,6 @@ nelmio_api_doc:
           in: query
           description: Fields in which the text_search should be searched
           required: false
-        uid:
-          name: uid
-          in: path
-          description: The uid of the document
-          schema:
-            type: string
-            example: 'testDocumentUid'
-          required: true
       responses:
         InvalidRequest:
           description: Invalid request
@@ -623,6 +615,21 @@ nelmio_api_doc:
               ref: '#/components/responses/NotFound'
             '500':
               ref: '#/components/responses/ServerError'
+        delete:
+          summary: Delete document(s) by uid.
+          tags:
+            - Documents
+          parameters:
+            - ref: '#/components/parameters/documentUid'
+          responses:
+            '204':
+              description: No Content
+            '400':
+              ref: '#/components/responses/InvalidRequest'
+            '404':
+              ref: '#/components/responses/NotFound'
+            '500':
+              ref: '#/components/responses/ServerError'
       /api/v1/documents/treat:
         post:
           summary: Update document status verification 2 (statut_verification2).
@@ -704,22 +711,6 @@ nelmio_api_doc:
               ref: '#/components/responses/DocumentDataLogs'
             '400':
               ref: '#/components/responses/InvalidRequest'
-            '500':
-              ref: '#/components/responses/ServerError'
-      /api/v1/documents/{uid}:
-        delete:
-          summary: Delete document(s) by uid.
-          tags:
-            - Documents
-          parameters:
-            - ref: '#/components/parameters/uid'
-          responses:
-            '204':
-              description: No Content
-            '400':
-              ref: '#/components/responses/InvalidRequest'
-            '404':
-              ref: '#/components/responses/NotFound'
             '500':
               ref: '#/components/responses/ServerError'
       /api/v1/folders/{id}/add-person:
