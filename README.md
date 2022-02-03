@@ -26,7 +26,7 @@ JWT
 In order to generate keys, you can run:
  - make generate-jwt-keys
 
-Your keys will land in config/jwt/private.pem and config/jwt/public.pem
+Your keys will land in config/jwt/private.pem and config/jwt/public.pem 
 
 Hosts
 -----
