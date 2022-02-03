@@ -18,13 +18,17 @@ use App\Tests\Mocks\Data\FolderData;
 use App\Tests\Mocks\Data\PersonData;
 use Kyc\InternalApiBundle\Enum\AdministratorEnum;
 use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilterModel;
+use Kyc\InternalApiBundle\Model\Request\Folder\DissociateFolderModel;
 use Kyc\InternalApiBundle\Model\Request\Folder\UpdateStatusWorkflowModel;
+use Kyc\InternalApiBundle\Model\Request\WorkflowStatusHistory\WorkflowStatusHistoryModel;
 use Kyc\InternalApiBundle\Model\Response\Folder\AssignedAdministratorModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderModelResponse;
+use Kyc\InternalApiBundle\Model\Response\WorkflowStatusHistory\WorkflowStatusHistoryModelResponse;
 use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalApiInvalidDataException;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as InternalApiResourceNotFoundException;
+use Kyc\InternalApiBundle\Service\WorkflowStatusHistoryService;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class FoldersControllerTest extends BaseApiTest
@@ -38,9 +42,12 @@ class FoldersControllerTest extends BaseApiTest
     public const FOLDER_MERGE_DOCUMENTS = 'api/v1/folders/1/document/merge';
     public const FOLDER_MERGE_DOCUMENTS_NO_FOLDER_ID = 'api/v1/folders//document/merge';
     public const FOLDER_UPDATE_WORKFLOW_STATUS = 'api/v1/folders/1/update-workflow-status';
+    public const FOLDER_WORKFLOW_STATUS_HISTORY = 'api/v1/folders/1/workflow-status-history';
+    public const FOLDER_DISSOCIATE = 'api/v1/folders/1/dissociate';
 
     protected ObjectProphecy $internalApiFolderService;
     protected ObjectProphecy $internalApiDocumentService;
+    protected ObjectProphecy $internalApiWorkflowStatusHistoryService;
     protected ObjectProphecy $documentService;
     protected ObjectProphecy $personService;
 
@@ -49,18 +56,23 @@ class FoldersControllerTest extends BaseApiTest
         parent::setUp();
         $this->internalApiFolderService = $this->prophesize(InternalApiFolderService::class);
         $this->internalApiDocumentService = $this->prophesize(InternalApiDocumentService::class);
+        $this->internalApiWorkflowStatusHistoryService = $this->prophesize(WorkflowStatusHistoryService::class);
         $this->documentService = $this->prophesize(DocumentService::class);
         $this->personService = $this->prophesize(PersonService::class);
         static::getContainer()->set(InternalApiFolderService::class, $this->internalApiFolderService->reveal());
         static::getContainer()->set(InternalApiDocumentService::class, $this->internalApiDocumentService->reveal());
+        static::getContainer()->set(WorkflowStatusHistoryService::class, $this->internalApiWorkflowStatusHistoryService->reveal());
         static::getContainer()->set(DocumentService::class, $this->documentService->reveal());
         static::getContainer()->set(PersonService::class, $this->personService->reveal());
     }
 
-    public function testGetFolder()
+    public function testGetFolders()
     {
 
         $folderFilterModel = new BaseFolderFiltersModel();
+        $folderFilterModel
+            ->setTextSearchFields('date_of_birth')
+            ->setFilters('person_type_id:1');
         $folderModelResponse1 = new FolderModelResponse();
         $folderModelResponse1
             ->setFolderId(1)
@@ -109,7 +121,14 @@ class FoldersControllerTest extends BaseApiTest
                 $resultAssignedAdministratorModelResponse1,
                 $resultAssignedAdministratorModelResponse2,
             ]);
-        $this->requestWithBody(BaseEnum::METHOD_GET, self::GET_FOLDERS);
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::GET_FOLDERS,
+            [],
+            [],
+            true,
+            ['text_search_fields' => 'date_of_birth']
+        );
 
         $this->assertEquals(200, $this->getStatusCode());
 
@@ -299,6 +318,212 @@ class FoldersControllerTest extends BaseApiTest
 
         $this->assertEquals(
             $this->buildExceptionResponse(404, null, 'Folder with id 1 not found'),
+            $this->getResponseContent()
+        );
+    }
+
+    public function testGetWorkflowStatusHistorySuccess()
+    {
+        $workflowStatusHistoryRequest = new WorkflowStatusHistoryModel();
+        $workflowStatusHistoryRequest
+            ->setFolderId(1)
+            ->setAdministratorId(1);
+
+        $workflowStatusHistoryModelResponse = new WorkflowStatusHistoryModelResponse();
+        $workflowStatusHistoryModelResponse
+            ->setAdministratorId(1)
+            ->setWorkflowStatus(10350)
+            ->setAdministratorId(1)
+            ->setFolderId(1);
+
+        $this->internalApiWorkflowStatusHistoryService
+            ->getWorkflowStatusHistory($workflowStatusHistoryRequest)
+            ->shouldBeCalledOnce()
+            ->willReturn([$workflowStatusHistoryModelResponse]);
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::FOLDER_WORKFLOW_STATUS_HISTORY,
+            [],
+            [],
+            true,
+            ['administrator-id' => 1]
+        );
+
+        $this->assertEquals(200, $this->getStatusCode());
+        $response = [
+            'workflowStatusHistory' => [
+                [
+                    'folderId' => $workflowStatusHistoryModelResponse->getFolderId(),
+                    'administratorId' => $workflowStatusHistoryModelResponse->getAdministratorId(),
+                    'agentId' => $workflowStatusHistoryModelResponse->getAgentId(),
+                    'workflowStatus' => $workflowStatusHistoryModelResponse->getWorkflowStatus(),
+                    'createdAt' => $workflowStatusHistoryModelResponse->getCreatedAt(),
+                    'updatedAt' => $workflowStatusHistoryModelResponse->getUpdatedAt(),
+                ],
+            ],
+        ];
+        $this->assertEquals($response, $this->getResponseContent());
+    }
+
+    public function testGetWorkflowStatusHistoryException()
+    {
+        $workflowStatusHistoryRequest = new WorkflowStatusHistoryModel();
+        $workflowStatusHistoryRequest
+            ->setFolderId(1)
+            ->setAdministratorId(1);
+
+        $this->internalApiWorkflowStatusHistoryService
+            ->getWorkflowStatusHistory($workflowStatusHistoryRequest)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiInvalidDataException('Invalid request'));
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::FOLDER_WORKFLOW_STATUS_HISTORY,
+            [],
+            [],
+            true,
+            ['administrator-id' => 1]
+        );
+
+        $this->assertEquals(400, $this->getStatusCode());
+        $this->assertEquals(
+            $this->buildExceptionResponse(400, null,'Invalid request'),
+            $this->getResponseContent()
+        );
+    }
+
+    public function testDissociateFolderSuccess()
+    {
+        $this->internalApiFolderService
+            ->getFolderById(1)
+            ->shouldBeCalledOnce()
+            ->willReturn(FolderData::createFolderByIdModelResponse());
+
+        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+        $updateStatusWorkflowModel
+            ->setUserDossierId(1)
+            ->setStatusWorkflow(10300)
+            ->setAdministratorId(1)
+            ->setAllowBack(true);
+
+        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldBeCalledOnce();
+
+        $dissociateFolderModel = new DissociateFolderModel();
+        $dissociateFolderModel->setFolderId(1);
+        $this->internalApiFolderService->dissociateFolder($dissociateFolderModel)->shouldBeCalledOnce();
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_POST,
+            self::FOLDER_DISSOCIATE
+        );
+    }
+
+    public function testDissociateFolderNotFound()
+    {
+        $this->internalApiFolderService
+            ->getFolderById(1)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiResourceNotFoundException('Folder with id 1 not found'));
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_POST,
+            self::FOLDER_DISSOCIATE
+        );
+
+        $this->assertEquals(404, $this->getStatusCode());
+        $this->assertEquals(
+            $this->buildExceptionResponse(404, null,'Folder with id 1 not found'),
+            $this->getResponseContent()
+        );
+    }
+
+    public function testDissociateFolderInvalidWorkflowStatus()
+    {
+        $this->internalApiFolderService
+            ->getFolderById(1)
+            ->shouldBeCalledOnce()
+            ->willReturn(FolderData::createFolderByIdModelResponse(['folderId' => 1, 'workflowStatus' => 10300]));
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_POST,
+            self::FOLDER_DISSOCIATE
+        );
+
+        $this->assertEquals(400, $this->getStatusCode());
+        $this->assertEquals(
+            $this->buildExceptionResponse(400, null,'The folder cannot be dissociated.'),
+            $this->getResponseContent()
+        );
+    }
+
+    public function testDissociateFolderInternalApiDissociateError()
+    {
+        $this->internalApiFolderService
+            ->getFolderById(1)
+            ->shouldBeCalledOnce()
+            ->willReturn(FolderData::createFolderByIdModelResponse());
+
+        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+        $updateStatusWorkflowModel
+            ->setUserDossierId(1)
+            ->setStatusWorkflow(10300)
+            ->setAdministratorId(1)
+            ->setAllowBack(true);
+
+        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldBeCalledOnce();
+
+        $dissociateFolderModel = new DissociateFolderModel();
+        $dissociateFolderModel->setFolderId(1);
+        $this->internalApiFolderService
+            ->dissociateFolder($dissociateFolderModel)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiInvalidDataException('Third party error.'));
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_POST,
+            self::FOLDER_DISSOCIATE
+        );
+
+        $this->assertEquals(400, $this->getStatusCode());
+        $this->assertEquals(
+            $this->buildExceptionResponse(400, null,'Third party error.'),
+            $this->getResponseContent()
+        );
+    }
+
+    public function testDissociateFolderUpdateWorkflowStatusFailed()
+    {
+        $this->internalApiFolderService
+            ->getFolderById(1)
+            ->shouldBeCalledOnce()
+            ->willReturn(FolderData::createFolderByIdModelResponse());
+
+        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+        $updateStatusWorkflowModel
+            ->setUserDossierId(1)
+            ->setStatusWorkflow(10300)
+            ->setAdministratorId(1)
+            ->setAllowBack(true);
+
+        $this->internalApiFolderService
+            ->updateStatusWorkflow($updateStatusWorkflowModel)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiInvalidDataException('Third party error.'));
+
+        $dissociateFolderModel = new DissociateFolderModel();
+        $dissociateFolderModel->setFolderId(1);
+        $this->internalApiFolderService->dissociateFolder($dissociateFolderModel)->shouldNotBeCalled();
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_POST,
+            self::FOLDER_DISSOCIATE
+        );
+
+        $this->assertEquals(400, $this->getStatusCode());
+        $this->assertEquals(
+            $this->buildExceptionResponse(400, null,'The folder cannot be dissociated because of its workflow status.'),
             $this->getResponseContent()
         );
     }

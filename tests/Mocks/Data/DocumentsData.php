@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Tests\Mocks\Data;
 
 use DateTime;
+use Kyc\InternalApiBundle\Model\Request\Document\DeleteDocumentModel;
+use Kyc\InternalApiBundle\Model\Request\Document\DocumentDataLogsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\DocumentFieldsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\MergeDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentByFolderModelResponse;
+use Kyc\InternalApiBundle\Model\Response\Document\DocumentDataLogsModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentFieldsModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
 
@@ -21,6 +24,10 @@ class DocumentsData
         "filename" => "test_merge_documents",
         "documentTypeId" => 51,
         "documentIds" => [37441, 37442]
+    ];
+    public const DELETE_DOCUMENT_MODEL_DATA = [
+        'documentUid' => self::DEFAULT_DOCUMENT_UID_TEST_DATA,
+        'administratorId' => 1
     ];
 
     public static function getInternalApiDocumentsByFolderId(): array
@@ -166,5 +173,34 @@ class DocumentsData
             ->setValidatorMethod('validator');
 
         return [$documentFieldsModelResponse];
+    }
+
+    public static function createDocumentDataLogsRequestModel(): DocumentDataLogsModel
+    {
+        $documentDataLogsRequest = new DocumentDataLogsModel();
+        $documentDataLogsRequest
+            ->setAdministratorId(1)
+            ->setDocumentIds([1, 2]);
+
+        return $documentDataLogsRequest;
+    }
+
+    public static function createDocumentDataLogsModelResponse(): array
+    {
+        $documentDataLogsModelResponse = new DocumentDataLogsModelResponse();
+        $documentDataLogsModelResponse
+            ->setAdministratorId(1)
+            ->setDocumentId(1)
+            ->setCreatedAt(new DateTime('2020-02-02'))
+            ->setVerification2Status(2);
+
+        return [$documentDataLogsModelResponse];
+    }
+
+    public static function createDeleteDocumentModel(array $data = self::DELETE_DOCUMENT_MODEL_DATA): DeleteDocumentModel
+    {
+        return (new DeleteDocumentModel())
+            ->setDocumentUid($data['documentUid'])
+            ->setAdministratorId($data['administratorId']);
     }
 }

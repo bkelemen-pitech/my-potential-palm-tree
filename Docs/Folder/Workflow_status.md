@@ -41,7 +41,7 @@ Content-Type: application/json
 
 ### Workflow status history
 This API will retrieve the workflow status history. Internally it will call
-`internalAPI/workflowstatushistory/folder-id/{folderId}` API.
+`internalAPI/workflowstatushistory?user_dossier_id={folderId}` API.
 
 ---
 __Method__: GET  
@@ -66,8 +66,8 @@ Content-Type: application/json
     { 
         "workflow_status" : 10300,
         "folder_id" : 123,
-        "created_at" : "2022-01-14 09:42:38.000000",
-        "updated_at" : "2022-01-14 09:43:38.000000",
+        "created_at" : "2021-11-18T13:36:17+00:00",
+        "updated_at" : "2021-11-18T13:36:17+00:00",
         "agent_id" : 2, 
         "administrator_id" : 1
     },

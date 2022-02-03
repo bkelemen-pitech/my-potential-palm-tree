@@ -4,5 +4,7 @@ namespace App\Enum;
 
 class DocumentEnum
 {
-    const INCLUDE_FILES_PARAM = 'include_files';
+    public const INCLUDE_FILES_PARAM = 'include_files';
+    public const DOCUMENT_DATA_LOGS = 'documentDataLogs';
+    public const DOCUMENT_UID_CAMEL_CASE = 'documentUid';
 }
