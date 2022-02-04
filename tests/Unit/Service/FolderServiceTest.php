@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Service;
 
+use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
 use App\Security\JWTTokenAuthenticator;
 use App\Service\FolderService;
@@ -13,6 +14,7 @@ use App\Tests\Mocks\Data\FolderData;
 use App\Tests\Mocks\Data\PersonData;
 use Kyc\InternalApiBundle\Enum\BepremsEnum;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalAPIInvalidDataException;
+use Kyc\InternalApiBundle\Model\Request\Folder\DissociateFolderModel;
 use Kyc\InternalApiBundle\Model\Request\Folder\UpdateStatusWorkflowModel;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Person\PersonModelResponse;
@@ -239,5 +241,115 @@ class FolderServiceTest extends BaseApiTest
             [1, 10301, 1],
             [2, 10350, null],
         ];
+    }
+
+    public function testDissociateFolderSuccess()
+    {
+        $this->internalApiFolderService
+            ->getFolderById(1)
+            ->shouldBeCalledOnce()
+            ->willReturn(FolderData::createFolderByIdModelResponse());
+
+        $dissociateFolderModel = new DissociateFolderModel();
+        $dissociateFolderModel->setFolderId(1);
+        $this->internalApiFolderService->dissociateFolder($dissociateFolderModel)->shouldBeCalledOnce();
+
+        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+        $updateStatusWorkflowModel
+            ->setUserDossierId(1)
+            ->setStatusWorkflow(10300)
+            ->setAdministratorId(1)
+            ->setAllowBack(true);
+
+        $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn(['userId' => 1]);
+        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldBeCalledOnce();
+
+        $this->folderService->dissociateFolder(1);
+    }
+
+    public function testDissociateFolderNotFound()
+    {
+        $this->internalApiFolderService
+            ->getFolderById(1)
+            ->shouldBeCalledOnce()
+            ->willThrow(new KycResourceNotFoundException('Folder with id 1 not found'));
+
+        $this->expectException(KycResourceNotFoundException::class);
+        $this->expectExceptionMessage('Folder with id 1 not found');
+
+        $this->folderService->dissociateFolder(1);
+    }
+
+    public function testDissociateFolderInvalidWorkflowStatus()
+    {
+        $this->internalApiFolderService
+            ->getFolderById(1)
+            ->shouldBeCalledOnce()
+            ->willReturn(FolderData::createFolderByIdModelResponse(['folderId' => 1, 'workflowStatus' => 10300]));
+
+        $this->expectException(InvalidDataException::class);
+        $this->expectExceptionMessage('The folder cannot be dissociated.');
+
+        $this->folderService->dissociateFolder(1);
+    }
+
+    public function testDissociateFolderInternalApiDissociateError()
+    {
+        $this->internalApiFolderService
+            ->getFolderById(1)
+            ->shouldBeCalledOnce()
+            ->willReturn(FolderData::createFolderByIdModelResponse());
+
+        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+        $updateStatusWorkflowModel
+            ->setUserDossierId(1)
+            ->setStatusWorkflow(10300)
+            ->setAdministratorId(1)
+            ->setAllowBack(true);
+
+        $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn(['userId' => 1]);
+        $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel)->shouldBeCalledOnce();
+
+        $dissociateFolderModel = new DissociateFolderModel();
+        $dissociateFolderModel->setFolderId(1);
+        $this->internalApiFolderService
+            ->dissociateFolder($dissociateFolderModel)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiInvalidDataException('Third party error.'));
+
+        $this->expectException(InternalApiInvalidDataException::class);
+        $this->expectExceptionMessage('Third party error.');
+
+        $this->folderService->dissociateFolder(1);
+    }
+
+    public function testDissociateFolderUpdateWorkflowStatusFailed()
+    {
+        $this->internalApiFolderService
+            ->getFolderById(1)
+            ->shouldBeCalledOnce()
+            ->willReturn(FolderData::createFolderByIdModelResponse());
+
+        $updateStatusWorkflowModel = new UpdateStatusWorkflowModel();
+        $updateStatusWorkflowModel
+            ->setUserDossierId(1)
+            ->setStatusWorkflow(10300)
+            ->setAdministratorId(1)
+            ->setAllowBack(true);
+
+        $this->authenticator->getLoggedUserData()->shouldBeCalledOnce()->willReturn(['userId' => 1]);
+        $this->internalApiFolderService
+            ->updateStatusWorkflow($updateStatusWorkflowModel)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiInvalidDataException('Third party error.'));
+
+        $dissociateFolderModel = new DissociateFolderModel();
+        $dissociateFolderModel->setFolderId(1);
+        $this->internalApiFolderService->dissociateFolder($dissociateFolderModel)->shouldNotBeCalled();
+
+        $this->expectException(InvalidDataException::class);
+        $this->expectExceptionMessage('The folder cannot be dissociated because of its workflow status.');
+
+        $this->folderService->dissociateFolder(1);
     }
 }

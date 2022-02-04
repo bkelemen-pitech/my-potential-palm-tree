@@ -21,7 +21,7 @@ class FolderData
         'folderId' => 1,
         'partnerFolderId' => '2',
         'status' => 3,
-        'workflowStatus' => 1400,
+        'workflowStatus' => 10400,
         'label' => 2,
         'subscription' => 20,
         'agencyId' => 7,
@@ -32,13 +32,13 @@ class FolderData
     {
         return (new FolderByIdModelResponse())
             ->setId($data['folderId'])
-            ->setPartnerFolderId($data['partnerFolderId'])
-            ->setStatus($data['status'])
-            ->setWorkflowStatus($data['workflowStatus'])
-            ->setLabel($data['label'])
-            ->setSubscription($data['subscription'])
-            ->setAgencyId($data['agencyId'])
-            ->setLogin($data['login']);
+            ->setPartnerFolderId($data['partnerFolderId'] ?? null)
+            ->setStatus($data['status'] ?? null)
+            ->setWorkflowStatus($data['workflowStatus'] ?? null)
+            ->setLabel($data['label'] ?? null)
+            ->setSubscription($data['subscription'] ?? null)
+            ->setAgencyId($data['agencyId'] ?? null)
+            ->setLogin($data['login'] ?? null);
     }
 
     public static function createInternalApiFolderByIdResponse(FolderById $resource): GetFolderByIdResponse
@@ -55,7 +55,7 @@ class FolderData
             'id' => 1,
             'partnerFolderId' => '2',
             'status' => 3,
-            'workflowStatus' => 1400,
+            'workflowStatus' => 10400,
             'label' => 2,
             'subscription' => 20,
             'persons' => [
