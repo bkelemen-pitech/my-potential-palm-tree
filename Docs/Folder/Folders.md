@@ -8,7 +8,7 @@ __Query params__:
 - __limit__ (int) - the number of entries per page, default `20`
 - __filters__ - the filters list, key-value pairs separated by ':' and ','. The same 
   field can be sent more than once. In this case the query will be executed with the
-  `IN` operator. Eg: `&filters=userId:1`
+  `IN` operator. Eg: `&filters=user_id:1`
 - __text_search__ (string) - filter criteria. Eg `&text_search=Doe`.
 - __text_search_fields__ -  a list of fields on which the `text_search` is applied. 
   The items in the list are separated by `,`. This works only in conjunction 
@@ -21,7 +21,7 @@ __Query params__:
 
 Request example:
 ```http request
-GET {HOST_NAME}/api/v1/folders?page=0&limit=10&filters=userId:1&text_search=Doe&text_search_fields=partner_folder_id,first_name&order_by=created_at&order=DESC&view=1
+GET {HOST_NAME}/api/v1/folders?page=0&limit=10&filters=user_id:1&text_search=Doe&text_search_fields=partner_folder_id,first_name&order_by=created_at&order=DESC&view=1
 
 Accept: application/json 
 Content-Type: application/json 
@@ -45,24 +45,24 @@ Content-Type: application/json
   }
 }
 ```
-> Note: if in the filters query param we find `userId` we must remove it before sending it to the internalAPi 
+> Note: if in the filters query param we find `user_id` we must remove it before sending it to the internalAPi 
 #### Views
 This parameter will set a specific set of filters on the request to the internalAPI 
 from [Monolith](../Monolith.md). There are views that are specific to a user [role](../User/README.md#users-role)(eg. view = 3). It can have these values:
 - 1 - corresponds to the _to be treated_ tab. This will add `workflow_status = 10300` filter to the internalAPI request;
 - 2 - corresponds to the _in treatment_ tab. This will add `workflow_status in [10301, 10302, 10303, 10304]` filter to the internalAPI request.
-If there is a _userId_ in the `filters` query params, we need to call the `/internalAPI/administrators/assignedfolders/administrator-id/{administrator-id}` 
+If there is a _user_id_ in the `filters` query params, we need to call the `/internalAPI/administrators/assignedfolders/administrator-id/{administrator-id}` 
 and filter the [folders list](#folders-api) with the folderIds [assigned](./Details.md#assign-folder-to-user) to the user.
 - 3 - corresponds to the _to be treated_ tab for **supervisor** user role. This will add `workflow_status = 10310` filter to the internalAPI request;
 > Note: do not send this parameter to the internalAPI
 #### View criteria
 `view_criteria` can have two values:
 - 1 - **all folders** - filter the list based on the given filters;
-- 2 - **only my folders** - must be used in conjunction with `userId` send in the `filters` query param, if it's not present return an empty list; 
-The user id must match the `userId` in the [JWT token](../Authentification/Authentication.md#decoding-the-jwt)
+- 2 - **only my folders** - must be used in conjunction with `user_id` send in the `filters` query param, if it's not present return an empty list; 
+The user id must match the `user_id` in the [JWT token](../Authentification/Authentication.md#decoding-the-jwt)
 
 In order to determine the default view criteria for the active user the `view_criteria` query param should be
-left empty and in the `filters` query param the _userId_ must be sent. In this case the 
+left empty and in the `filters` query param the _user_id_ must be sent. In this case the 
 API should get the assigned folders of the user, here we have the following cases:
 - **if the user has assigned folders**: return the list of folder assigned to the user and also the view_criteria=2 in the meta property
 - **if the user does not have assigned folders**: return the list of folders and the view_criteria=1 in the meta property

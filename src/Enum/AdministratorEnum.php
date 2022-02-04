@@ -11,6 +11,9 @@ class AdministratorEnum extends BaseEnum
     // API RESPONSE
     public const ADMINISTRATORS = 'administrators';
 
+    // ADMINISTRATORS PROPERTY
+    public const ADMINISTRATOR_ID_CAMEL_CASED = 'administratorId';
+
     public const ADMINISTRATOR_ROLES = [
         UserEnum::ROLE_ADMINISTRATOR,
         UserEnum::ROLE_SUPERVISOR,

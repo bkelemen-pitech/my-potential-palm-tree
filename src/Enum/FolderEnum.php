@@ -19,6 +19,15 @@ class FolderEnum extends BaseEnum
     public const ORDER_BY = 'order_by';
     public const TEXT_SEARCH = 'text_search';
     public const TEXT_SEARCH_FIELDS = 'text_search_fields';
+    public const VIEW = 'view';
+    public const VIEW_CRITERIA = 'view_criteria';
+
+    // API VALUES
+    public const VIEW_CRITERIA_ALL_FOLDERS = 1;
+    public const VIEW_CRITERIA_MY_FOLDERS = 2;
+    public const VIEW_TO_BE_TREATED = 1;
+    public const VIEW_IN_TREATMENT = 2;
+    public const VIEW_TO_BE_TREATED_SUPERVISOR = 3;
 
     // API RESPONSE
     public const ASSIGNED_TO = 'assignedTo';
@@ -157,7 +166,23 @@ class FolderEnum extends BaseEnum
 
     public const WORKFLOW_STATUS_PROCESSED_BY_WEBHELP = 10300;
     public const WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP = 10301;
-    public const WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP = 10302 ;
+    public const WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP = 10302;
+    public const WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP_1 = 10303;
+    public const WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP_2 = 10304;
+    public const WORKFLOW_STATUS_PROCESSED_BY_WEBHELP_SUPERVISOR = 10310;
+
+    public const VIEW_TO_BE_TREATED_TAB = [
+        self::WORKFLOW_STATUS . ':' . self::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP,
+    ];
+    public const VIEW_IN_TREATMENT_TAB = [
+        self::WORKFLOW_STATUS . ':' . self::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP,
+        self::WORKFLOW_STATUS . ':' . self::WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP,
+        self::WORKFLOW_STATUS . ':' . self::WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP_1,
+        self::WORKFLOW_STATUS . ':' . self::WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP_2,
+    ];
+    public const VIEW_TO_BE_TREATED_SUPERVISOR_TAB = [
+        self::WORKFLOW_STATUS . ':' . self::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP_SUPERVISOR,
+    ];
 
     public const FOLDER_ENTITY_PROPERTIES = [
         self::ACTIVE_SCREENING,
