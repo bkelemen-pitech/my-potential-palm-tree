@@ -5,7 +5,7 @@ Docker setup project for KYC back-office project.
 
 ## [Docs](./Docs)
 
-## Usage
+## Usage 
 
 For the initial install, you should use:
 - make install
