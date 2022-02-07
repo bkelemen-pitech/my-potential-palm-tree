@@ -34,6 +34,7 @@ class FolderData
                 'text_search_fields' => 'date_of_birth',
                 'view' => 2,
             ],
+            2,
         ],
         [
             [
@@ -41,6 +42,7 @@ class FolderData
                 'view' => 2,
                 'filters' => 'user_id:1',
             ],
+            2,
         ],
         [
             [
@@ -49,6 +51,7 @@ class FolderData
                 'view_criteria' => 1,
                 'filters' => 'user_id:1',
             ],
+            1,
         ],
         [
             [
@@ -56,6 +59,7 @@ class FolderData
                 'view' => 2,
                 'view_criteria' => 2,
             ],
+            2,
         ],
         [
             [
@@ -64,6 +68,7 @@ class FolderData
                 'view_criteria' => 2,
                 'filters' => 'user_id:1',
             ],
+            2,
         ],
     ];
 
@@ -73,6 +78,7 @@ class FolderData
             [
                 'text_search_fields' => 'date_of_birth',
             ],
+            2,
         ],
         [
             'person_type_id:1',
@@ -80,6 +86,7 @@ class FolderData
                 'text_search_fields' => 'date_of_birth',
                 'filters' => 'user_id:1',
             ],
+            2,
         ],
         [
             'person_type_id:1',
@@ -87,6 +94,7 @@ class FolderData
                 'text_search_fields' => 'date_of_birth',
                 'view_criteria' => 1,
             ],
+            1,
         ],
         [
             'person_type_id:1',
@@ -95,6 +103,7 @@ class FolderData
                 'view_criteria' => 1,
                 'filters' => 'user_id:1',
             ],
+            1,
         ],
         [
             'person_type_id:1',
@@ -102,6 +111,7 @@ class FolderData
                 'text_search_fields' => 'date_of_birth',
                 'view_criteria' => 2,
             ],
+            2,
         ],
         [
             'person_type_id:1',
@@ -110,6 +120,7 @@ class FolderData
                 'view_criteria' => 2,
                 'filters' => 'user_id:1',
             ],
+            2,
         ],
         [
             'workflow_status:10300,person_type_id:1',
@@ -117,6 +128,7 @@ class FolderData
                 'text_search_fields' => 'date_of_birth',
                 'view' => 1,
             ],
+            2,
         ],
         [
             'workflow_status:10300,person_type_id:1',
@@ -125,6 +137,7 @@ class FolderData
                 'view' => 1,
                 'filters' => 'user_id:1',
             ],
+            2,
         ],
         [
             'workflow_status:10300,person_type_id:1',
@@ -133,6 +146,7 @@ class FolderData
                 'view' => 1,
                 'view_criteria' => 1,
             ],
+            1,
         ],
         [
             'workflow_status:10300,person_type_id:1',
@@ -142,6 +156,7 @@ class FolderData
                 'view_criteria' => 1,
                 'filters' => 'user_id:1',
             ],
+            1,
         ],
         [
             'workflow_status:10300,person_type_id:1',
@@ -150,6 +165,7 @@ class FolderData
                 'view' => 1,
                 'view_criteria' => 2,
             ],
+            2,
         ],
         [
             'workflow_status:10300,person_type_id:1',
@@ -159,6 +175,7 @@ class FolderData
                 'view_criteria' => 2,
                 'filters' => 'user_id:1',
             ],
+            2,
         ],
         [
             'workflow_status:10310,person_type_id:1',
@@ -166,6 +183,7 @@ class FolderData
                 'text_search_fields' => 'date_of_birth',
                 'view' => 3,
             ],
+            2,
         ],
         [
             'workflow_status:10310,person_type_id:1',
@@ -174,6 +192,7 @@ class FolderData
                 'view' => 3,
                 'filters' => 'user_id:1',
             ],
+            2,
         ],
         [
             'workflow_status:10310,person_type_id:1',
@@ -182,6 +201,7 @@ class FolderData
                 'view' => 3,
                 'view_criteria' => 1,
             ],
+            1,
         ],
         [
             'workflow_status:10310,person_type_id:1',
@@ -191,6 +211,7 @@ class FolderData
                 'view_criteria' => 1,
                 'filters' => 'user_id:1',
             ],
+            1,
         ],
         [
             'workflow_status:10310,person_type_id:1',
@@ -199,6 +220,7 @@ class FolderData
                 'view' => 3,
                 'view_criteria' => 2,
             ],
+            2,
         ],
         [
             'workflow_status:10310,person_type_id:1',
@@ -208,6 +230,7 @@ class FolderData
                 'view_criteria' => 2,
                 'filters' => 'user_id:1',
             ],
+            2,
         ],
         [
             'workflow_status:10301,workflow_status:10302,workflow_status:10303,workflow_status:10304,person_type_id:1',
@@ -216,6 +239,7 @@ class FolderData
                 'view' => 2,
                 'view_criteria' => 1,
             ],
+            1,
         ],
     ];
 

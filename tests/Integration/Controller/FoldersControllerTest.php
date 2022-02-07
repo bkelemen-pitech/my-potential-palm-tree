@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Controller;
 
-use App\Enum\FolderEnum;
-use App\Enum\PersonEnum;
 use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
 use App\Model\Request\BaseFolderFiltersModel;
 use App\Service\DocumentService;
 use App\Service\PersonService;
 use App\Tests\BaseApiTest;
+use App\Tests\Enum\AdministratorEnum;
 use App\Tests\Enum\BaseEnum;
+use App\Tests\Enum\FolderEnum;
+use App\Tests\Enum\PersonEnum;
 use App\Tests\Mocks\Data\DocumentsData;
 use App\Tests\Mocks\Data\FolderData;
 use App\Tests\Mocks\Data\PersonData;
-use Kyc\InternalApiBundle\Enum\AdministratorEnum;
 use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilterModel;
 use Kyc\InternalApiBundle\Model\Request\Folder\UpdateStatusWorkflowModel;
 use Kyc\InternalApiBundle\Model\Request\WorkflowStatusHistory\WorkflowStatusHistoryModel;
@@ -28,9 +28,6 @@ use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalApiInvalidDataException;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as InternalApiResourceNotFoundException;
 use Kyc\InternalApiBundle\Service\WorkflowStatusHistoryService;
-use Prophecy\Argument;
-use Prophecy\Promise\ReturnPromise;
-use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class FoldersControllerTest extends BaseApiTest
@@ -78,7 +75,7 @@ class FoldersControllerTest extends BaseApiTest
     /**
      * @dataProvider getFoldersParametersWith1ApiCall
      */
-    public function testGetFoldersWith1ApiCall(array $queryParameters)
+    public function testGetFoldersWith1ApiCall(array $queryParameters, int $viewCriteriaResponse)
     {
         $folderFilterModel = (new BaseFolderFiltersModel())
             ->setTextSearchFields('date_of_birth')
@@ -134,7 +131,7 @@ class FoldersControllerTest extends BaseApiTest
                 ],
                 FolderEnum::META => [
                     FolderEnum::TOTAL => 2,
-                    FolderEnum::VIEW_CRITERIA => 2,
+                    FolderEnum::VIEW_CRITERIA => $viewCriteriaResponse,
                 ],
             ],
             $this->getResponseContent()
@@ -149,7 +146,7 @@ class FoldersControllerTest extends BaseApiTest
     /**
      * @dataProvider getFoldersParametersWith2ApiCalls
      */
-    public function testGetFoldersWith2ApiCalls(string $filters, array $queryParameters)
+    public function testGetFoldersWith2ApiCalls(string $filters, array $queryParameters, int $viewCriteriaResponse)
     {
         $folderFilterModel = (new BaseFolderFiltersModel())
             ->setTextSearchFields('date_of_birth')
@@ -223,7 +220,7 @@ class FoldersControllerTest extends BaseApiTest
                 ],
                 FolderEnum::META => [
                     FolderEnum::TOTAL => 2,
-                    FolderEnum::VIEW_CRITERIA => 2,
+                    FolderEnum::VIEW_CRITERIA => $viewCriteriaResponse,
                 ],
             ],
             $this->getResponseContent()
@@ -283,8 +280,7 @@ class FoldersControllerTest extends BaseApiTest
                 FolderEnum::META => [
                     FolderEnum::TOTAL => 2,
                 ],
-            ])
-        ;
+            ]);
 
         $filterModel = (new AssignedAdministratorFilterModel())->setUserDossierIds([1, 2]);
 
