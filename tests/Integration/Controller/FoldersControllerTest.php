@@ -72,7 +72,7 @@ class FoldersControllerTest extends BaseApiTest
         $folderFilterModel = new BaseFolderFiltersModel();
         $folderFilterModel
             ->setTextSearchFields('date_of_birth')
-            ->setFilters('person_type_id:1');
+            ->setFilters(['person_type_id' => [1]]);
         $folderModelResponse1 = new FolderModelResponse();
         $folderModelResponse1
             ->setFolderId(1)
