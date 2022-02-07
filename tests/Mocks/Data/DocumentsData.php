@@ -109,7 +109,10 @@ class DocumentsData
             'encryption' => true,
             'customerAnomaly' => null,
             'partnerVerificationStatus' => null,
-            'data' => 'a:2:{s:20:"agence_document_type";s:2:"11";s:16:"controle_couleur";i:0;}',
+            'data' => [
+                'agence_document_type' => 11,
+                'controle_couleur' => null,
+            ],
             'size' => 181333,
             'anomaly' => null,
             'partnerDocumentId' => 'passport.jpeg',
