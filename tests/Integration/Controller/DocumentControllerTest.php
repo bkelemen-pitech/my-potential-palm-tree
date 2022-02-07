@@ -180,6 +180,7 @@ class DocumentControllerTest extends BaseApiTest
                     'verification2Status' => 2,
                     'administratorId' => 1,
                     'createdAt' => '2020-02-02T00:00:00+00:00',
+                    'data' => null,
                 ]
             ]],
             $this->getResponseContent()

@@ -185,19 +185,7 @@ class FolderService
         if (isset($data[InternalApiFolderEnum::TEXT_SEARCH_FIELDS])) {
             $textSearchFields = explode(',', $data[InternalApiFolderEnum::TEXT_SEARCH_FIELDS]);
             if (in_array(InternalApiFolderEnum::PERSON_DATE_OF_BIRTH, $textSearchFields)) {
-                if (isset($data[InternalApiFolderEnum::FILTERS])) {
-                    $data[InternalApiFolderEnum::FILTERS] .= sprintf(
-                        ',%s:%s',
-                        InternalApiFolderEnum::PERSON_TYPE_ID,
-                        PersonEnum::MAIN_PHYSICAL_PERSON_TYPE_ID
-                    );
-                } else {
-                    $data[InternalApiFolderEnum::FILTERS] = sprintf(
-                        '%s:%s',
-                        InternalApiFolderEnum::PERSON_TYPE_ID,
-                        PersonEnum::MAIN_PHYSICAL_PERSON_TYPE_ID
-                    );
-                }
+                $data[InternalApiFolderEnum::FILTERS][InternalApiFolderEnum::PERSON_TYPE_ID][] = PersonEnum::MAIN_PHYSICAL_PERSON_TYPE_ID;
             }
         }
 
