@@ -19,11 +19,11 @@ opt view_criteria empty
     end
 end
 opt view_criteria 1
-    alt userId set 
+    alt userId set (administrateur_id)
         BE BO->Monolith: internalAPI folders with administrateur_id
         Monolith->BE BO: assigned folders list
         BE BO->FE BO: folders list + meta: view_criteria: 1
-    else userId not set
+    else userId (administrateur_id) not set
         BE BO->+Monolith: internalAPI folder without administrateur_id
         Monolith->-BE BO: folders list
         BE BO->+Monolith: internalAPI assigned administrators
