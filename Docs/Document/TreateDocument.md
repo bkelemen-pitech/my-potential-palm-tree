@@ -5,17 +5,17 @@ by an agent. The Back-office application will send the `status=2`.
 
 ---
 __Method__: POST.  
-__URL__: `/api/v1/documents/treat`.  
+__URL__: `/api/v1/documents/{document_uid}/treat`.  
 Request example:
 
 ```http request
-GET {HOST_NAME}/api/v1/documents/treat
+POST {HOST_NAME}/api/v1/documents/1234abc456/treat
 Accept: application/json 
 Content-Type: application/json
 
 {
-  "documentUid": "1234abc456",
-  "statusVerification2": 2
+  "agency_id": 1,
+  "verification2_status": 2
 }
 
 204 NO CONTENT
@@ -29,3 +29,4 @@ Content-Type: application/json
   "status":"error"
 }
 ```
+> Obs: the agency_id and administrator_id is needed for the event DOC_TRAITE.

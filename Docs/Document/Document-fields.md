@@ -3,7 +3,7 @@ This API retrieves the fields of a specific document type and person type.
 Internally it will call `internalAPI/documents/fields`. 
 
 __Method__: GET.  
-__URL__: `/api/v1/document/fields`.  
+__URL__: `/api/v1/documents/fields`.  
 __Query params__:
 - __document_type_id__ (int) 
 - __person_type_id__ (int)   
@@ -12,7 +12,7 @@ __Query params__:
 Request example:
 
 ```http request
-GET {HOST_NAME}/api/v1/document/fields?document_type_id=1&person_type_id=2&agency_id=1
+GET {HOST_NAME}/api/v1/documents/fields?document_type_id=1&person_type_id=2&agency_id=1
 Accept: application/json 
 Content-Type: application/json 
 
@@ -25,7 +25,7 @@ Content-Type: application/json
       "mandatory": 1,
       "order": 1,
       "format": 1,
-      "ocr_field: 1,
+      "ocr_field": 1,
       "helperMethod": "getCommonNom",
       "validatorMethod": "validateFormData",
     },
