@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Mocks\Data;
 
 use DateTime;
+use Kyc\InternalApiBundle\Model\Request\Document\DeleteDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\DocumentDataLogsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\DocumentFieldsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\MergeDocumentModel;
@@ -23,6 +24,10 @@ class DocumentsData
         "filename" => "test_merge_documents",
         "documentTypeId" => 51,
         "documentIds" => [37441, 37442]
+    ];
+    public const DELETE_DOCUMENT_MODEL_DATA = [
+        'documentUid' => self::DEFAULT_DOCUMENT_UID_TEST_DATA,
+        'administratorId' => 1
     ];
 
     public static function getInternalApiDocumentsByFolderId(): array
@@ -190,5 +195,12 @@ class DocumentsData
             ->setVerification2Status(2);
 
         return [$documentDataLogsModelResponse];
+    }
+
+    public static function createDeleteDocumentModel(array $data = self::DELETE_DOCUMENT_MODEL_DATA): DeleteDocumentModel
+    {
+        return (new DeleteDocumentModel())
+            ->setDocumentUid($data['documentUid'])
+            ->setAdministratorId($data['administratorId']);
     }
 }

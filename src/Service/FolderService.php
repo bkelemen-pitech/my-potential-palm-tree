@@ -6,6 +6,7 @@ use App\Enum\AdministratorEnum;
 use App\Enum\FolderEnum;
 use App\Enum\PersonEnum;
 use App\Enum\UserEnum;
+use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
 use App\Model\Request\BaseFolderFiltersModel;
 use App\Security\JWTTokenAuthenticator;
@@ -13,6 +14,7 @@ use Kyc\InternalApiBundle\Enum\FolderEnum as InternalApiFolderEnum;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotFoundException;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalAPIInvalidDataException;
 use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilterModel;
+use Kyc\InternalApiBundle\Model\Request\Folder\DissociateFolderModel;
 use Kyc\InternalApiBundle\Model\Request\Folder\UpdateStatusWorkflowModel;
 use Kyc\InternalApiBundle\Model\Response\Folder\AssignedAdministratorModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
@@ -155,9 +157,34 @@ class FolderService
         $updateStatusWorkflowModel
             ->setUserDossierId($folderId)
             ->setAdministratorId($administratorId)
-            ->setStatusWorkflow($data[InternalApiFolderEnum::WORKFLOW_STATUS_CAMEL_CASE] ?? null);
+            ->setStatusWorkflow($data[InternalApiFolderEnum::WORKFLOW_STATUS_CAMEL_CASE] ?? null)
+            ->setAllowBack($data[InternalApiFolderEnum::ALLOW_BACK_DB_CAMEL_CASE] ?? null);
 
         $this->internalApiFolderService->updateStatusWorkflow($updateStatusWorkflowModel);
+    }
+
+    public function dissociateFolder(int $folderId)
+    {
+        $folder = $this->internalApiFolderService->getFolderById($folderId);
+        if ($folder->getWorkflowStatus() <= FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP) {
+            throw new InvalidDataException('The folder cannot be dissociated.');
+        }
+
+        try {
+            $this->updateWorkflowStatus(
+                $folderId,
+                [
+                    InternalApiFolderEnum::WORKFLOW_STATUS_CAMEL_CASE => FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP,
+                    InternalApiFolderEnum::ALLOW_BACK_DB_CAMEL_CASE => true,
+                ]
+            );
+        } catch (\Exception $exception) {
+            throw new InvalidDataException('The folder cannot be dissociated because of its workflow status.');
+        }
+
+        $dissociateFolderModel = new DissociateFolderModel();
+        $dissociateFolderModel->setFolderId($folderId);
+        $this->internalApiFolderService->dissociateFolder($dissociateFolderModel);
     }
 
     private function assignAdministratorsToFoldersIfNeeded(
@@ -199,19 +226,7 @@ class FolderService
         if (isset($data[InternalApiFolderEnum::TEXT_SEARCH_FIELDS])) {
             $textSearchFields = explode(',', $data[InternalApiFolderEnum::TEXT_SEARCH_FIELDS]);
             if (in_array(InternalApiFolderEnum::PERSON_DATE_OF_BIRTH, $textSearchFields)) {
-                if (isset($data[InternalApiFolderEnum::FILTERS]) && !empty($data[InternalApiFolderEnum::FILTERS])) {
-                    $data[InternalApiFolderEnum::FILTERS] .= sprintf(
-                        ',%s:%s',
-                        InternalApiFolderEnum::PERSON_TYPE_ID,
-                        PersonEnum::MAIN_PHYSICAL_PERSON_TYPE_ID
-                    );
-                } else {
-                    $data[InternalApiFolderEnum::FILTERS] = sprintf(
-                        '%s:%s',
-                        InternalApiFolderEnum::PERSON_TYPE_ID,
-                        PersonEnum::MAIN_PHYSICAL_PERSON_TYPE_ID
-                    );
-                }
+                $data[InternalApiFolderEnum::FILTERS][InternalApiFolderEnum::PERSON_TYPE_ID][] = PersonEnum::MAIN_PHYSICAL_PERSON_TYPE_ID;
             }
         }
 

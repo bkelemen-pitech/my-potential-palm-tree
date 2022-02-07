@@ -6,12 +6,13 @@ namespace App\Controller;
 
 use App\Enum\DocumentEnum;
 use App\Exception\ApiException;
-use App\Exception\ResourceNotFoundException;
 use App\Service\DocumentService;
+use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as InternalApiResourceNotFound;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -27,7 +28,7 @@ class DocumentController extends AbstractController
         try {
             $includeFiles = filter_var($request->query->get(DocumentEnum::INCLUDE_FILES_PARAM), FILTER_VALIDATE_BOOLEAN);
             $document = $documentService->getDocumentByUid($documentUid, $includeFiles);
-        } catch (ResourceNotFoundException $exception) {
+        } catch (InternalApiResourceNotFound $exception) {
             throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
         }
 
@@ -71,6 +72,22 @@ class DocumentController extends AbstractController
             $documentDataLogs = $documentService->getDocumentDataLogs($request->query->all());
 
             return $this->json([DocumentEnum::DOCUMENT_DATA_LOGS => $documentDataLogs]);
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+    }
+
+    /**
+     * @Route("/{documentUid}", name="delete_document_by_uid", methods="DELETE")
+     */
+    public function deleteDocument(string $documentUid, DocumentService $documentService)
+    {
+        try {
+            $documentService->deleteDocumentByUid([DocumentEnum::DOCUMENT_UID_CAMEL_CASE => $documentUid]);
+
+            return $this->json(null, Response::HTTP_NO_CONTENT);
+        } catch (InternalApiResourceNotFound $exception) {
+            throw new NotFoundHttpException($exception->getMessage());
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }

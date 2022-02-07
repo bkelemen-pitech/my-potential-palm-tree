@@ -169,4 +169,20 @@ class FoldersController extends AbstractController
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
     }
+
+    /**
+     * @Route("/{id}/dissociate", name="dissociate_folder", methods="POST")
+     */
+    public function dissociateFolder(int $id): JsonResponse
+    {
+        try {
+            $this->folderService->dissociateFolder($id);
+        } catch (InternalApiResourceNotFound $exception) {
+            throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
 }
