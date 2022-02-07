@@ -642,10 +642,16 @@ nelmio_api_doc:
                 schema:
                   type: object
                   properties:
-                    document_uid:
+                    documentUid:
                       type: string
                       example: 618145978da9e
-                    status_verification2:
+                    statusVerification2:
+                      type: integer
+                      example: 3
+                    agencyId:
+                      type: integer
+                      example: 3
+                    folderId:
                       type: integer
                       example: 3
           responses:

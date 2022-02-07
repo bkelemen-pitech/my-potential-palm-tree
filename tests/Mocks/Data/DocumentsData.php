@@ -18,7 +18,13 @@ use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
 class DocumentsData
 {
     public const DEFAULT_DOCUMENT_UID_TEST_DATA = '617f896a61e39';
-    public const TREAT_DOCUMENT_DATA = [self::DEFAULT_DOCUMENT_UID_TEST_DATA, 8];
+    public const TREAT_DOCUMENT_DATA = [
+        'documentUid' => self::DEFAULT_DOCUMENT_UID_TEST_DATA,
+        'statusVerification2' => 8,
+        'agencyId' => 1,
+        'folderId' => 1,
+        'administratorId' => 1
+    ];
     public const MERGE_DOCUMENTS_BODY = [
         "personUid" => "617ff03bb7c55",
         "filename" => "test_merge_documents",
@@ -131,8 +137,11 @@ class DocumentsData
     public static function createTreatDocumentModel(array $data = self::TREAT_DOCUMENT_DATA)
     {
         return (new TreatDocumentModel())
-            ->setDocumentUid($data[0])
-            ->setStatusVerification2($data[1]);
+            ->setDocumentUid($data['documentUid'])
+            ->setStatusVerification2($data['statusVerification2'])
+            ->setAgencyId($data['agencyId'])
+            ->setAdministratorId($data['administratorId'])
+            ->setFolderId($data['folderId']);
     }
 
     public static function createMergeDocumentModel(array $data = self::MERGE_DOCUMENTS_BODY, int $folderId = 1): MergeDocumentModel

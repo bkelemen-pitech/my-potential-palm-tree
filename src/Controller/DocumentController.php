@@ -44,6 +44,8 @@ class DocumentController extends AbstractController
             $documentService->treatDocument($request->toArray());
 
             return $this->json(null, Response::HTTP_NO_CONTENT);
+        } catch (InternalApiResourceNotFound $exception) {
+            throw new NotFoundHttpException($exception->getMessage());
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
