@@ -236,28 +236,13 @@ class FolderService
     private function getUserId(array $data, ?int $viewCriteria = null): ?int
     {
         $loggedUserId = $this->authenticator->getLoggedUserData()[UserEnum::USER_ID];
-        $userIdFromFilters = isset($data[FolderEnum::FILTERS])
-            ? $this->getUserIdFromFilters(explode(",", $data[FolderEnum::FILTERS]))
-            : null;
+        $userIdFromFilters = $data[FolderEnum::FILTERS][FolderEnum::USER_ID][0] ?? null;
 
         if (is_null($viewCriteria) || $viewCriteria === FolderEnum::VIEW_CRITERIA_MY_FOLDERS) {
-            return $loggedUserId;
+            return (int) $loggedUserId;
         }
 
         return $userIdFromFilters;
-    }
-
-    private function getUserIdFromFilters(array $filters): ?int
-    {
-        foreach ($filters as $filter) {
-            $filterArray = explode(':', $filter);
-
-            if ($filterArray[0] === FolderEnum::USER_ID) {
-                return (int) $filterArray[1];
-            }
-        }
-
-        return null;
     }
 
     private function handleQueryParameters(array $queryParameters, ?int $userId = null): array
@@ -268,17 +253,9 @@ class FolderService
             if (in_array($parameterKey, [FolderEnum::VIEW, FolderEnum::VIEW_CRITERIA])) {
                 unset($queryParameters[$parameterKey]);
             }
-            if ($parameterKey === FolderEnum::FILTERS) {
-                $queryParameters[FolderEnum::FILTERS] = implode(
-                    ",",
-                    $this->updateFilters(explode(",", $parameterValue), $view)
-                );
-            }
         }
 
-        if (!isset($queryParameters[FolderEnum::FILTERS])) {
-            $queryParameters[FolderEnum::FILTERS] = implode(",", $this->updateFilters([], $view));
-        }
+        $queryParameters[FolderEnum::FILTERS] = $this->updateFilters($queryParameters[FolderEnum::FILTERS] ?? [], $view);
 
         if (!is_null($userId)) {
             $queryParameters[AdministratorEnum::ADMINISTRATOR_ID_CAMEL_CASE] = $userId;
@@ -290,9 +267,7 @@ class FolderService
     private function updateFilters(?array $filters, ?int $view): array
     {
         foreach ($filters as $filterKey => $filterValue) {
-            $filterArray = explode(':', $filterValue);
-
-            if ($filterArray[0] === FolderEnum::USER_ID) {
+            if ($filterKey === FolderEnum::USER_ID) {
                 unset($filters[$filterKey]);
             }
         }

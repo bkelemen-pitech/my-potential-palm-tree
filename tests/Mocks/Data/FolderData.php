@@ -40,7 +40,9 @@ class FolderData
             [
                 'text_search_fields' => 'date_of_birth',
                 'view' => 2,
-                'filters' => 'user_id:1',
+                'filters' => [
+                    'user_id' => '1',
+                ],
             ],
             2,
         ],
@@ -49,7 +51,9 @@ class FolderData
                 'text_search_fields' => 'date_of_birth',
                 'view' => 2,
                 'view_criteria' => 1,
-                'filters' => 'user_id:1',
+                'filters' => [
+                    'user_id' => '1',
+                ],
             ],
             1,
         ],
@@ -66,7 +70,9 @@ class FolderData
                 'text_search_fields' => 'date_of_birth',
                 'view' => 2,
                 'view_criteria' => 2,
-                'filters' => 'user_id:1',
+                'filters' => [
+                    'user_id' => '1',
+                ],
             ],
             2,
         ],
@@ -74,22 +80,30 @@ class FolderData
 
     public const GET_FOLDERS_PARAMETERS_WITH_2_API_CALLS = [
         [
-            'person_type_id:1',
+            [
+                'person_type_id' => ['1'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
             ],
             2,
         ],
         [
-            'person_type_id:1',
+            [
+                'person_type_id' => ['1'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
-                'filters' => 'user_id:1',
+                'filters' => [
+                    'user_id' => '1',
+                ],
             ],
             2,
         ],
         [
-            'person_type_id:1',
+            [
+                'person_type_id' => ['1'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
                 'view_criteria' => 1,
@@ -97,16 +111,22 @@ class FolderData
             1,
         ],
         [
-            'person_type_id:1',
+            [
+                'person_type_id' => ['1'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
                 'view_criteria' => 1,
-                'filters' => 'user_id:1',
+                'filters' => [
+                    'user_id' => '1',
+                ],
             ],
             1,
         ],
         [
-            'person_type_id:1',
+            [
+                'person_type_id' => ['1'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
                 'view_criteria' => 2,
@@ -114,16 +134,23 @@ class FolderData
             2,
         ],
         [
-            'person_type_id:1',
+            [
+                'person_type_id' => ['1'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
                 'view_criteria' => 2,
-                'filters' => 'user_id:1',
+                'filters' => [
+                    'user_id' => '1',
+                ],
             ],
             2,
         ],
         [
-            'workflow_status:10300,person_type_id:1',
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10300'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
                 'view' => 1,
@@ -131,90 +158,130 @@ class FolderData
             2,
         ],
         [
-            'workflow_status:10300,person_type_id:1',
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10300'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
                 'view' => 1,
-                'filters' => 'user_id:1',
+                'filters' => [
+                    'user_id' => '1',
+                ],
             ],
             2,
         ],
         [
-            'workflow_status:10300,person_type_id:1',
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10300'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
                 'view' => 1,
-                'view_criteria' => 1,
-            ],
-            1,
-        ],
-        [
-            'workflow_status:10300,person_type_id:1',
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 1,
-                'view_criteria' => 1,
-                'filters' => 'user_id:1',
-            ],
-            1,
-        ],
-        [
-            'workflow_status:10300,person_type_id:1',
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 1,
-                'view_criteria' => 2,
-            ],
-            2,
-        ],
-        [
-            'workflow_status:10300,person_type_id:1',
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 1,
-                'view_criteria' => 2,
-                'filters' => 'user_id:1',
-            ],
-            2,
-        ],
-        [
-            'workflow_status:10310,person_type_id:1',
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 3,
-            ],
-            2,
-        ],
-        [
-            'workflow_status:10310,person_type_id:1',
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 3,
-                'filters' => 'user_id:1',
-            ],
-            2,
-        ],
-        [
-            'workflow_status:10310,person_type_id:1',
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 3,
                 'view_criteria' => 1,
             ],
             1,
         ],
         [
-            'workflow_status:10310,person_type_id:1',
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10300'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
-                'view' => 3,
+                'view' => 1,
                 'view_criteria' => 1,
-                'filters' => 'user_id:1',
+                'filters' => [
+                    'user_id' => '1',
+                ],
             ],
             1,
         ],
         [
-            'workflow_status:10310,person_type_id:1',
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10300'],
+            ],
+            [
+                'text_search_fields' => 'date_of_birth',
+                'view' => 1,
+                'view_criteria' => 2,
+            ],
+            2,
+        ],
+        [
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10300'],
+            ],
+            [
+                'text_search_fields' => 'date_of_birth',
+                'view' => 1,
+                'view_criteria' => 2,
+                'filters' => [
+                    'user_id' => '1',
+                ],
+            ],
+            2,
+        ],
+        [
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10310'],
+            ],
+            [
+                'text_search_fields' => 'date_of_birth',
+                'view' => 3,
+            ],
+            2,
+        ],
+        [
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10310'],
+            ],
+            [
+                'text_search_fields' => 'date_of_birth',
+                'view' => 3,
+                'filters' => [
+                    'user_id' => '1',
+                ],
+            ],
+            2,
+        ],
+        [
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10310'],
+            ],
+            [
+                'text_search_fields' => 'date_of_birth',
+                'view' => 3,
+                'view_criteria' => 1,
+            ],
+            1,
+        ],
+        [
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10310'],
+            ],
+            [
+                'text_search_fields' => 'date_of_birth',
+                'view' => 3,
+                'view_criteria' => 1,
+                'filters' => [
+                    'user_id' => '1',
+                ],
+            ],
+            1,
+        ],
+        [
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10310'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
                 'view' => 3,
@@ -223,17 +290,25 @@ class FolderData
             2,
         ],
         [
-            'workflow_status:10310,person_type_id:1',
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10310'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
                 'view' => 3,
                 'view_criteria' => 2,
-                'filters' => 'user_id:1',
+                'filters' => [
+                    'user_id' => '1',
+                ],
             ],
             2,
         ],
         [
-            'workflow_status:10301,workflow_status:10302,workflow_status:10303,workflow_status:10304,person_type_id:1',
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10301', '10302', '10303', '10304'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
                 'view' => 2,
@@ -245,11 +320,18 @@ class FolderData
 
     public const GET_FOLDERS_PARAMETERS_WITH_3_API_CALLS = [
         [
-            'workflow_status:10301,workflow_status:10302,workflow_status:10303,workflow_status:10304,person_type_id:1',
+
+            [
+                'person_type_id' => ['1'],
+                'workflow_status' => ['10301', '10302', '10303', '10304'],
+            ],
             [
                 'text_search_fields' => 'date_of_birth',
                 'view' => 2,
-                'filters' => 'user_id:1',
+                'filters' =>
+                    [
+                        'user_id' => '1',
+                    ],
             ],
         ],
     ];

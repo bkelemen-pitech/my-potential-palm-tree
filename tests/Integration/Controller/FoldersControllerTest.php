@@ -82,7 +82,10 @@ class FoldersControllerTest extends BaseApiTest
         $folderFilterModel = (new BaseFolderFiltersModel())
             ->setTextSearchFields('date_of_birth')
             ->setFilters(
-                'workflow_status:10301,workflow_status:10302,workflow_status:10303,workflow_status:10304,person_type_id:1'
+                [
+                    'person_type_id' => ['1'],
+                    'workflow_status' => ['10301', '10302', '10303', '10304'],
+                ]
             )
             ->setAdministratorId(1);
         $folderModelResponse1 = (new FolderModelResponse())
@@ -148,7 +151,7 @@ class FoldersControllerTest extends BaseApiTest
     /**
      * @dataProvider getFoldersParametersWith2ApiCalls
      */
-    public function testGetFoldersWith2ApiCalls(string $filters, array $queryParameters, int $viewCriteriaResponse)
+    public function testGetFoldersWith2ApiCalls(array $filters, array $queryParameters, int $viewCriteriaResponse)
     {
         $folderFilterModel = (new BaseFolderFiltersModel())
             ->setTextSearchFields('date_of_birth')
@@ -237,7 +240,7 @@ class FoldersControllerTest extends BaseApiTest
     /**
      * @dataProvider getFoldersParametersWith3ApiCalls
      */
-    public function testGetFoldersWith3ApiCalls(string $filters, array $queryParameters)
+    public function testGetFoldersWith3ApiCalls(array $filters, array $queryParameters)
     {
         $folderFilterModel1 = (new BaseFolderFiltersModel())
             ->setTextSearchFields('date_of_birth')
