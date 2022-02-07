@@ -190,6 +190,12 @@ class FolderEnum extends BaseEnum
         ],
     ];
 
+    public const WORKFLOW_STATUS_BY_VIEW = [
+        self::VIEW_TO_BE_TREATED => self::VIEW_TO_BE_TREATED_TAB,
+        self::VIEW_IN_TREATMENT => self::VIEW_IN_TREATMENT_TAB,
+        self::VIEW_TO_BE_TREATED_SUPERVISOR => self::VIEW_TO_BE_TREATED_SUPERVISOR_TAB,
+    ];
+
     public const FOLDER_ENTITY_PROPERTIES = [
         self::ACTIVE_SCREENING,
         self::AGENCY_ID_REFERENCE,

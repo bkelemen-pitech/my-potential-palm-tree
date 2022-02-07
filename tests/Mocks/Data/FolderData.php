@@ -149,7 +149,7 @@ class FolderData
         [
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10300'],
+                'workflow_status' => [10300],
             ],
             [
                 'text_search_fields' => 'date_of_birth',
@@ -160,7 +160,7 @@ class FolderData
         [
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10300'],
+                'workflow_status' => [10300],
             ],
             [
                 'text_search_fields' => 'date_of_birth',
@@ -174,7 +174,7 @@ class FolderData
         [
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10300'],
+                'workflow_status' => [10300],
             ],
             [
                 'text_search_fields' => 'date_of_birth',
@@ -186,7 +186,7 @@ class FolderData
         [
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10300'],
+                'workflow_status' => [10300],
             ],
             [
                 'text_search_fields' => 'date_of_birth',
@@ -201,7 +201,7 @@ class FolderData
         [
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10300'],
+                'workflow_status' => [10300],
             ],
             [
                 'text_search_fields' => 'date_of_birth',
@@ -213,7 +213,7 @@ class FolderData
         [
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10300'],
+                'workflow_status' => [10300],
             ],
             [
                 'text_search_fields' => 'date_of_birth',
@@ -228,7 +228,7 @@ class FolderData
         [
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10310'],
+                'workflow_status' => [10310],
             ],
             [
                 'text_search_fields' => 'date_of_birth',
@@ -239,7 +239,7 @@ class FolderData
         [
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10310'],
+                'workflow_status' => [10310],
             ],
             [
                 'text_search_fields' => 'date_of_birth',
@@ -253,7 +253,7 @@ class FolderData
         [
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10310'],
+                'workflow_status' => [10310],
             ],
             [
                 'text_search_fields' => 'date_of_birth',
@@ -265,7 +265,7 @@ class FolderData
         [
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10310'],
+                'workflow_status' => [10310],
             ],
             [
                 'text_search_fields' => 'date_of_birth',
@@ -280,7 +280,7 @@ class FolderData
         [
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10310'],
+                'workflow_status' => [10310],
             ],
             [
                 'text_search_fields' => 'date_of_birth',
@@ -292,7 +292,7 @@ class FolderData
         [
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10310'],
+                'workflow_status' => [10310],
             ],
             [
                 'text_search_fields' => 'date_of_birth',
@@ -307,7 +307,7 @@ class FolderData
         [
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10301', '10302', '10303', '10304'],
+                'workflow_status' => [10301, 10302, 10303, 10304],
             ],
             [
                 'text_search_fields' => 'date_of_birth',
@@ -323,7 +323,7 @@ class FolderData
 
             [
                 'person_type_id' => ['1'],
-                'workflow_status' => ['10301', '10302', '10303', '10304'],
+                'workflow_status' => [10301, 10302, 10303, 10304],
             ],
             [
                 'text_search_fields' => 'date_of_birth',

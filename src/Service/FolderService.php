@@ -192,7 +192,7 @@ class FolderService
         array $queryParameters,
         ?int $userId,
         ?int $viewCriteria
-    ) {
+    ): array {
         $folders = $foldersResult[FolderEnum::FOLDERS];
 
         if (is_null($userId) || (is_null($viewCriteria) && empty($folders))) {
@@ -235,14 +235,11 @@ class FolderService
 
     private function getUserId(array $data, ?int $viewCriteria = null): ?int
     {
-        $loggedUserId = $this->authenticator->getLoggedUserData()[UserEnum::USER_ID];
-        $userIdFromFilters = $data[FolderEnum::FILTERS][FolderEnum::USER_ID][0] ?? null;
-
         if (is_null($viewCriteria) || $viewCriteria === FolderEnum::VIEW_CRITERIA_MY_FOLDERS) {
-            return (int) $loggedUserId;
+            return (int) $this->authenticator->getLoggedUserData()[UserEnum::USER_ID];
         }
 
-        return $userIdFromFilters;
+        return $data[FolderEnum::FILTERS][FolderEnum::USER_ID][0] ?? null;
     }
 
     private function handleQueryParameters(array $queryParameters, ?int $userId = null): array
@@ -255,7 +252,10 @@ class FolderService
             }
         }
 
-        $queryParameters[FolderEnum::FILTERS] = $this->updateFilters($queryParameters[FolderEnum::FILTERS] ?? [], $view);
+        $queryParameters[FolderEnum::FILTERS] = $this->updateFilters(
+            $queryParameters[FolderEnum::FILTERS] ?? [],
+            $view
+        );
 
         if (!is_null($userId)) {
             $queryParameters[AdministratorEnum::ADMINISTRATOR_ID_CAMEL_CASE] = $userId;
@@ -277,16 +277,7 @@ class FolderService
 
     private function addWorkflowStatusToFilters(array $filters, int $view): array
     {
-        switch ($view) {
-            case FolderEnum::VIEW_TO_BE_TREATED:
-                return array_merge($filters, FolderEnum::VIEW_TO_BE_TREATED_TAB);
-            case FolderEnum::VIEW_IN_TREATMENT:
-                return array_merge($filters, FolderEnum::VIEW_IN_TREATMENT_TAB);
-            case FolderEnum::VIEW_TO_BE_TREATED_SUPERVISOR:
-                return array_merge($filters, FolderEnum::VIEW_TO_BE_TREATED_SUPERVISOR_TAB);
-            default:
-                return $filters;
-        }
+        return array_merge($filters, FolderEnum::WORKFLOW_STATUS_BY_VIEW[$view]);
     }
 
     private function getReturnedViewCriteria(array $folders, ?int $viewCriteria): int
