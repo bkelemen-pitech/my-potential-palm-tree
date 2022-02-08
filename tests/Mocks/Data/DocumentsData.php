@@ -109,7 +109,10 @@ class DocumentsData
             'encryption' => true,
             'customerAnomaly' => null,
             'partnerVerificationStatus' => null,
-            'data' => 'a:2:{s:20:"agence_document_type";s:2:"11";s:16:"controle_couleur";i:0;}',
+            'data' => [
+                'agence_document_type' => 11,
+                'controle_couleur' => null,
+            ],
             'size' => 181333,
             'anomaly' => null,
             'partnerDocumentId' => 'passport.jpeg',
@@ -185,14 +188,15 @@ class DocumentsData
         return $documentDataLogsRequest;
     }
 
-    public static function createDocumentDataLogsModelResponse(): array
+    public static function createDocumentDataLogsModelResponse(?string $data = null): array
     {
         $documentDataLogsModelResponse = new DocumentDataLogsModelResponse();
         $documentDataLogsModelResponse
             ->setAdministratorId(1)
             ->setDocumentId(1)
             ->setCreatedAt(new DateTime('2020-02-02'))
-            ->setVerification2Status(2);
+            ->setVerification2Status(2)
+            ->setData($data);
 
         return [$documentDataLogsModelResponse];
     }

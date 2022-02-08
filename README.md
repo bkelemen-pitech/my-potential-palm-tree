@@ -5,7 +5,7 @@ Docker setup project for KYC back-office project.
 
 ## [Docs](./Docs)
 
-## Usage
+## Usage 
 
 For the initial install, you should use:
 - make install
@@ -18,7 +18,7 @@ For project permissions, you can run:
 For test, you can run:
 - make run-test
 
-Please check Makefile file for more available commands
+Please check Makefile file for more available commands.
 
 JWT
 ---
@@ -26,7 +26,7 @@ JWT
 In order to generate keys, you can run:
  - make generate-jwt-keys
 
-Your keys will land in config/jwt/private.pem and config/jwt/public.pem
+Your keys will land in config/jwt/private.pem and config/jwt/public.pem 
 
 Hosts
 -----
@@ -67,6 +67,6 @@ The container `app` contains xdebug enabled by default. Make sure to set the cor
 You can check and update (if needed) the xdebug.ini file by accessing the 'app' folder in the docker directory
 
 In order to have xdebug up and running, follow the above:
-1. the PHPStorm server needs to be configured and mapped from `Settings > Languages and Frameworks > PHP > Servers`.
+1. the PHPStorm server needs to be configured and mapped from `Settings > Languages and Frameworks > PHP > Servers`
 2. Add `bo_traitement.local` as `host`
 3. Map the folders properly: `/local/path/to/bo_traitement_agent/ > /var/www/html`
