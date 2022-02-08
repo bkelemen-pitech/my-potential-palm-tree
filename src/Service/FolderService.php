@@ -11,6 +11,7 @@ use App\Exception\ResourceNotFoundException;
 use App\Model\Request\BaseFolderFiltersModel;
 use App\Security\JWTTokenAuthenticator;
 use Kyc\InternalApiBundle\Enum\FolderEnum as InternalApiFolderEnum;
+use Kyc\InternalApiBundle\Enum\WorkflowStatusEnum;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as KycResourceNotFoundException;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalAPIInvalidDataException;
 use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilterModel;
@@ -49,35 +50,25 @@ class FolderService
         $this->authenticator = $authenticator;
     }
 
-    public function getFolders(array $data): array
+    public function getFoldersByView(array $data): array
     {
         $view = isset($data[FolderEnum::VIEW]) ? (int) $data[FolderEnum::VIEW] : null;
-        $viewCriteria = isset($data[FolderEnum::VIEW_CRITERIA]) ? (int) $data[FolderEnum::VIEW_CRITERIA] : null;
-        $userId = $view === FolderEnum::VIEW_IN_TREATMENT ? $this->getUserId($data, $viewCriteria) : null;
 
-        $data = $this->handleQueryParameters($data, $userId);
-        $data = $this->setExtraFilters($data);
-        $folderFiltersModel = $this->serializer->deserialize(
-            \json_encode($data),
-            BaseFolderFiltersModel::class,
-            'json'
-        );
-
-        $foldersResponse = $this->internalApiFolderService->getFolders($folderFiltersModel);
-        [$folders, $total] = $this->assignAdministratorsToFoldersIfNeeded(
-            $foldersResponse,
-            $data,
-            $userId,
-            $viewCriteria
-        );
-
-        return [
-            FolderEnum::FOLDERS => $folders,
-            FolderEnum::META => [
-                FolderEnum::TOTAL => $total,
-                FolderEnum::VIEW_CRITERIA => $this->getReturnedViewCriteria($folders, $viewCriteria),
-            ],
-        ];
+        switch ($view) {
+            case FolderEnum::VIEW_TO_BE_TREATED:
+            case FolderEnum::VIEW_TO_BE_TREATED_SUPERVISOR:
+                return $this->getToBeTreatedFolders($data);
+            case FolderEnum::VIEW_IN_TREATMENT:
+                return $this->getInTreatmentFolders($data);
+            default:
+                return [
+                    FolderEnum::FOLDERS => [],
+                    FolderEnum::META => [
+                        FolderEnum::TOTAL => 0,
+                        FolderEnum::VIEW_CRITERIA => 1,
+                    ],
+                ];
+        }
     }
 
     public function getDocuments(int $folderId): array
@@ -92,7 +83,7 @@ class FolderService
             $persons = $this->internalApiFolderService->getPersonsByFolderId($folderId, $filters);
             $folderById->setPersons($persons);
 
-            if ($folderById->getWorkflowStatus() == FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP) {
+            if ($folderById->getWorkflowStatus() == WorkflowStatusEnum::STATUT_WORKFLOW_TRAITER_PAR_WEBHELP) {
                 try {
                     $administratorId = $this->authenticator->getLoggedUserData()[UserEnum::USER_ID];
 
@@ -100,10 +91,10 @@ class FolderService
 
                     $this->updateWorkflowStatus(
                         $folderById->getId(),
-                        [InternalApiFolderEnum::WORKFLOW_STATUS_CAMEL_CASE => FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP],
+                        [InternalApiFolderEnum::WORKFLOW_STATUS_CAMEL_CASE => WorkflowStatusEnum::STATUT_WORKFLOW_PRISE_EN_CHARGE_PAR_WEBHELP],
                         $administratorId
                     );
-                    $folderById->setWorkflowStatus(FolderEnum::WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP);
+                    $folderById->setWorkflowStatus(WorkflowStatusEnum::STATUT_WORKFLOW_PRISE_EN_CHARGE_PAR_WEBHELP);
                 } catch (InternalAPIInvalidDataException $exception) {
                     $this->logger->error($exception->getMessage(), [$exception->getTrace()]);
                 }
@@ -166,7 +157,7 @@ class FolderService
     public function dissociateFolder(int $folderId)
     {
         $folder = $this->internalApiFolderService->getFolderById($folderId);
-        if ($folder->getWorkflowStatus() <= FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP) {
+        if ($folder->getWorkflowStatus() <= WorkflowStatusEnum::STATUT_WORKFLOW_TRAITER_PAR_WEBHELP) {
             throw new InvalidDataException('The folder cannot be dissociated.');
         }
 
@@ -174,7 +165,7 @@ class FolderService
             $this->updateWorkflowStatus(
                 $folderId,
                 [
-                    InternalApiFolderEnum::WORKFLOW_STATUS_CAMEL_CASE => FolderEnum::WORKFLOW_STATUS_PROCESSED_BY_WEBHELP,
+                    InternalApiFolderEnum::WORKFLOW_STATUS_CAMEL_CASE => WorkflowStatusEnum::STATUT_WORKFLOW_TRAITER_PAR_WEBHELP,
                     InternalApiFolderEnum::ALLOW_BACK_DB_CAMEL_CASE => true,
                 ]
             );
@@ -187,59 +178,69 @@ class FolderService
         $this->internalApiFolderService->dissociateFolder($dissociateFolderModel);
     }
 
-    private function assignAdministratorsToFoldersIfNeeded(
-        array $foldersResult,
-        array $queryParameters,
-        ?int $userId,
-        ?int $viewCriteria
-    ): array {
-        $folders = $foldersResult[FolderEnum::FOLDERS];
+    private function getToBeTreatedFolders(array $data): array
+    {
+        $viewCriteria = isset($data[FolderEnum::VIEW_CRITERIA]) ? (int) $data[FolderEnum::VIEW_CRITERIA] : null;
+
+        $data = $this->handleQueryParameters($data);
+        $data = $this->setExtraFilters($data);
+        $folderFiltersModel = $this->serializer->deserialize(
+            \json_encode($data),
+            BaseFolderFiltersModel::class,
+            'json'
+        );
+
+        $foldersResponse = $this->internalApiFolderService->getFolders($folderFiltersModel);
+        $folders = $this->addAdministratorNamesToFolders($foldersResponse);
+
+        return [
+            FolderEnum::FOLDERS => $folders,
+            FolderEnum::META => [
+                FolderEnum::TOTAL => $foldersResponse[FolderEnum::META][FolderEnum::TOTAL],
+                FolderEnum::VIEW_CRITERIA => $this->getReturnedViewCriteria($folders, $viewCriteria),
+            ],
+        ];
+    }
+
+    private function getInTreatmentFolders(array $data): array
+    {
+        $view = isset($data[FolderEnum::VIEW]) ? (int) $data[FolderEnum::VIEW] : null;
+        $viewCriteria = isset($data[FolderEnum::VIEW_CRITERIA]) ? (int) $data[FolderEnum::VIEW_CRITERIA] : null;
+        $userId = $view === FolderEnum::VIEW_IN_TREATMENT ? $this->getUserId($data, $viewCriteria) : null;
+
+        $data = $this->handleQueryParameters($data, $userId);
+        $data = $this->setExtraFilters($data);
+        $folderFiltersModel = $this->serializer->deserialize(
+            \json_encode($data),
+            BaseFolderFiltersModel::class,
+            'json'
+        );
+
+        $foldersResponse = $this->internalApiFolderService->getFolders($folderFiltersModel);
+        $folders = $foldersResponse[FolderEnum::FOLDERS];
 
         if (is_null($userId) || (is_null($viewCriteria) && empty($folders))) {
             if (is_null($viewCriteria) && empty($folders)) {
-                unset($queryParameters[AdministratorEnum::ADMINISTRATOR_ID_CAMEL_CASE]);
+                unset($data[AdministratorEnum::ADMINISTRATOR_ID_CAMEL_CASE]);
                 $folderFiltersModelWithoutAdministratorId = $this->serializer->deserialize(
-                    \json_encode($queryParameters),
+                    \json_encode($data),
                     BaseFolderFiltersModel::class,
                     'json'
                 );
-                $foldersResult = $this->internalApiFolderService->getFolders($folderFiltersModelWithoutAdministratorId);
+                $foldersResponse = $this->internalApiFolderService->getFolders(
+                    $folderFiltersModelWithoutAdministratorId
+                );
             }
-            $folderIds = [];
-
-            foreach ($foldersResult[FolderEnum::FOLDERS] as $folder) {
-                $folderIds[] = $folder->getFolderId();
-            }
-
-            $assignedAdministrators = $this->getAssignedAdministratorsByFolderIds($folderIds);
-            $folders = $this->assignAdministratorsToFolders(
-                $assignedAdministrators,
-                $foldersResult[FolderEnum::FOLDERS]
-            );
+            $folders = $this->addAdministratorNamesToFolders($foldersResponse);
         }
 
-        return [$folders, $foldersResult[FolderEnum::META][FolderEnum::TOTAL]];
-    }
-
-    private function setExtraFilters(array $data): array
-    {
-        if (isset($data[InternalApiFolderEnum::TEXT_SEARCH_FIELDS])) {
-            $textSearchFields = explode(',', $data[InternalApiFolderEnum::TEXT_SEARCH_FIELDS]);
-            if (in_array(InternalApiFolderEnum::PERSON_DATE_OF_BIRTH, $textSearchFields)) {
-                $data[InternalApiFolderEnum::FILTERS][InternalApiFolderEnum::PERSON_TYPE_ID][] = PersonEnum::MAIN_PHYSICAL_PERSON_TYPE_ID;
-            }
-        }
-
-        return $data;
-    }
-
-    private function getUserId(array $data, ?int $viewCriteria = null): ?int
-    {
-        if (is_null($viewCriteria) || $viewCriteria === FolderEnum::VIEW_CRITERIA_MY_FOLDERS) {
-            return (int) $this->authenticator->getLoggedUserData()[UserEnum::USER_ID];
-        }
-
-        return $data[FolderEnum::FILTERS][FolderEnum::USER_ID][0] ?? null;
+        return [
+            FolderEnum::FOLDERS => $folders,
+            FolderEnum::META => [
+                FolderEnum::TOTAL => $foldersResponse[FolderEnum::META][FolderEnum::TOTAL],
+                FolderEnum::VIEW_CRITERIA => $this->getReturnedViewCriteria($folders, $viewCriteria),
+            ],
+        ];
     }
 
     private function handleQueryParameters(array $queryParameters, ?int $userId = null): array
@@ -247,7 +248,7 @@ class FolderService
         $view = isset($queryParameters[FolderEnum::VIEW]) ? (int) $queryParameters[FolderEnum::VIEW] : null;
 
         foreach ($queryParameters as $parameterKey => $parameterValue) {
-            if (in_array($parameterKey, [FolderEnum::VIEW, FolderEnum::VIEW_CRITERIA])) {
+            if (in_array($parameterKey, FolderEnum::PARAMETERS_TO_UNSET)) {
                 unset($queryParameters[$parameterKey]);
             }
         }
@@ -264,10 +265,38 @@ class FolderService
         return $queryParameters;
     }
 
+    private function setExtraFilters(array $data): array
+    {
+        if (isset($data[InternalApiFolderEnum::TEXT_SEARCH_FIELDS])) {
+            $textSearchFields = explode(',', $data[InternalApiFolderEnum::TEXT_SEARCH_FIELDS]);
+            if (in_array(InternalApiFolderEnum::PERSON_DATE_OF_BIRTH, $textSearchFields)) {
+                $data[InternalApiFolderEnum::FILTERS][InternalApiFolderEnum::PERSON_TYPE_ID][] = PersonEnum::MAIN_PHYSICAL_PERSON_TYPE_ID;
+            }
+        }
+
+        return $data;
+    }
+
+    private function addAdministratorNamesToFolders(array $foldersResponse): array
+    {
+        $folderIds = [];
+
+        foreach ($foldersResponse[FolderEnum::FOLDERS] as $folder) {
+            $folderIds[] = $folder->getFolderId();
+        }
+
+        $assignedAdministrators = $this->getAssignedAdministratorsByFolderIds($folderIds);
+
+        return $this->assignAdministratorsToFolders(
+            $assignedAdministrators,
+            $foldersResponse[FolderEnum::FOLDERS]
+        );
+    }
+
     private function updateFilters(?array $filters, ?int $view): array
     {
         foreach ($filters as $filterKey => $filterValue) {
-            if ($filterKey === FolderEnum::USER_ID) {
+            if (in_array($filterKey, FolderEnum::FILTER_PARAMETERS_TO_UNSET)) {
                 unset($filters[$filterKey]);
             }
         }
@@ -282,11 +311,19 @@ class FolderService
 
     private function getReturnedViewCriteria(array $folders, ?int $viewCriteria): int
     {
-        return !is_null($viewCriteria)
-            ? $viewCriteria
-            : (empty($folders)
-                ? FolderEnum::VIEW_CRITERIA_ALL_FOLDERS
-                : FolderEnum::VIEW_CRITERIA_MY_FOLDERS
-            );
+        if (!is_null($viewCriteria)) {
+            return $viewCriteria;
+        }
+
+        return empty($folders) ? FolderEnum::VIEW_CRITERIA_ALL_FOLDERS : FolderEnum::VIEW_CRITERIA_MY_FOLDERS;
+    }
+
+    private function getUserId(array $data, ?int $viewCriteria = null): ?int
+    {
+        if (is_null($viewCriteria) || $viewCriteria === FolderEnum::VIEW_CRITERIA_MY_FOLDERS) {
+            return (int) $this->authenticator->getLoggedUserData()[UserEnum::USER_ID];
+        }
+
+        return $data[FolderEnum::FILTERS][FolderEnum::USER_ID][0] ?? null;
     }
 }

@@ -51,7 +51,7 @@ class FoldersController extends AbstractController
     public function getFolders(Request $request): JsonResponse
     {
         try {
-            $folders = $this->folderService->getFolders($request->query->all());
+            $folders = $this->folderService->getFoldersByView($request->query->all());
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
