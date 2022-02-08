@@ -41,7 +41,9 @@ class DocumentController extends AbstractController
     public function treatDocument(string $documentUid, Request $request, DocumentService $documentService)
     {
         try {
-            $documentService->treatDocument(array_merge($request->toArray(), [DocumentEnum::DOCUMENT_UID_CAMEL_CASE => $documentUid]));
+            $documentService->treatDocument(
+                array_merge($request->toArray(), [DocumentEnum::DOCUMENT_UID_CAMEL_CASE => $documentUid])
+            );
 
             return $this->json(null, Response::HTTP_NO_CONTENT);
         } catch (InternalApiResourceNotFound $exception) {

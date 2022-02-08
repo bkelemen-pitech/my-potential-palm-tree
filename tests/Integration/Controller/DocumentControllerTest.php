@@ -63,9 +63,9 @@ class DocumentControllerTest extends BaseApiTest
     public function testTreatDocumentOk()
     {
         $body = [
-          "verification2Status" => 8,
-          "agencyId" => 1,
-          "folderId" => 1
+          "verification2_status" => 8,
+          "agency_id" => 1,
+          "folder_id" => 1
         ];
 
         $this->internalApiDocumentService
@@ -87,13 +87,13 @@ class DocumentControllerTest extends BaseApiTest
     public function testTreatDocumentThrowException()
     {
         $body = [
-            "verification2Status" => '100',
-            "agencyId" => 1,
-            "folderId" => 1
+            "verification2_status" => '100',
+            "agency_id" => 1,
+            "folder_id" => 1
         ];
 
         $treatDocumentModel = DocumentsData::createTreatDocumentModel();
-        $treatDocumentModel->setVerification2Status($body['verification2Status']);
+        $treatDocumentModel->setVerification2Status($body['verification2_status']);
 
         $this->internalApiDocumentService
             ->treatDocument($treatDocumentModel)
