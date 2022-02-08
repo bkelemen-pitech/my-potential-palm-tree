@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Controller;
 
-use App\Exception\InvalidDataException;
 use App\Tests\BaseApiTest;
 use App\Tests\Enum\BaseEnum;
 use App\Tests\Mocks\Data\DocumentsData;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalApiInvalidDataException;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException;
-use Kyc\InternalApiBundle\Model\Request\Document\DeleteDocumentModel;
-use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class DocumentControllerTest extends BaseApiTest
 {
     public const PATH = 'api/v1/documents/';
-    public const TREAT_DOCUMENT_PATH = 'api/v1/documents/treat';
+    public const TREAT_DOCUMENT_PATH = 'api/v1/documents/617f896a61e39/treat';
     public const DOCUMENT_FIELDS_PATH = 'api/v1/documents/fields';
     public const DOCUMENT_DATA_LOGS_PATH = 'api/v1/documents/document-data-logs';
     public const DELETE_DOCUMENT_PATH = 'api/v1/documents/617f896a61e39';
@@ -66,8 +63,7 @@ class DocumentControllerTest extends BaseApiTest
     public function testTreatDocumentOk()
     {
         $body = [
-          "documentUid" => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA,
-          "statusVerification2" => 8,
+          "verification2Status" => 8,
           "agencyId" => 1,
           "folderId" => 1
         ];
@@ -76,7 +72,14 @@ class DocumentControllerTest extends BaseApiTest
             ->treatDocument(DocumentsData::createTreatDocumentModel())
             ->shouldBeCalledOnce();
 
-        $this->requestWithBody(BaseEnum::METHOD_POST, self::TREAT_DOCUMENT_PATH, $body);
+        $this->requestWithBody(
+            BaseEnum::METHOD_POST,
+            self::TREAT_DOCUMENT_PATH,
+            $body,
+            [],
+            true,
+            ['documentUid' => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA]
+        );
         $this->assertEquals(204, $this->getStatusCode());
         $this->assertEquals(null, $this->getResponseContent());
     }
@@ -84,20 +87,27 @@ class DocumentControllerTest extends BaseApiTest
     public function testTreatDocumentThrowException()
     {
         $body = [
-            "documentUid" => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA,
-            "statusVerification2" => "100",
+            "verification2Status" => '100',
             "agencyId" => 1,
             "folderId" => 1
         ];
 
         $treatDocumentModel = DocumentsData::createTreatDocumentModel();
-        $treatDocumentModel->setStatusVerification2($body['statusVerification2']);
+        $treatDocumentModel->setVerification2Status($body['verification2Status']);
 
         $this->internalApiDocumentService
             ->treatDocument($treatDocumentModel)
             ->willThrow(new InternalApiInvalidDataException());
 
-        $this->requestWithBody(BaseEnum::METHOD_POST, self::TREAT_DOCUMENT_PATH, $body);
+        $this->requestWithBody(
+            BaseEnum::METHOD_POST,
+            self::TREAT_DOCUMENT_PATH,
+            $body,
+            [],
+            true,
+            ['documentUid' => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA]
+        );
+
         $this->assertEquals(400, $this->getStatusCode());
     }
 

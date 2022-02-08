@@ -138,7 +138,7 @@ class DocumentsData
     {
         return (new TreatDocumentModel())
             ->setDocumentUid($data['documentUid'])
-            ->setStatusVerification2($data['statusVerification2'])
+            ->setVerification2Status($data['statusVerification2'])
             ->setAgencyId($data['agencyId'])
             ->setAdministratorId($data['administratorId'])
             ->setFolderId($data['folderId']);

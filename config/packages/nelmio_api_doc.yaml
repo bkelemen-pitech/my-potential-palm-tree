@@ -630,11 +630,13 @@ nelmio_api_doc:
               ref: '#/components/responses/NotFound'
             '500':
               ref: '#/components/responses/ServerError'
-      /api/v1/documents/treat:
+      /api/v1/documents/{documentUid}/treat:
         post:
-          summary: Update document status verification 2 (statut_verification2).
+          summary: Update document verification2_status (statut_verification2).
           tags:
             - Documents
+          parameters:
+            - ref: '#/components/parameters/documentUid'
           requestBody:
             required: true
             content:
@@ -642,16 +644,13 @@ nelmio_api_doc:
                 schema:
                   type: object
                   properties:
-                    documentUid:
-                      type: string
-                      example: 618145978da9e
-                    statusVerification2:
+                    verification2_status:
                       type: integer
                       example: 3
-                    agencyId:
+                    agency_id:
                       type: integer
                       example: 3
-                    folderId:
+                    folder_id:
                       type: integer
                       example: 3
           responses:

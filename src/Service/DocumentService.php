@@ -45,7 +45,6 @@ class DocumentService
 
     public function treatDocument(array $data): void
     {
-        try {
         $loggedUser = $this->authenticator->getLoggedUserData();
         $treatDocumentData = $this->serializer->deserialize(
             json_encode(array_merge($data, [AdministratorEnum::ADMINISTRATOR_ID => $loggedUser[UserEnum::USER_ID]])),
@@ -53,10 +52,6 @@ class DocumentService
             'json'
         );
         $this->internalApiDocumentService->treatDocument($treatDocumentData);
-
-        }catch (\Exception $exception) {
-            throw new InvalidDataException($exception->getMessage());
-        }
     }
 
     public function mergeDocuments(array $data): void

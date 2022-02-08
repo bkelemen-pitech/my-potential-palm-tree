@@ -16,6 +16,7 @@ Content-Type: application/json
 {
   "agency_id": 1,
   "verification2_status": 2
+  "folder_id": 2
 }
 
 204 NO CONTENT
@@ -29,4 +30,4 @@ Content-Type: application/json
   "status":"error"
 }
 ```
-> Obs: the agency_id and administrator_id is needed for the event DOC_TRAITE.
+> Obs: the agency_id, folder_id and administrator_id is needed for the event DOC_TRAITE.
