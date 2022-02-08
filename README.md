@@ -48,7 +48,8 @@ cp githooks/pre-push .git/hooks/pre-push
 chmod +x .git/hooks/pre-push
 ```
 
-In case you need to push changes without running the tests (for partial work), you can use `--no-verify` to skip the hook.
+In case you need to push changes without running the tests (for partial work), you can use `--no-verify` to skip the 
+hook.
 
 Docker Containers
 -----------------
