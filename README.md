@@ -1,4 +1,4 @@
-# KYC Back Office app
+# KYC Back Office app [![Run back end tests](https://github.com/mariuspop86/pipelines/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/mariuspop86/pipelines/actions/workflows/backend-tests.yml)
 ==================
 
 Docker setup project for KYC back-office project.
