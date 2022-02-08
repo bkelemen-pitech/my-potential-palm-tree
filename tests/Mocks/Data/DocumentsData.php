@@ -19,11 +19,11 @@ class DocumentsData
 {
     public const DEFAULT_DOCUMENT_UID_TEST_DATA = '617f896a61e39';
     public const TREAT_DOCUMENT_DATA = [
-        'documentUid' => self::DEFAULT_DOCUMENT_UID_TEST_DATA,
-        'statusVerification2' => 8,
-        'agencyId' => 1,
-        'folderId' => 1,
-        'administratorId' => 1
+        'document_uid' => self::DEFAULT_DOCUMENT_UID_TEST_DATA,
+        'verification2_status' => 8,
+        'agency_id' => 1,
+        'folder_id' => 1,
+        'administrator_id' => 1
     ];
     public const MERGE_DOCUMENTS_BODY = [
         "personUid" => "617ff03bb7c55",
@@ -137,11 +137,11 @@ class DocumentsData
     public static function createTreatDocumentModel(array $data = self::TREAT_DOCUMENT_DATA)
     {
         return (new TreatDocumentModel())
-            ->setDocumentUid($data['documentUid'])
-            ->setVerification2Status($data['statusVerification2'])
-            ->setAgencyId($data['agencyId'])
-            ->setAdministratorId($data['administratorId'])
-            ->setFolderId($data['folderId']);
+            ->setDocumentUid($data['document_uid'])
+            ->setVerification2Status($data['verification2_status'])
+            ->setAgencyId($data['agency_id'])
+            ->setAdministratorId($data['administrator_id'])
+            ->setFolderId($data['folder_id']);
     }
 
     public static function createMergeDocumentModel(array $data = self::MERGE_DOCUMENTS_BODY, int $folderId = 1): MergeDocumentModel
