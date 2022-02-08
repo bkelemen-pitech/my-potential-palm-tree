@@ -18,34 +18,34 @@ Content-Type: application/json
 200 OK
 {
   "id":1,
-  "partnerFolderId":"2",
+  "partner_folder_id":"2",
   "status":1,
-  "workflowStatus":10300,
+  "workflow_status":10300,
   "label":0,
   "subscription":10,
   "persons":[{
-    "personId":1,
-    "lastName":"jhon",
-    "firstName":"doe",
-    "dateOfBirth":"1970-01-01T00:00:00+00:00",
-    "personTypeId":1,
-    "personUid":"619b8418437b6",
-    "personInfo":[
+    "person_id":1,
+    "last_name":"jhon",
+    "first_name":"doe",
+    "date_of_birth":"1970-01-01T00:00:00+00:00",
+    "person_type_id":1,
+    "person_uid":"619b8418437b6",
+    "person_info":[
       {
-        "nameInfo":"nom",
-        "dataInfo":"john",
+        "name_info":"nom",
+        "data_info":"john",
         "source":"IMPORT"
       },
       {
-        "nameInfo":"email",
-        "dataInfo":"john.doe@test.com",
+        "name_info":"email",
+        "data_info":"john.doe@test.com",
         "source":"IMPORT"
       },
       ...
     ],
-    "folderId":null
+    "folder_id": 123
   }],
-  "agencyId":1088
+  "agency_id":1088
 }
 
 404 NOT FOUND
