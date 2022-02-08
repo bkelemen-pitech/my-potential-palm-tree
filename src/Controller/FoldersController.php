@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Enum\AdministratorEnum;
+use App\Enum\BaseEnum;
 use App\Enum\BepremsEnum;
 use App\Enum\FolderEnum;
 use App\Enum\PersonEnum;
 use App\Exception\ApiException;
+use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
 use App\Service\FolderService;
 use App\Service\PersonService;
@@ -161,7 +163,11 @@ class FoldersController extends AbstractController
     ): JsonResponse {
         try {
             $administratorId = (int) $request->query->get(AdministratorEnum::ADMINISTRATOR_ID);
-            $response = $workflowStatusHistoryService->getWorkflowStatusHistory($id, $administratorId ?: null);
+            $filters = $request->query->get(BaseEnum::FILTERS);
+            if (!empty($filters) && !is_array($filters)) {
+                throw new InvalidDataException("Filters must be an array");
+            }
+            $response = $workflowStatusHistoryService->getWorkflowStatusHistory($id, $administratorId ?: null, $filters);
 
             return $this->json([FolderEnum::WORKFLOW_STATUS_HISTORY => $response], Response::HTTP_OK);
         } catch (\Exception $exception) {
