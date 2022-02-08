@@ -180,8 +180,6 @@ class FolderService
 
     private function getToBeTreatedFolders(array $data): array
     {
-        $viewCriteria = isset($data[FolderEnum::VIEW_CRITERIA]) ? (int) $data[FolderEnum::VIEW_CRITERIA] : null;
-
         $data = $this->handleQueryParameters($data);
         $data = $this->setExtraFilters($data);
         $folderFiltersModel = $this->serializer->deserialize(
@@ -197,16 +195,15 @@ class FolderService
             FolderEnum::FOLDERS => $folders,
             FolderEnum::META => [
                 FolderEnum::TOTAL => $foldersResponse[FolderEnum::META][FolderEnum::TOTAL],
-                FolderEnum::VIEW_CRITERIA => $this->getReturnedViewCriteria($folders, $viewCriteria),
+                FolderEnum::VIEW_CRITERIA => FolderEnum::VIEW_CRITERIA_ALL_FOLDERS,
             ],
         ];
     }
 
     private function getInTreatmentFolders(array $data): array
     {
-        $view = isset($data[FolderEnum::VIEW]) ? (int) $data[FolderEnum::VIEW] : null;
         $viewCriteria = isset($data[FolderEnum::VIEW_CRITERIA]) ? (int) $data[FolderEnum::VIEW_CRITERIA] : null;
-        $userId = $view === FolderEnum::VIEW_IN_TREATMENT ? $this->getUserId($data, $viewCriteria) : null;
+        $userId = $this->getUserId($data, $viewCriteria);
 
         $data = $this->handleQueryParameters($data, $userId);
         $data = $this->setExtraFilters($data);

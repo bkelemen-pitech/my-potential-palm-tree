@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Mocks\Data;
 
+use App\Tests\Enum\AdministratorEnum;
 use Kyc\InternalApiBundle\Model\InternalApi\Folder\FolderById;
 use Kyc\InternalApiBundle\Model\InternalApi\Folder\GetFolderByIdResponse;
+use Kyc\InternalApiBundle\Model\Response\Folder\AssignedAdministratorModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Folder\FolderByIdModelResponse;
+use Kyc\InternalApiBundle\Model\Response\Folder\FolderModelResponse;
 
 class FolderData
 {
@@ -28,305 +31,46 @@ class FolderData
         'login' => 'Test login',
     ];
 
-    public const GET_FOLDERS_PARAMETERS_WITH_1_API_CALL = [
+    public const GET_FOLDERS_WITH_VIEW_2 = [
         [
             [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 2,
-            ],
-            2,
-        ],
-        [
-            [
-                'text_search_fields' => 'date_of_birth',
                 'view' => 2,
                 'filters' => [
-                    'user_id' => '1',
+                    'user_id' => [
+                        1,
+                    ],
                 ],
             ],
             2,
         ],
         [
             [
-                'text_search_fields' => 'date_of_birth',
                 'view' => 2,
                 'view_criteria' => 1,
                 'filters' => [
-                    'user_id' => '1',
+                    'user_id' => [
+                        1,
+                    ],
                 ],
             ],
             1,
         ],
         [
             [
-                'text_search_fields' => 'date_of_birth',
                 'view' => 2,
                 'view_criteria' => 2,
-            ],
-            2,
-        ],
-        [
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 2,
-                'view_criteria' => 2,
-                'filters' => [
-                    'user_id' => '1',
-                ],
             ],
             2,
         ],
     ];
 
-    public const GET_FOLDERS_PARAMETERS_WITH_2_API_CALLS = [
-        [
-            [
-                'person_type_id' => ['1'],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-            ],
-            2,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'filters' => [
-                    'user_id' => '1',
-                ],
-            ],
-            2,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view_criteria' => 1,
-            ],
-            1,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view_criteria' => 1,
-                'filters' => [
-                    'user_id' => '1',
-                ],
-            ],
-            1,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view_criteria' => 2,
-            ],
-            2,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view_criteria' => 2,
-                'filters' => [
-                    'user_id' => '1',
-                ],
-            ],
-            2,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-                'workflow_status' => [10300],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 1,
-            ],
-            2,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-                'workflow_status' => [10300],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 1,
-                'filters' => [
-                    'user_id' => '1',
-                ],
-            ],
-            2,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-                'workflow_status' => [10300],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 1,
-                'view_criteria' => 1,
-            ],
-            1,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-                'workflow_status' => [10300],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 1,
-                'view_criteria' => 1,
-                'filters' => [
-                    'user_id' => '1',
-                ],
-            ],
-            1,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-                'workflow_status' => [10300],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 1,
-                'view_criteria' => 2,
-            ],
-            2,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-                'workflow_status' => [10300],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 1,
-                'view_criteria' => 2,
-                'filters' => [
-                    'user_id' => '1',
-                ],
-            ],
-            2,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-                'workflow_status' => [10310],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 3,
-            ],
-            2,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-                'workflow_status' => [10310],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 3,
-                'filters' => [
-                    'user_id' => '1',
-                ],
-            ],
-            2,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-                'workflow_status' => [10310],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 3,
-                'view_criteria' => 1,
-            ],
-            1,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-                'workflow_status' => [10310],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 3,
-                'view_criteria' => 1,
-                'filters' => [
-                    'user_id' => '1',
-                ],
-            ],
-            1,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-                'workflow_status' => [10310],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 3,
-                'view_criteria' => 2,
-            ],
-            2,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-                'workflow_status' => [10310],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 3,
-                'view_criteria' => 2,
-                'filters' => [
-                    'user_id' => '1',
-                ],
-            ],
-            2,
-        ],
-        [
-            [
-                'person_type_id' => ['1'],
-                'workflow_status' => [10301, 10302, 10303, 10304],
-            ],
-            [
-                'text_search_fields' => 'date_of_birth',
-                'view' => 2,
-                'view_criteria' => 1,
-            ],
-            1,
-        ],
-    ];
-
-    public const GET_FOLDERS_PARAMETERS_WITH_3_API_CALLS = [
+    public const GET_FOLDERS_WITH_VIEW_2_NO_VIEW_CRITERIA = [
         [
 
             [
-                'person_type_id' => ['1'],
                 'workflow_status' => [10301, 10302, 10303, 10304],
             ],
             [
-                'text_search_fields' => 'date_of_birth',
                 'view' => 2,
                 'filters' =>
                     [
@@ -400,5 +144,69 @@ class FolderData
     public static function getLoginByAdministratorId(?int $administratorId): ?string
     {
         return is_null($administratorId) ? null : 'Admin' . $administratorId;
+    }
+
+    public static function getFolderModelResponse1(): FolderModelResponse
+    {
+        return (new FolderModelResponse())
+            ->setFolderId(1)
+            ->setFolder('1a')
+            ->setFirstName('First Name 1')
+            ->setLastName('Last Name 1')
+            ->setDateOfBirth('2020-02-02T00:00:00+00:00')
+            ->setSubscription(10);
+    }
+
+    public static function getFolderModelResponse1Assigned(): FolderModelResponse
+    {
+        return (new FolderModelResponse())
+            ->setFolderId(1)
+            ->setFolder('1a')
+            ->setFirstName('First Name 1')
+            ->setLastName('Last Name 1')
+            ->setDateOfBirth('2020-02-02T00:00:00+00:00')
+            ->setSubscription(10)
+            ->setAssignedTo('Admin1');
+    }
+
+    public static function getFolderModelResponse2(): FolderModelResponse
+    {
+        return (new FolderModelResponse())
+            ->setFolderId(2)
+            ->setFolder('2a')
+            ->setFirstName('First Name 2')
+            ->setLastName('Last Name 2')
+            ->setDateOfBirth('2020-02-02T00:00:00+00:00')
+            ->setSubscription(20);
+    }
+
+    public static function getFolderModelResponse2Assigned(): FolderModelResponse
+    {
+        return (new FolderModelResponse())
+            ->setFolderId(2)
+            ->setFolder('2a')
+            ->setFirstName('First Name 2')
+            ->setLastName('Last Name 2')
+            ->setDateOfBirth('2020-02-02T00:00:00+00:00')
+            ->setSubscription(20)
+            ->setAssignedTo('Admin2');
+    }
+
+    public static function getAssignedAdministratorModelResponse1(): AssignedAdministratorModelResponse
+    {
+        return (new AssignedAdministratorModelResponse())
+            ->setAdministratorId(1)
+            ->setStatus(AdministratorEnum::STATUS_IN_PROGRESS)
+            ->setUsername('Admin1')
+            ->setFolderId(1);
+    }
+
+    public static function getAssignedAdministratorModelResponse2(): AssignedAdministratorModelResponse
+    {
+        return (new AssignedAdministratorModelResponse())
+            ->setAdministratorId(2)
+            ->setStatus(AdministratorEnum::STATUS_IN_PROGRESS)
+            ->setUsername('Admin2')
+            ->setFolderId(2);
     }
 }
