@@ -21,17 +21,20 @@ Content-Type: application/json
     { 
       "document_type_id": 1,
       "sub_document_type_id": 1
-      "treatment_instruction": "Consigne de traitement carte Nationale d’Identité"
+      "treatment_instruction": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "sub_treatment_instruction": "Nulla vitae tortor non ligula faucibus pharetra vel at velit."
     },
     { 
       "document_type_id": 1,
-      "sub_document_type_id": 2
-      "treatment_instruction": ""
+      "sub_document_type_id": 2,
+      "treatment_instruction": null,
+      "sub_treatment_instruction": "Integer risus lacus, porttitor pharetra nunc at, sagittis porta dolor. "
     },
     { 
       "document_type_id": 2,
-      "sub_document_type_id": null
-      "treatment_instruction": ""
+      "sub_document_type_id": null,
+      "treatment_instruction": "Cras blandit ex vel est auctor aliquet at vitae quam.",
+      "sub_treatment_instruction": null
     },
     ...
    ]}
@@ -41,7 +44,7 @@ Content-Type: application/json
 {
   "statusCode":400,
   "body":null,
-  "error":"Invalid  person type id",
+  "error":"Invalid person type id",
   "status":"error"
 }
 ```

@@ -7,16 +7,16 @@ status property in the database. To update this field the application calls
 
 ---
 __Method__: POST  
-__URL__: `/api/v1/folders/{folderId}/update-workflow-status`  
+__URL__: `/api/v1/folders/{folderId}/update_workflow_status`  
 Request example:
 
 ```http request
-POST {HOST_NAME}/api/v1/folders/1/update-workflow-status
+POST {HOST_NAME}/api/v1/folders/1/update_workflow_status
 Accept: application/json 
 Content-Type: application/json 
 
 {
-  "workflowStatus": 10301
+  "workflow_status": 10301
 }
 
 204 NO CONTENT
@@ -45,7 +45,7 @@ This API will retrieve the workflow status history. Internally it will call
 
 ---
 __Method__: GET  
-__URL__: `/api/v1/folders/{folderId}/workflow-status-history`  
+__URL__: `/api/v1/folders/{folderId}/workflow_status_history`  
 __Query params__:
 - __administrator_id__ (int) - the administrator id, _optional_
 - __workflow_status__ (array) - an array of workflow statuses to filter. If a range is needed set the `start` and
@@ -56,7 +56,7 @@ __Query params__:
 Request example:
 
 ```http request
-GET {HOST_NAME}/api/v1/folders/1/workflow-status-history?administratorId=1&workflow_status[start]=10300&workflow_status[end]=10399
+GET {HOST_NAME}/api/v1/folders/1/workflow_status_history?administrator_id=1&workflow_status[start]=10300&workflow_status[end]=10399
 Accept: application/json 
 Content-Type: application/json
 
