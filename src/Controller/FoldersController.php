@@ -46,12 +46,12 @@ class FoldersController extends AbstractController
     }
 
     /**
-     * @Route("/", name="get_folders", methods="GET")
+     * @Route(name="get_folders", methods="GET")
      */
     public function getFolders(Request $request): JsonResponse
     {
         try {
-            $folders = $this->folderService->getFolders($request->query->all());
+            $folders = $this->folderService->getFoldersByView($request->query->all());
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
@@ -107,7 +107,9 @@ class FoldersController extends AbstractController
     public function assignDocument(int $folderId, Request $request): JsonResponse
     {
         try {
-            $this->personService->assignDocument(array_merge($request->attributes->get('_route_params'), [FolderEnum::FOLDER_ID => $folderId]));
+            $this->personService->assignDocument(
+                array_merge($request->attributes->get('_route_params'), [FolderEnum::FOLDER_ID => $folderId])
+            );
         } catch (ResourceNotFoundException $exception) {
             throw new NotFoundHttpException($exception->getMessage());
         } catch (\Exception $exception) {
@@ -123,7 +125,9 @@ class FoldersController extends AbstractController
     public function mergeDocuments(int $folderId, Request $request): JsonResponse
     {
         try {
-            $this->documentService->mergeDocuments(array_merge([FolderEnum::FOLDER_ID => $folderId], $request->toArray()));
+            $this->documentService->mergeDocuments(
+                array_merge([FolderEnum::FOLDER_ID => $folderId], $request->toArray())
+            );
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
@@ -150,8 +154,11 @@ class FoldersController extends AbstractController
     /**
      * @Route("/{id}/workflow-status-history", name="get_workflow_status_history", methods="GET")
      */
-    public function getWorkflowStatusHistory(int $id, Request $request, WorkflowStatusHistoryService $workflowStatusHistoryService): JsonResponse
-    {
+    public function getWorkflowStatusHistory(
+        int $id,
+        Request $request,
+        WorkflowStatusHistoryService $workflowStatusHistoryService
+    ): JsonResponse {
         try {
             $administratorId = (int) $request->query->get(AdministratorEnum::ADMINISTRATOR_ID);
             $response = $workflowStatusHistoryService->getWorkflowStatusHistory($id, $administratorId ?: null);
