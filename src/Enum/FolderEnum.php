@@ -11,7 +11,7 @@ class FolderEnum extends BaseEnum
     public const DEFAULT_ORDER_BY = 'modification';
     public const DEFAULT_ORDER = 'DESC';
 
-    public const WORKFLOW_STATUS_HISTORY = 'workflowStatusHistory';
+    public const WORKFLOW_STATUS_HISTORY = 'workflow_status_history';
 
     // API PARAMETERS
     public const FILTERS = 'filters';

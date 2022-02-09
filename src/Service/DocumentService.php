@@ -69,7 +69,7 @@ class DocumentService
     public function getDocumentFields(array $data): array
     {
         try {
-            $documentFieldsModelRequest = $this->serializer->deserialize(json_encode($data), DocumentFieldsModel::class, 'json');
+            $documentFieldsModelRequest = $this->serializer->deserialize(json_encode($this->transformNumericValuesToInt($data)), DocumentFieldsModel::class, 'json');
 
             return $this->internalApiDocumentService->getDocumentFields($documentFieldsModelRequest);
         } catch (\Exception $exception) {

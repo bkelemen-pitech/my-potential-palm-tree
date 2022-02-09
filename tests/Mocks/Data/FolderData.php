@@ -53,38 +53,38 @@ class FolderData
     {
         return [
             'id' => 1,
-            'partnerFolderId' => '2',
+            'partner_folder_id' => '2',
             'status' => 3,
-            'workflowStatus' => 10400,
+            'workflow_status' => 10400,
             'label' => 2,
             'subscription' => 20,
             'persons' => [
                 [
-                    'lastName' => 'Smith',
-                    'firstName' => 'John',
-                    'dateOfBirth' => '2020-01-12T00:00:00+00:00',
-                    'personTypeId' => 1,
-                    'personUid' => '1',
-                    'personId' => 30,
-                    'personInfo' => [
+                    'last_name' => 'Smith',
+                    'first_name' => 'John',
+                    'date_of_birth' => '2020-01-12T00:00:00+00:00',
+                    'person_type_id' => 1,
+                    'person_uid' => '1',
+                    'person_id' => 30,
+                    'person_info' => [
                         [
-                            'nameInfo' => 'dossier',
-                            'dataInfo' => '39',
+                            'name_info' => 'dossier',
+                            'data_info' => '39',
                             'source' => null,
                         ],
                     ],
                 ],
                 [
-                    'lastName' => 'Smithy',
-                    'firstName' => 'Johny',
-                    'dateOfBirth' => '2020-03-12T00:00:00+00:00',
-                    'personTypeId' => 1,
-                    'personUid' => '1',
-                    'personId' => 31,
-                    'personInfo' => [],
+                    'last_name' => 'Smithy',
+                    'first_name' => 'Johny',
+                    'date_of_birth' => '2020-03-12T00:00:00+00:00',
+                    'person_type_id' => 1,
+                    'person_uid' => '1',
+                    'person_id' => 31,
+                    'person_info' => [],
                 ],
             ],
-            'agencyId' => 7,
+            'agency_id' => 7,
             'login' => 'Test login',
         ];
     }

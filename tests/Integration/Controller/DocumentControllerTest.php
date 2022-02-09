@@ -67,7 +67,7 @@ class DocumentControllerTest extends BaseApiTest
     {
         $body = [
           "document_uid" => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA,
-          "status_verification2" => 8
+          "verification2_status" => 8
         ];
 
         $this->internalApiDocumentService
@@ -83,13 +83,13 @@ class DocumentControllerTest extends BaseApiTest
     {
         $body = [
             "document_uid" => 'test1234',
-            "status_verification2" => 100
+            "verification2_status" => 100
         ];
 
         $treatDocumentModel = new TreatDocumentModel();
         $treatDocumentModel
             ->setDocumentUid($body['document_uid'])
-            ->setStatusVerification2($body['status_verification2']);
+            ->setVerification2Status($body['verification2_status']);
 
         $this->internalApiDocumentService->treatDocument($treatDocumentModel)->willThrow(new InvalidDataException());
         $this->requestWithBody(BaseEnum::METHOD_POST, self::TREAT_DOCUMENT_PATH, $body);
@@ -119,14 +119,14 @@ class DocumentControllerTest extends BaseApiTest
         $this->assertEquals(
             [
                 [
-                    'dbFieldName' => 'nom',
+                    'db_field_name' => 'nom',
                     'label' => 'Nom',
                     'order' => 1,
                     'format' => 1,
                     'mandatory' => 1,
-                    'helperMethod' => 'test',
-                    'ocrField' => 1,
-                    'validatorMethod' => 'validator',
+                    'helper_method' => 'test',
+                    'ocr_field' => 1,
+                    'validator_method' => 'validator',
                 ]
             ],
             $this->getResponseContent()
@@ -177,12 +177,12 @@ class DocumentControllerTest extends BaseApiTest
         $this->assertEquals(200, $this->getStatusCode());
 
         $this->assertEquals(
-            ['documentDataLogs' => [
+            ['document_data_logs' => [
                 [
-                    'documentId' => 1,
-                    'verification2Status' => 2,
-                    'administratorId' => 1,
-                    'createdAt' => '2020-02-02T00:00:00+00:00',
+                    'document_id' => 1,
+                    'verification2_status' => 2,
+                    'administrator_id' => 1,
+                    'created_at' => '2020-02-02T00:00:00+00:00',
                     'data' => $responseValue,
                 ]
             ]],
