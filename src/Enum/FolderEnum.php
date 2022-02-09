@@ -24,12 +24,12 @@ class FolderEnum extends BaseEnum
     public const VIEW = 'view';
     public const VIEW_CRITERIA = 'view_criteria';
 
-    public const PARAMETERS_TO_UNSET = [
+    public const GET_FOLDERS_PARAMETERS_TO_UNSET = [
         self::VIEW,
         self::VIEW_CRITERIA,
     ];
 
-    public const FILTER_PARAMETERS_TO_UNSET = [
+    public const GET_FOLDERS_FILTER_PARAMETERS_TO_UNSET = [
         self::USER_ID,
     ];
 

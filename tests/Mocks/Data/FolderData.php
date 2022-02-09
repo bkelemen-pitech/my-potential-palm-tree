@@ -64,22 +64,6 @@ class FolderData
         ],
     ];
 
-    public const GET_FOLDERS_WITH_VIEW_2_NO_VIEW_CRITERIA = [
-        [
-
-            [
-                'workflow_status' => [10301, 10302, 10303, 10304],
-            ],
-            [
-                'view' => 2,
-                'filters' =>
-                    [
-                        'user_id' => '1',
-                    ],
-            ],
-        ],
-    ];
-
     public static function createFolderByIdModelResponse(array $data = self::FOLDER_BY_ID_DATA): FolderByIdModelResponse
     {
         return (new FolderByIdModelResponse())
@@ -91,14 +75,6 @@ class FolderData
             ->setSubscription($data['subscription'] ?? null)
             ->setAgencyId($data['agencyId'] ?? null)
             ->setLogin($data['login'] ?? null);
-    }
-
-    public static function createInternalApiFolderByIdResponse(FolderById $resource): GetFolderByIdResponse
-    {
-        return (new GetFolderByIdResponse())
-            ->setCode('OK')
-            ->setMsg('Success')
-            ->setResource($resource);
     }
 
     public static function getFolderByIdExpectedData(): array

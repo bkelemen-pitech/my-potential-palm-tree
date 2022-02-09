@@ -245,7 +245,7 @@ class FolderService
         $view = isset($queryParameters[FolderEnum::VIEW]) ? (int) $queryParameters[FolderEnum::VIEW] : null;
 
         foreach ($queryParameters as $parameterKey => $parameterValue) {
-            if (in_array($parameterKey, FolderEnum::PARAMETERS_TO_UNSET)) {
+            if (in_array($parameterKey, FolderEnum::GET_FOLDERS_PARAMETERS_TO_UNSET)) {
                 unset($queryParameters[$parameterKey]);
             }
         }
@@ -293,7 +293,7 @@ class FolderService
     private function updateFilters(?array $filters, ?int $view): array
     {
         foreach ($filters as $filterKey => $filterValue) {
-            if (in_array($filterKey, FolderEnum::FILTER_PARAMETERS_TO_UNSET)) {
+            if (in_array($filterKey, FolderEnum::GET_FOLDERS_FILTER_PARAMETERS_TO_UNSET)) {
                 unset($filters[$filterKey]);
             }
         }

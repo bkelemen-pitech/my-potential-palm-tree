@@ -10,7 +10,6 @@ use App\Model\Request\BaseFolderFiltersModel;
 use App\Service\DocumentService;
 use App\Service\PersonService;
 use App\Tests\BaseApiTest;
-use App\Tests\Enum\AdministratorEnum;
 use App\Tests\Enum\BaseEnum;
 use App\Tests\Enum\FolderEnum;
 use App\Tests\Enum\PersonEnum;
@@ -21,15 +20,12 @@ use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilte
 use Kyc\InternalApiBundle\Model\Request\Folder\DissociateFolderModel;
 use Kyc\InternalApiBundle\Model\Request\Folder\UpdateStatusWorkflowModel;
 use Kyc\InternalApiBundle\Model\Request\WorkflowStatusHistory\WorkflowStatusHistoryModel;
-use Kyc\InternalApiBundle\Model\Response\Folder\AssignedAdministratorModelResponse;
-use Kyc\InternalApiBundle\Model\Response\Folder\FolderModelResponse;
 use Kyc\InternalApiBundle\Model\Response\WorkflowStatusHistory\WorkflowStatusHistoryModelResponse;
 use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalApiInvalidDataException;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as InternalApiResourceNotFoundException;
 use Kyc\InternalApiBundle\Service\WorkflowStatusHistoryService;
-use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class FoldersControllerTest extends BaseApiTest
@@ -128,13 +124,13 @@ class FoldersControllerTest extends BaseApiTest
         );
     }
 
-    public function getFoldersParametersWithView2(): array
+    public function getFoldersParametersWithView2DataProvider(): array
     {
         return FolderData::GET_FOLDERS_WITH_VIEW_2;
     }
 
     /**
-     * @dataProvider getFoldersParametersWithView2
+     * @dataProvider getFoldersParametersWithView2DataProvider
      */
     public function testGetFoldersParametersWithView2AndUserId(array $queryParameters, int $viewCriteriaResponse)
     {
