@@ -141,11 +141,6 @@ class FolderData
         ];
     }
 
-    public static function getLoginByAdministratorId(?int $administratorId): ?string
-    {
-        return is_null($administratorId) ? null : 'Admin' . $administratorId;
-    }
-
     public static function getFolderModelResponse1(): FolderModelResponse
     {
         return (new FolderModelResponse())
