@@ -127,26 +127,26 @@ call `internalAPI/documents/documentdatalogs` API.
 
 ---
 __Method__: GET  
-__URL__: `/api/v1/documents/document-data-logs`  
+__URL__: `/api/v1/documents/document_data_logs`  
 __Query params__:
-- __document-ids__ (array) - the document Ids, at least one id must be provided
-- __administrator-id__ (int) - the administrator id, _optional_  
+- __document_ids__ (array) - the document ids, at least one id must be provided
+- __administrator_id__ (int) - the administrator id, _optional_  
 
 Request example:
 
 ```http request
-GET {HOST_NAME}/api/v1/documents/document-data-logs?document-ids[]=1&document-ids[]=2&administrator-id=1
+GET {HOST_NAME}/api/v1/documents/document_data_logs?document_ids[]=1&document_ids[]=2&administrator_id=1
 Accept: application/json 
 Content-Type: application/json 
 
 200 OK
 {
-  "documentDataLogs": [
+  "document_data_logs": [
     { 
-      "createdAt" : "2021-11-01T06:30:02+00:00",
-      "documentId" : 2, 
-      "administratorId" : 1,
-      "verification2status" : 1,
+      "created_at" : "2021-11-01T06:30:02+00:00",
+      "document_id" : 2, 
+      "administrator_id" : 1,
+      "verification2_status" : 1,
       "data": {
         "agence_document_type": "1_T00022",
         "date_delivrance": "01/02/2009",

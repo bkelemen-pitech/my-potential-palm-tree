@@ -20,14 +20,14 @@ Content-Type: application/json
 {
   "fields":{[
     { 
-      "dbFieldName": "nom",
+      "db_field_name": "nom",
       "label": "Nom",
       "mandatory": 1,
       "order": 1,
       "format": 1,
       "ocr_field": 1,
-      "helperMethod": "getCommonNom",
-      "validatorMethod": "validateFormData",
+      "helper_method": "getCommonNom",
+      "validator_method": "validateFormData",
     },
     ...
    ]}
@@ -46,11 +46,11 @@ The response from internalAPI needs to be mapped according to this table
 
 | InternalAPI  | Bundle | Obs |
 | ------------- | ------------- | ------------- |
-| nom_info  | dbFieldName  |  |
+| nom_info  | db_field_name  | Database field name |
 | libelle  | label  |  |
 | obligatoir  | mandatory  | Possible values: 1 for mandatory, 2 for optional |
 | ordre  | order  | The order in which the fields need to be displayed |
-| format  | format  |  |
+| format  | format  | Input type |
 | champs_ocr  | ocr_field  |  |
-| valeur_helper  | helperMethod  |  |
-| validateur  | validatorMethod  |  |
+| valeur_helper  | helper_method  |  |
+| validateur  | validator_method  |  |
