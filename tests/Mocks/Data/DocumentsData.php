@@ -77,8 +77,8 @@ class DocumentsData
             ->setCreation(new DateTime('2021-11-01T06:30:02+00:00'))
             ->setDocumentTypeId(51)
             ->setSize(181333)
-            ->setStatusVerification(0)
-            ->setStatusVerification2(0)
+            ->setVerificationStatus(0)
+            ->setVerification2Status(0)
             ->setAnomaly(null)
             ->setUrl("_TEMP_COMPANYID_1129_617f896a61e39.jpg")
             ->setSignature("6bba0ea97392769fffb14df19f7c850ba4c0bfdf9d214b490e001d7bbdfe335f")
@@ -103,29 +103,29 @@ class DocumentsData
     {
         $expected = [
             'name' => 'Kbis (CompanyID)',
-            'documentId' => 36090,
-            'documentUid' => '617f896a61e39',
-            'masterDocumentId' => 0,
-            'statusVerification' => 0,
-            'statusVerification2' => 0,
+            'document_id' => 36090,
+            'document_uid' => '617f896a61e39',
+            'master_document_id' => 0,
+            'verification_status' => 0,
+            'verification2_status' => 0,
             'status' => 1,
             'creation' => '2021-11-01T06:30:02+00:00',
-            'personDocumentId' => null,
-            'documentTypeId' => 51,
+            'person_document_id' => null,
+            'document_type_id' => 51,
             'encryption' => true,
-            'customerAnomaly' => null,
-            'partnerVerificationStatus' => null,
+            'customer_anomaly' => null,
+            'partner_verification_status' => null,
             'data' => [
                 'agence_document_type' => 11,
                 'controle_couleur' => null,
             ],
             'size' => 181333,
             'anomaly' => null,
-            'partnerDocumentId' => 'passport.jpeg',
+            'partner_document_id' => 'passport.jpeg',
             'url' => '_TEMP_COMPANYID_1129_617f896a61e39.jpg',
             'signature' => '6bba0ea97392769fffb14df19f7c850ba4c0bfdf9d214b490e001d7bbdfe335f',
-            'signatureInfos' => null,
-            'orderDocument' => 21,
+            'signature_infos' => null,
+            'order_document' => 21,
             'type' => 'Kbis',
             'mandatory' => null,
         ];
