@@ -24,9 +24,9 @@ Content-Type: application/json
     "type": 51,
     "status": "pending",
     "uid": "5c3479c5eec12",
-    "documentId": 12345,
-    "documenStatus": 1,
-    "personId": 123
+    "document_id": 12345,
+    "documen_status": 1,
+    "person_id": 123
   },
   ...
 ]

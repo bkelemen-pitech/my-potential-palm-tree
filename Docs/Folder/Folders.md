@@ -19,7 +19,7 @@ __Query params__:
 
 Request example:
 ```http request
-GET {HOST_NAME}/api/v1/folders?page=0&limit=10&filters=user_id:1&text_search=Doe&text_search_fields=partner_folder_id,first_name&order_by=created_at&order=DESC&view=1
+GET {HOST_NAME}/api/v1/folders?page=0&limit=10&filters[user_id]=1&text_search=Doe&text_search_fields=partner_folder_id,first_name&order_by=created_at&order=DESC&view=1
 
 Accept: application/json 
 Content-Type: application/json 
@@ -28,11 +28,11 @@ Content-Type: application/json
 {
   "folders": [
     {
-       "folderId": 1,
+       "folder_id": 1,
        "folder": "TESTFOLDER",
-       "firstName": "Jhon",
-       "lastName": "Doe", 
-       "dateOfBirth": "1970-01-01T00:00:00+00:00"
+       "first_name": "Jhon",
+       "last_name": "Doe", 
+       "date_of_birth": "1970-01-01T00:00:00+00:00"
        "subscription": 10
     },
     ...
