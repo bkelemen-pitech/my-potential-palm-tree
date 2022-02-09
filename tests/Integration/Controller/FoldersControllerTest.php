@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Controller;
 
-use App\Enum\FolderEnum;
-use App\Enum\PersonEnum;
 use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
 use App\Model\Request\BaseFolderFiltersModel;
@@ -13,16 +11,15 @@ use App\Service\DocumentService;
 use App\Service\PersonService;
 use App\Tests\BaseApiTest;
 use App\Tests\Enum\BaseEnum;
+use App\Tests\Enum\FolderEnum;
+use App\Tests\Enum\PersonEnum;
 use App\Tests\Mocks\Data\DocumentsData;
 use App\Tests\Mocks\Data\FolderData;
 use App\Tests\Mocks\Data\PersonData;
-use Kyc\InternalApiBundle\Enum\AdministratorEnum;
 use Kyc\InternalApiBundle\Model\Request\Administrator\AssignedAdministratorFilterModel;
 use Kyc\InternalApiBundle\Model\Request\Folder\DissociateFolderModel;
 use Kyc\InternalApiBundle\Model\Request\Folder\UpdateStatusWorkflowModel;
 use Kyc\InternalApiBundle\Model\Request\WorkflowStatusHistory\WorkflowStatusHistoryModel;
-use Kyc\InternalApiBundle\Model\Response\Folder\AssignedAdministratorModelResponse;
-use Kyc\InternalApiBundle\Model\Response\Folder\FolderModelResponse;
 use Kyc\InternalApiBundle\Model\Response\WorkflowStatusHistory\WorkflowStatusHistoryModelResponse;
 use Kyc\InternalApiBundle\Service\FolderService as InternalApiFolderService;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
@@ -33,7 +30,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 
 class FoldersControllerTest extends BaseApiTest
 {
-    public const GET_FOLDERS = 'api/v1/folders/';
+    public const GET_FOLDERS = 'api/v1/folders';
     public const GET_FOLDER = 'api/v1/folders/1';
     public const FOLDER_GET_DOCUMENTS = 'api/v1/folders/1/documents';
     public const FOLDER_ADD_PERSON = 'api/v1/folders/1/add-person';
@@ -61,65 +58,148 @@ class FoldersControllerTest extends BaseApiTest
         $this->personService = $this->prophesize(PersonService::class);
         static::getContainer()->set(InternalApiFolderService::class, $this->internalApiFolderService->reveal());
         static::getContainer()->set(InternalApiDocumentService::class, $this->internalApiDocumentService->reveal());
-        static::getContainer()->set(WorkflowStatusHistoryService::class, $this->internalApiWorkflowStatusHistoryService->reveal());
+        static::getContainer()->set(
+            WorkflowStatusHistoryService::class,
+            $this->internalApiWorkflowStatusHistoryService->reveal()
+        );
         static::getContainer()->set(DocumentService::class, $this->documentService->reveal());
         static::getContainer()->set(PersonService::class, $this->personService->reveal());
     }
 
-    public function testGetFolders()
+    public function testGetFoldersParametersWithView1()
     {
-
-        $folderFilterModel = new BaseFolderFiltersModel();
-        $folderFilterModel
-            ->setTextSearchFields('date_of_birth')
-            ->setFilters(['person_type_id' => [1]]);
-        $folderModelResponse1 = new FolderModelResponse();
-        $folderModelResponse1
-            ->setFolderId(1)
-            ->setFolder('1a')
-            ->setFirstName('First Name 1')
-            ->setLastName('Last Name 1')
-            ->setDateOfBirth('2020-02-02')
-            ->setSubscription(10);
-        $folderModelResponse2 = new FolderModelResponse();
-        $folderModelResponse2
-            ->setFolderId(2)
-            ->setFolder('2a')
-            ->setFirstName('First Name 2')
-            ->setLastName('Last Name 2')
-            ->setDateOfBirth('2020-02-02')
-            ->setSubscription(20);
+        $folderFilterModel = (new BaseFolderFiltersModel())
+            ->setFilters(
+                [
+                    'workflow_status' => [10300],
+                ]
+            );
 
         $this->internalApiFolderService->getFolders($folderFilterModel)
             ->shouldBeCalledOnce()
             ->willReturn([
                 FolderEnum::FOLDERS => [
-                    $folderModelResponse1,
-                    $folderModelResponse2,
+                    FolderData::getFolderModelResponse1(),
+                    FolderData::getFolderModelResponse2(),
                 ],
-                FolderEnum::META => 2,
+                FolderEnum::META => [
+                    FolderEnum::TOTAL => 2,
+                ],
             ]);
 
-        $filterModel = new AssignedAdministratorFilterModel();
-        $filterModel->setUserDossierIds([1,2]);
-
-        $resultAssignedAdministratorModelResponse1 = (new AssignedAdministratorModelResponse())
-            ->setAdministratorId(1)
-            ->setStatus(AdministratorEnum::STATUS_IN_PROGRESS)
-            ->setUsername('Admin1')
-            ->setFolderId(1);
-
-        $resultAssignedAdministratorModelResponse2 = (new AssignedAdministratorModelResponse())
-            ->setAdministratorId(2)
-            ->setStatus(AdministratorEnum::STATUS_IN_PROGRESS)
-            ->setUsername('Admin2')
-            ->setFolderId(2);
+        $filterModel = (new AssignedAdministratorFilterModel())->setUserDossierIds([1, 2]);
 
         $this->internalApiFolderService->getAssignedAdministrators($filterModel)
             ->shouldBeCalledOnce()
             ->willReturn([
-                $resultAssignedAdministratorModelResponse1,
-                $resultAssignedAdministratorModelResponse2,
+                FolderData::getAssignedAdministratorModelResponse1(),
+                FolderData::getAssignedAdministratorModelResponse2(),
+            ]);
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::GET_FOLDERS,
+            [],
+            [],
+            true,
+            [
+                'view' => 1,
+            ],
+        );
+
+        $this->assertEquals(200, $this->getStatusCode());
+
+        $this->assertEquals(
+            [
+                FolderEnum::FOLDERS => [
+                    FolderData::getFolderModelResponse1Assigned()->toArray(),
+                    FolderData::getFolderModelResponse2Assigned()->toArray(),
+                ],
+                FolderEnum::META => [
+                    FolderEnum::TOTAL => 2,
+                    FolderEnum::VIEW_CRITERIA => 1,
+                ],
+            ],
+            $this->getResponseContent()
+        );
+    }
+
+    public function getFoldersParametersWithView2DataProvider(): array
+    {
+        return FolderData::GET_FOLDERS_WITH_VIEW_2;
+    }
+
+    /**
+     * @dataProvider getFoldersParametersWithView2DataProvider
+     */
+    public function testGetFoldersParametersWithView2AndUserId(array $queryParameters, int $viewCriteriaResponse)
+    {
+        $folderFilterModel = (new BaseFolderFiltersModel())
+            ->setFilters(['workflow_status' => [10301, 10302, 10303, 10304]])
+            ->setAdministratorId(1);
+
+        $this->internalApiFolderService->getFolders($folderFilterModel)
+            ->shouldBeCalledOnce()
+            ->willReturn([
+                FolderEnum::FOLDERS => [
+                    FolderData::getFolderModelResponse1Assigned(),
+                    FolderData::getFolderModelResponse2Assigned(),
+                ],
+                FolderEnum::META => [
+                    FolderEnum::TOTAL => 2,
+                ],
+            ]);
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::GET_FOLDERS,
+            [],
+            [],
+            true,
+            $queryParameters,
+        );
+
+        $this->assertEquals(200, $this->getStatusCode());
+
+        $this->assertEquals(
+            [
+                FolderEnum::FOLDERS => [
+                    FolderData::getFolderModelResponse1Assigned()->toArray(),
+                    FolderData::getFolderModelResponse2Assigned()->toArray(),
+                ],
+                FolderEnum::META => [
+                    FolderEnum::TOTAL => 2,
+                    FolderEnum::VIEW_CRITERIA => $viewCriteriaResponse,
+                ],
+            ],
+            $this->getResponseContent()
+        );
+    }
+
+    public function testGetFoldersParametersWithView2AndAndViewCriteria1AndNoUserId()
+    {
+        $folderFilterModel = (new BaseFolderFiltersModel())
+            ->setFilters(['workflow_status' => [10301, 10302, 10303, 10304]]);
+
+        $this->internalApiFolderService->getFolders($folderFilterModel)
+            ->shouldBeCalledOnce()
+            ->willReturn([
+                FolderEnum::FOLDERS => [
+                    FolderData::getFolderModelResponse1(),
+                    FolderData::getFolderModelResponse2(),
+                ],
+                FolderEnum::META => [
+                    FolderEnum::TOTAL => 2,
+                ],
+            ]);
+
+        $filterModel = (new AssignedAdministratorFilterModel())->setUserDossierIds([1, 2]);
+
+        $this->internalApiFolderService->getAssignedAdministrators($filterModel)
+            ->shouldBeCalledOnce()
+            ->willReturn([
+                FolderData::getAssignedAdministratorModelResponse1(),
+                FolderData::getAssignedAdministratorModelResponse2(),
             ]);
         $this->requestWithBody(
             BaseEnum::METHOD_GET,
@@ -127,20 +207,151 @@ class FoldersControllerTest extends BaseApiTest
             [],
             [],
             true,
-            ['text_search_fields' => 'date_of_birth']
+            [
+                'view' => 2,
+                'view_criteria' => 1,
+            ],
         );
 
         $this->assertEquals(200, $this->getStatusCode());
 
-        $folderModelResponse1->setAssignedTo('Admin1');
-        $folderModelResponse2->setAssignedTo('Admin2');
-
-        $this->assertEquals([
+        $this->assertEquals(
+            [
                 FolderEnum::FOLDERS => [
-                    $folderModelResponse1->toArray(),
-                    $folderModelResponse2->toArray(),
+                    FolderData::getFolderModelResponse1Assigned()->toArray(),
+                    FolderData::getFolderModelResponse2Assigned()->toArray(),
                 ],
-                FolderEnum::META => 2,
+                FolderEnum::META => [
+                    FolderEnum::TOTAL => 2,
+                    FolderEnum::VIEW_CRITERIA => 1,
+                ],
+            ],
+            $this->getResponseContent()
+        );
+    }
+
+    public function testGetFoldersParametersWithView2NoViewCriteriaAndNoAssignedFolders()
+    {
+        $folderFilterModel1 = (new BaseFolderFiltersModel())
+            ->setFilters(['workflow_status' => [10301, 10302, 10303, 10304]])
+            ->setAdministratorId(1);
+        $folderFilterModel2 = (new BaseFolderFiltersModel())
+            ->setFilters(['workflow_status' => [10301, 10302, 10303, 10304]]);
+
+        $this->internalApiFolderService->getFolders($folderFilterModel1)
+            ->shouldBeCalledOnce()
+            ->willReturn([
+                FolderEnum::FOLDERS => [],
+                FolderEnum::META => [
+                    FolderEnum::TOTAL => 0,
+                ],
+            ]);
+
+        $this->internalApiFolderService->getFolders($folderFilterModel2)
+            ->shouldBeCalledOnce()
+            ->willReturn([
+                FolderEnum::FOLDERS => [
+                    FolderData::getFolderModelResponse1Assigned(),
+                    FolderData::getFolderModelResponse2Assigned(),
+                ],
+                FolderEnum::META => [
+                    FolderEnum::TOTAL => 2,
+                ],
+            ]);
+
+        $filterModel = (new AssignedAdministratorFilterModel())->setUserDossierIds([1, 2]);
+
+        $this->internalApiFolderService->getAssignedAdministrators($filterModel)
+            ->shouldBeCalledOnce()
+            ->willReturn([
+                FolderData::getAssignedAdministratorModelResponse1(),
+                FolderData::getAssignedAdministratorModelResponse2(),
+            ]);
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::GET_FOLDERS,
+            [],
+            [],
+            true,
+            [
+                'view' => 2,
+                'filters' =>
+                    [
+                        'user_id' => '1',
+                    ],
+            ],
+        );
+
+        $this->assertEquals(200, $this->getStatusCode());
+
+        $this->assertEquals(
+            [
+                FolderEnum::FOLDERS => [
+                    FolderData::getFolderModelResponse1Assigned()->toArray(),
+                    FolderData::getFolderModelResponse2Assigned()->toArray(),
+                ],
+                FolderEnum::META => [
+                    FolderEnum::TOTAL => 2,
+                    FolderEnum::VIEW_CRITERIA => 2,
+                ],
+            ],
+            $this->getResponseContent()
+        );
+    }
+
+    public function testGetFoldersParametersWithView3()
+    {
+        $folderFilterModel = (new BaseFolderFiltersModel())
+            ->setFilters(
+                [
+                    'workflow_status' => [10310],
+                ]
+            );
+
+        $this->internalApiFolderService->getFolders($folderFilterModel)
+            ->shouldBeCalledOnce()
+            ->willReturn([
+                FolderEnum::FOLDERS => [
+                    FolderData::getFolderModelResponse1(),
+                    FolderData::getFolderModelResponse2(),
+                ],
+                FolderEnum::META => [
+                    FolderEnum::TOTAL => 2,
+                ],
+            ]);
+
+        $filterModel = (new AssignedAdministratorFilterModel())->setUserDossierIds([1, 2]);
+
+        $this->internalApiFolderService->getAssignedAdministrators($filterModel)
+            ->shouldBeCalledOnce()
+            ->willReturn([
+                FolderData::getAssignedAdministratorModelResponse1(),
+                FolderData::getAssignedAdministratorModelResponse2(),
+            ]);
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::GET_FOLDERS,
+            [],
+            [],
+            true,
+            [
+                'view' => 3,
+            ],
+        );
+
+        $this->assertEquals(200, $this->getStatusCode());
+
+        $this->assertEquals(
+            [
+                FolderEnum::FOLDERS => [
+                    FolderData::getFolderModelResponse1Assigned()->toArray(),
+                    FolderData::getFolderModelResponse2Assigned()->toArray(),
+                ],
+                FolderEnum::META => [
+                    FolderEnum::TOTAL => 2,
+                    FolderEnum::VIEW_CRITERIA => 1,
+                ],
             ],
             $this->getResponseContent()
         );
@@ -176,7 +387,7 @@ class FoldersControllerTest extends BaseApiTest
     {
         $body = [
             'personTypeId' => 1,
-            'agencyId' => 709
+            'agencyId' => 709,
         ];
 
         $this->personService
@@ -186,7 +397,10 @@ class FoldersControllerTest extends BaseApiTest
         $this->requestWithBody(BaseEnum::METHOD_POST, self::FOLDER_ADD_PERSON, $body);
 
         $this->assertEquals(200, $this->getStatusCode());
-        $this->assertEquals([PersonEnum::PERSON_UID => PersonData::DEFAULT_PERSON_UID_TEST_DATA], $this->getResponseContent());
+        $this->assertEquals(
+            [PersonEnum::PERSON_UID => PersonData::DEFAULT_PERSON_UID_TEST_DATA],
+            $this->getResponseContent()
+        );
     }
 
     public function testAddPersonEmptyBodyShouldThrowException()
@@ -247,7 +461,11 @@ class FoldersControllerTest extends BaseApiTest
             ->mergeDocuments(array_merge([FolderEnum::FOLDER_ID => 1], DocumentsData::MERGE_DOCUMENTS_BODY))
             ->shouldBeCalledOnce();
 
-        $this->requestWithBody(BaseEnum::METHOD_POST, self::FOLDER_MERGE_DOCUMENTS, DocumentsData::MERGE_DOCUMENTS_BODY);
+        $this->requestWithBody(
+            BaseEnum::METHOD_POST,
+            self::FOLDER_MERGE_DOCUMENTS,
+            DocumentsData::MERGE_DOCUMENTS_BODY
+        );
 
         $this->assertEquals(204, $this->getStatusCode());
         $this->assertEquals(null, $this->getResponseContent());
@@ -285,13 +503,17 @@ class FoldersControllerTest extends BaseApiTest
         $this->internalApiFolderService
             ->updateStatusWorkflow($updateStatusWorkflowModel)
             ->shouldBeCalledOnce()
-            ->willThrow(new InternalApiInvalidDataException(json_encode(['statusWorkflow' => 'This value should not be blank.'])));
+            ->willThrow(
+                new InternalApiInvalidDataException(
+                    json_encode(['statusWorkflow' => 'This value should not be blank.'])
+                )
+            );
 
         $this->requestWithBody(BaseEnum::METHOD_POST, self::FOLDER_UPDATE_WORKFLOW_STATUS, []);
 
         $this->assertEquals(400, $this->getStatusCode());
         $expectedErrorMessage = [
-            'statusWorkflow' => 'This value should not be blank.'
+            'statusWorkflow' => 'This value should not be blank.',
         ];
         $this->assertEquals(
             $this->buildExceptionResponse(400, $expectedErrorMessage, json_encode($expectedErrorMessage)),
@@ -389,7 +611,7 @@ class FoldersControllerTest extends BaseApiTest
 
         $this->assertEquals(400, $this->getStatusCode());
         $this->assertEquals(
-            $this->buildExceptionResponse(400, null,'Invalid request'),
+            $this->buildExceptionResponse(400, null, 'Invalid request'),
             $this->getResponseContent()
         );
     }
@@ -434,7 +656,7 @@ class FoldersControllerTest extends BaseApiTest
 
         $this->assertEquals(404, $this->getStatusCode());
         $this->assertEquals(
-            $this->buildExceptionResponse(404, null,'Folder with id 1 not found'),
+            $this->buildExceptionResponse(404, null, 'Folder with id 1 not found'),
             $this->getResponseContent()
         );
     }
@@ -453,7 +675,7 @@ class FoldersControllerTest extends BaseApiTest
 
         $this->assertEquals(400, $this->getStatusCode());
         $this->assertEquals(
-            $this->buildExceptionResponse(400, null,'The folder cannot be dissociated.'),
+            $this->buildExceptionResponse(400, null, 'The folder cannot be dissociated.'),
             $this->getResponseContent()
         );
     }
@@ -488,7 +710,7 @@ class FoldersControllerTest extends BaseApiTest
 
         $this->assertEquals(400, $this->getStatusCode());
         $this->assertEquals(
-            $this->buildExceptionResponse(400, null,'Third party error.'),
+            $this->buildExceptionResponse(400, null, 'Third party error.'),
             $this->getResponseContent()
         );
     }
@@ -523,7 +745,11 @@ class FoldersControllerTest extends BaseApiTest
 
         $this->assertEquals(400, $this->getStatusCode());
         $this->assertEquals(
-            $this->buildExceptionResponse(400, null,'The folder cannot be dissociated because of its workflow status.'),
+            $this->buildExceptionResponse(
+                400,
+                null,
+                'The folder cannot be dissociated because of its workflow status.'
+            ),
             $this->getResponseContent()
         );
     }

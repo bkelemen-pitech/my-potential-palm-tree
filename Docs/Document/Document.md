@@ -88,7 +88,7 @@ If the document type id is `1` the subtype is under `data.type_id` (this is an o
 
 ## Delete document
 This API will soft delete a document. Internally it will
-call `internalAPI/documents/deletebydocumentuid/document-uid/{document-uid}` API.
+call `internalAPI/documents/deletebydocumentuid/document_uid/{document_uid}` API.
 
 ---
 __Method__: DELETE.  
@@ -99,10 +99,6 @@ Request example:
 DELETE {HOST_NAME}/api/v1/documents/619648c127658
 Accept: application/json 
 Content-Type: application/json 
-
-{ 
-  "agency_id": 1
-}
 
 204 NO CONTENT
 {}
@@ -123,7 +119,7 @@ Content-Type: application/json
   "status":"error"
 }
 ```
-> Obs: the agency_id and administrator_id is needed for the event SUPPRIME_DOCUMENT.
+> Obs: the administrator_id is needed for the event SUPPRIME_DOCUMENT.
 
 ## Document data log
 This API will retrieve the document data logs. Internally it will
