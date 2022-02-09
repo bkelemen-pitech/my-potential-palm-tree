@@ -1,4 +1,4 @@
-# KYC Back Office app
+# KYC Back Office app [![Run back end tests](https://github.com/mariuspop86/pipelines/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/mariuspop86/pipelines/actions/workflows/backend-tests.yml)
 ==================
 
 Docker setup project for KYC back-office project.
@@ -48,7 +48,8 @@ cp githooks/pre-push .git/hooks/pre-push
 chmod +x .git/hooks/pre-push
 ```
 
-In case you need to push changes without running the tests (for partial work), you can use `--no-verify` to skip the hook.
+In case you need to push changes without running the tests (for partial work), you can use `--no-verify` to skip the 
+hook.
 
 Docker Containers
 -----------------

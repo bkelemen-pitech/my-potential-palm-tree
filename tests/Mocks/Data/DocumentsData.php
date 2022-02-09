@@ -18,7 +18,13 @@ use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
 class DocumentsData
 {
     public const DEFAULT_DOCUMENT_UID_TEST_DATA = '617f896a61e39';
-    public const TREAT_DOCUMENT_DATA = [self::DEFAULT_DOCUMENT_UID_TEST_DATA, 8];
+    public const TREAT_DOCUMENT_DATA = [
+        'document_uid' => self::DEFAULT_DOCUMENT_UID_TEST_DATA,
+        'verification2_status' => 8,
+        'agency_id' => 1,
+        'folder_id' => 1,
+        'administrator_id' => 1
+    ];
     public const MERGE_DOCUMENTS_BODY = [
         "personUid" => "617ff03bb7c55",
         "filename" => "test_merge_documents",
@@ -109,7 +115,10 @@ class DocumentsData
             'encryption' => true,
             'customerAnomaly' => null,
             'partnerVerificationStatus' => null,
-            'data' => 'a:2:{s:20:"agence_document_type";s:2:"11";s:16:"controle_couleur";i:0;}',
+            'data' => [
+                'agence_document_type' => 11,
+                'controle_couleur' => null,
+            ],
             'size' => 181333,
             'anomaly' => null,
             'partnerDocumentId' => 'passport.jpeg',
@@ -131,8 +140,11 @@ class DocumentsData
     public static function createTreatDocumentModel(array $data = self::TREAT_DOCUMENT_DATA)
     {
         return (new TreatDocumentModel())
-            ->setDocumentUid($data[0])
-            ->setStatusVerification2($data[1]);
+            ->setDocumentUid($data['document_uid'])
+            ->setVerification2Status($data['verification2_status'])
+            ->setAgencyId($data['agency_id'])
+            ->setAdministratorId($data['administrator_id'])
+            ->setFolderId($data['folder_id']);
     }
 
     public static function createMergeDocumentModel(array $data = self::MERGE_DOCUMENTS_BODY, int $folderId = 1): MergeDocumentModel
@@ -185,14 +197,15 @@ class DocumentsData
         return $documentDataLogsRequest;
     }
 
-    public static function createDocumentDataLogsModelResponse(): array
+    public static function createDocumentDataLogsModelResponse(?string $data = null): array
     {
         $documentDataLogsModelResponse = new DocumentDataLogsModelResponse();
         $documentDataLogsModelResponse
             ->setAdministratorId(1)
             ->setDocumentId(1)
             ->setCreatedAt(new DateTime('2020-02-02'))
-            ->setVerification2Status(2);
+            ->setVerification2Status(2)
+            ->setData($data);
 
         return [$documentDataLogsModelResponse];
     }

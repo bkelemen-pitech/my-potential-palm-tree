@@ -36,14 +36,18 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/treat", name="treat_document", methods="POST")
+     * @Route("/{documentUid}/treat", name="treat_document", methods="POST")
      */
-    public function treatDocument(Request $request, DocumentService $documentService)
+    public function treatDocument(string $documentUid, Request $request, DocumentService $documentService)
     {
         try {
-            $documentService->treatDocument($request->toArray());
+            $documentService->treatDocument(
+                array_merge($request->toArray(), [DocumentEnum::DOCUMENT_UID_CAMEL_CASE => $documentUid])
+            );
 
             return $this->json(null, Response::HTTP_NO_CONTENT);
+        } catch (InternalApiResourceNotFound $exception) {
+            throw new NotFoundHttpException($exception->getMessage());
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
