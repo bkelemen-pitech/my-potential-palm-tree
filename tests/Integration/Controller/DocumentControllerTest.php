@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Controller;
 
-use App\Exception\InvalidDataException;
 use App\Tests\BaseApiTest;
 use App\Tests\Enum\BaseEnum;
 use App\Tests\Mocks\Data\DocumentsData;
 use Kyc\InternalApiBundle\Exception\InvalidDataException as InternalApiInvalidDataException;
 use Kyc\InternalApiBundle\Exception\ResourceNotFoundException;
-use Kyc\InternalApiBundle\Model\Request\Document\DeleteDocumentModel;
-use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
 use Kyc\InternalApiBundle\Service\DocumentService as InternalApiDocumentService;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class DocumentControllerTest extends BaseApiTest
 {
     public const PATH = 'api/v1/documents/';
-    public const TREAT_DOCUMENT_PATH = 'api/v1/documents/treat';
+    public const TREAT_DOCUMENT_PATH = 'api/v1/documents/617f896a61e39/treat';
     public const DOCUMENT_FIELDS_PATH = 'api/v1/documents/fields';
     public const DOCUMENT_DATA_LOGS_PATH = 'api/v1/documents/document-data-logs';
     public const DELETE_DOCUMENT_PATH = 'api/v1/documents/617f896a61e39';
@@ -66,15 +63,23 @@ class DocumentControllerTest extends BaseApiTest
     public function testTreatDocumentOk()
     {
         $body = [
-          "document_uid" => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA,
-          "verification2_status" => 8
+          "verification2_status" => 8,
+          "agency_id" => 1,
+          "folder_id" => 1
         ];
 
         $this->internalApiDocumentService
             ->treatDocument(DocumentsData::createTreatDocumentModel())
             ->shouldBeCalledOnce();
 
-        $this->requestWithBody(BaseEnum::METHOD_POST, self::TREAT_DOCUMENT_PATH, $body);
+        $this->requestWithBody(
+            BaseEnum::METHOD_POST,
+            self::TREAT_DOCUMENT_PATH,
+            $body,
+            [],
+            true,
+            ['documentUid' => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA]
+        );
         $this->assertEquals(204, $this->getStatusCode());
         $this->assertEquals(null, $this->getResponseContent());
     }
@@ -82,17 +87,27 @@ class DocumentControllerTest extends BaseApiTest
     public function testTreatDocumentThrowException()
     {
         $body = [
-            "document_uid" => 'test1234',
-            "verification2_status" => 100
+            "verification2_status" => '100',
+            "agency_id" => 1,
+            "folder_id" => 1
         ];
 
-        $treatDocumentModel = new TreatDocumentModel();
-        $treatDocumentModel
-            ->setDocumentUid($body['document_uid'])
-            ->setVerification2Status($body['verification2_status']);
+        $treatDocumentModel = DocumentsData::createTreatDocumentModel();
+        $treatDocumentModel->setVerification2Status($body['verification2_status']);
 
-        $this->internalApiDocumentService->treatDocument($treatDocumentModel)->willThrow(new InvalidDataException());
-        $this->requestWithBody(BaseEnum::METHOD_POST, self::TREAT_DOCUMENT_PATH, $body);
+        $this->internalApiDocumentService
+            ->treatDocument($treatDocumentModel)
+            ->willThrow(new InternalApiInvalidDataException());
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_POST,
+            self::TREAT_DOCUMENT_PATH,
+            $body,
+            [],
+            true,
+            ['documentUid' => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA]
+        );
+
         $this->assertEquals(400, $this->getStatusCode());
     }
 
@@ -256,12 +271,14 @@ class DocumentControllerTest extends BaseApiTest
 
     public function testDeleteDocumentThrowNotFoundException()
     {
-        $deleteDocumentModel = new DeleteDocumentModel();
-        $deleteDocumentModel
-            ->setDocumentUid(DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA)
-            ->setAdministratorId('1');
+        $deleteDocumentModelData = [
+            'documentUid' => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA,
+            'administratorId' => '1'
+        ];
 
-        $this->internalApiDocumentService->deleteDocumentByUid($deleteDocumentModel)->willThrow(new ResourceNotFoundException());
+        $this->internalApiDocumentService
+            ->deleteDocumentByUid(DocumentsData::createDeleteDocumentModel($deleteDocumentModelData))
+            ->willThrow(new ResourceNotFoundException());
         $this->requestWithBody(BaseEnum::METHOD_DELETE, self::DELETE_DOCUMENT_PATH);
         $this->assertEquals(404, $this->getStatusCode());
     }

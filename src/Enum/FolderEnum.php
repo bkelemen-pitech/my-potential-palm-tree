@@ -2,6 +2,8 @@
 
 namespace App\Enum;
 
+use Kyc\InternalApiBundle\Enum\WorkflowStatusEnum;
+
 class FolderEnum extends BaseEnum
 {
     // PAGINATION
@@ -19,6 +21,24 @@ class FolderEnum extends BaseEnum
     public const ORDER_BY = 'order_by';
     public const TEXT_SEARCH = 'text_search';
     public const TEXT_SEARCH_FIELDS = 'text_search_fields';
+    public const VIEW = 'view';
+    public const VIEW_CRITERIA = 'view_criteria';
+
+    public const GET_FOLDERS_PARAMETERS_TO_UNSET = [
+        self::VIEW,
+        self::VIEW_CRITERIA,
+    ];
+
+    public const GET_FOLDERS_FILTER_PARAMETERS_TO_UNSET = [
+        self::USER_ID,
+    ];
+
+    // API VALUES
+    public const VIEW_CRITERIA_ALL_FOLDERS = 1;
+    public const VIEW_CRITERIA_MY_FOLDERS = 2;
+    public const VIEW_TO_BE_TREATED = 1;
+    public const VIEW_IN_TREATMENT = 2;
+    public const VIEW_TO_BE_TREATED_SUPERVISOR = 3;
 
     // API RESPONSE
     public const ASSIGNED_TO = 'assignedTo';
@@ -155,9 +175,30 @@ class FolderEnum extends BaseEnum
     public const WORKFLOW_STATUS_DATE_FR = 'date_statut_workflow';
 
 
-    public const WORKFLOW_STATUS_PROCESSED_BY_WEBHELP = 10300;
-    public const WORKFLOW_STATUS_IN_PROGRESS_BY_WEBHELP = 10301;
-    public const WORKFLOW_STATUS_IN_SUPERVISED_BY_WEBHELP = 10302 ;
+    public const VIEW_TO_BE_TREATED_TAB = [
+        self::WORKFLOW_STATUS => [
+            WorkflowStatusEnum::STATUT_WORKFLOW_TRAITER_PAR_WEBHELP,
+        ],
+    ];
+    public const VIEW_IN_TREATMENT_TAB = [
+        self::WORKFLOW_STATUS => [
+            WorkflowStatusEnum::STATUT_WORKFLOW_PRISE_EN_CHARGE_PAR_WEBHELP,
+            WorkflowStatusEnum::STATUT_WORKFLOW_SUPERVISER_PAR_WEBHELP,
+            WorkflowStatusEnum::STATUT_WORKFLOW_SUPERVISER_PAR_WEBHELP_1,
+            WorkflowStatusEnum::STATUT_WORKFLOW_SUPERVISER_PAR_WEBHELP_2,
+        ],
+    ];
+    public const VIEW_TO_BE_TREATED_SUPERVISOR_TAB = [
+        self::WORKFLOW_STATUS => [
+            WorkflowStatusEnum::STATUT_WORKFLOW_TRAITER_PAR_WEBHELP_SUPERVISOR,
+        ],
+    ];
+
+    public const WORKFLOW_STATUS_BY_VIEW = [
+        self::VIEW_TO_BE_TREATED => self::VIEW_TO_BE_TREATED_TAB,
+        self::VIEW_IN_TREATMENT => self::VIEW_IN_TREATMENT_TAB,
+        self::VIEW_TO_BE_TREATED_SUPERVISOR => self::VIEW_TO_BE_TREATED_SUPERVISOR_TAB,
+    ];
 
     public const FOLDER_ENTITY_PROPERTIES = [
         self::ACTIVE_SCREENING,
