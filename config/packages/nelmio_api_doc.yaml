@@ -462,7 +462,7 @@ nelmio_api_doc:
           title: 200 Success
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 200
             body:
@@ -475,7 +475,7 @@ nelmio_api_doc:
           title: 400 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 400
             body:
@@ -491,7 +491,7 @@ nelmio_api_doc:
           title: 401 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 401
             body:
@@ -507,7 +507,7 @@ nelmio_api_doc:
           title: 404 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 404
             body:
@@ -523,7 +523,7 @@ nelmio_api_doc:
           title: 500 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 500
             body:
