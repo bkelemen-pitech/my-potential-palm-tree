@@ -178,6 +178,13 @@ class FolderService
         $this->internalApiFolderService->dissociateFolder($dissociateFolderModel);
     }
 
+    public function getFoldersCount(): array
+    {
+        $filters = $this->getFoldersCountFilters();
+
+        return $this->internalApiFolderService->getFoldersCount([FolderEnum::FILTERS => $filters]);
+    }
+
     private function getToBeTreatedFolders(array $data): array
     {
         $data = $this->handleQueryParameters($data);
@@ -322,5 +329,16 @@ class FolderService
         }
 
         return $data[FolderEnum::FILTERS][FolderEnum::USER_ID][0] ?? null;
+    }
+
+    private function getFoldersCountFilters(): array
+    {
+        $filters = [];
+
+        foreach (FolderEnum::CURRENT_VIEWS as $view) {
+            $filters[FolderEnum::VIEW . $view] = FolderEnum::WORKFLOW_STATUS_BY_VIEW[$view];
+        }
+
+        return $filters;
     }
 }

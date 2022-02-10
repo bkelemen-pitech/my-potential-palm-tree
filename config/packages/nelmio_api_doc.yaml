@@ -457,6 +457,24 @@ nelmio_api_doc:
                         groupId:
                           type: integer
                           example: 1
+        SuccessFoldersCount:
+          description: Success response example for the GET folders count API call
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  folders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        view:
+                          type: integer
+                          example: 1
+                        total:
+                          type: integer
+                          example: 123
       schemas:
         200Success:
           title: 200 Success
@@ -938,6 +956,24 @@ nelmio_api_doc:
             '200':
               description: OK
               ref: '#/components/responses/SuccessAdministrators'
+            '400':
+              description: Invalid Request
+              ref: '#/components/responses/InvalidRequest'
+            '401':
+              description: Invalid Request
+              ref: '#/components/responses/Unauthenticated'
+            '500':
+              description: Invalid Request
+              ref: '#/components/responses/ServerError'
+      /api/v1/folders/count:
+        get:
+          description: Get folders with or without parameters
+          tags:
+            - Folders
+          responses:
+            '200':
+              description: OK
+              ref: '#/components/responses/SuccessFoldersCount'
             '400':
               description: Invalid Request
               ref: '#/components/responses/InvalidRequest'
