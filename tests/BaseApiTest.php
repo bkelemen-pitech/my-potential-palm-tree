@@ -76,7 +76,7 @@ abstract class BaseApiTest extends WebTestCase
     protected function buildExceptionResponse(int $statusCode, ?array $body, string $message): array
     {
         return [
-            'statusCode' => $statusCode,
+            'status_code' => $statusCode,
             'body' => $body,
             'error' => $message,
             'status' => 'error',
