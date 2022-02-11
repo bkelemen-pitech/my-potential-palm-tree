@@ -352,4 +352,16 @@ class FolderServiceTest extends BaseApiTest
 
         $this->folderService->dissociateFolder(1);
     }
+
+    public function testGetFoldersCount()
+    {
+        $this->internalApiFolderService->getFoldersCount(FolderData::GET_FOLDERS_COUNT)
+            ->shouldBeCalledOnce()
+            ->willReturn(FolderData::GET_FOLDERS_COUNT_RESPONSE);
+
+        $this->assertEquals(
+            FolderData::GET_FOLDERS_COUNT_RESPONSE,
+            $this->folderService->getFoldersCount()
+        );
+    }
 }
