@@ -27,7 +27,8 @@ class WorkflowStatusHistoryServiceTest extends BaseApiTest
         $workflowStatusHistoryRequest = new WorkflowStatusHistoryModel();
         $workflowStatusHistoryRequest
             ->setFolderId(1)
-            ->setAdministratorId(1);
+            ->setAdministratorId(1)
+            ->setFilters(['workflow_status' => [10350]]);
 
         $workflowStatusHistoryModelResponse = new WorkflowStatusHistoryModelResponse();
         $workflowStatusHistoryModelResponse
@@ -43,7 +44,7 @@ class WorkflowStatusHistoryServiceTest extends BaseApiTest
 
         $this->assertEquals(
             [$workflowStatusHistoryModelResponse],
-            $this->workflowStatusHistoryService->getWorkflowStatusHistory(1, 1)
+            $this->workflowStatusHistoryService->getWorkflowStatusHistory(1, 1, ['workflow_status' => [10350]])
         );
     }
 }
