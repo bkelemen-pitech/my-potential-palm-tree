@@ -33,7 +33,7 @@ class FolderEnum extends BaseEnum
         self::USER_ID,
     ];
 
-    public const CURRENT_VIEWS = [
+    public const FOLDER_VIEWS = [
         self::VIEW_TO_BE_TREATED,
         self::VIEW_IN_TREATMENT,
     ];

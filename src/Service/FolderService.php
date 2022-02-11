@@ -335,7 +335,7 @@ class FolderService
     {
         $filters = [];
 
-        foreach (FolderEnum::CURRENT_VIEWS as $view) {
+        foreach (FolderEnum::FOLDER_VIEWS as $view) {
             $filters[FolderEnum::VIEW . '_' . $view] = FolderEnum::WORKFLOW_STATUS_BY_VIEW[$view];
         }
 
