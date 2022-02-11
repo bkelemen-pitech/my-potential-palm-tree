@@ -10,7 +10,6 @@ use App\Enum\BepremsEnum;
 use App\Enum\FolderEnum;
 use App\Enum\PersonEnum;
 use App\Exception\ApiException;
-use App\Exception\InvalidDataException;
 use App\Exception\ResourceNotFoundException;
 use App\Service\FolderService;
 use App\Service\PersonService;
@@ -162,17 +161,18 @@ class FoldersController extends AbstractController
         WorkflowStatusHistoryService $workflowStatusHistoryService
     ): JsonResponse {
         try {
-            $administratorId = (int) $request->query->get(AdministratorEnum::ADMINISTRATOR_ID);
-            $filters = $request->query->get(BaseEnum::FILTERS);
-            if (!empty($filters) && !is_array($filters)) {
-                throw new InvalidDataException("Filters must be an array");
-            }
-            $response = $workflowStatusHistoryService->getWorkflowStatusHistory($id, $administratorId ?: null, $filters);
+            $response = $workflowStatusHistoryService->getWorkflowStatusHistory(
+                $id,
+                (int) $request->query->get(AdministratorEnum::ADMINISTRATOR_ID) ?: null,
+                $request->query->get(BaseEnum::FILTERS) ?: []
+            );
 
             return $this->json([FolderEnum::WORKFLOW_STATUS_HISTORY => $response], Response::HTTP_OK);
         } catch (\Exception $exception) {
             $this->logger->error($exception->getMessage());
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        } catch (\Error $error) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, ApiException::INVALID_DATA_EXCEPTION_MESSAGE);
         }
     }
 
