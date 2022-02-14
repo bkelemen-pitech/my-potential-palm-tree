@@ -478,12 +478,30 @@ nelmio_api_doc:
                         groupId:
                           type: integer
                           example: 1
+        SuccessFoldersCount:
+          description: Success response example for the GET folders count API call
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  folders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        view:
+                          type: integer
+                          example: 1
+                        total:
+                          type: integer
+                          example: 123
       schemas:
         200Success:
           title: 200 Success
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 200
             body:
@@ -496,7 +514,7 @@ nelmio_api_doc:
           title: 400 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 400
             body:
@@ -512,7 +530,7 @@ nelmio_api_doc:
           title: 401 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 401
             body:
@@ -528,7 +546,7 @@ nelmio_api_doc:
           title: 404 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 404
             body:
@@ -544,7 +562,7 @@ nelmio_api_doc:
           title: 500 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 500
             body:
@@ -983,6 +1001,24 @@ nelmio_api_doc:
             '200':
               description: OK
               ref: '#/components/responses/SuccessAdministrators'
+            '400':
+              description: Invalid Request
+              ref: '#/components/responses/InvalidRequest'
+            '401':
+              description: Invalid Request
+              ref: '#/components/responses/Unauthenticated'
+            '500':
+              description: Invalid Request
+              ref: '#/components/responses/ServerError'
+      /api/v1/folders/count:
+        get:
+          description: Get folders with or without parameters
+          tags:
+            - Folders
+          responses:
+            '200':
+              description: OK
+              ref: '#/components/responses/SuccessFoldersCount'
             '400':
               description: Invalid Request
               ref: '#/components/responses/InvalidRequest'

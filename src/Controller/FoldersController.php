@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Enum\AdministratorEnum;
+use App\Enum\BaseEnum;
 use App\Enum\BepremsEnum;
 use App\Enum\FolderEnum;
 use App\Enum\PersonEnum;
@@ -52,6 +53,20 @@ class FoldersController extends AbstractController
     {
         try {
             $folders = $this->folderService->getFoldersByView($request->query->all());
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+
+        return $this->json($folders);
+    }
+
+    /**
+     * @Route("/count", name="get_folders_count", methods="GET")
+     */
+    public function getFoldersCount(): JsonResponse
+    {
+        try {
+            $folders = $this->folderService->getFoldersCount();
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
@@ -160,13 +175,18 @@ class FoldersController extends AbstractController
         WorkflowStatusHistoryService $workflowStatusHistoryService
     ): JsonResponse {
         try {
-            $administratorId = (int) $request->query->get(AdministratorEnum::ADMINISTRATOR_ID);
-            $response = $workflowStatusHistoryService->getWorkflowStatusHistory($id, $administratorId ?: null);
+            $response = $workflowStatusHistoryService->getWorkflowStatusHistory(
+                $id,
+                (int) $request->query->get(AdministratorEnum::ADMINISTRATOR_ID) ?: null,
+                $request->query->get(BaseEnum::FILTERS) ?: []
+            );
 
             return $this->json([FolderEnum::WORKFLOW_STATUS_HISTORY => $response], Response::HTTP_OK);
         } catch (\Exception $exception) {
             $this->logger->error($exception->getMessage());
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        } catch (\Error $error) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, ApiException::INVALID_DATA_EXCEPTION_MESSAGE);
         }
     }
 

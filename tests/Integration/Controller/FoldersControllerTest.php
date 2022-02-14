@@ -31,6 +31,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 class FoldersControllerTest extends BaseApiTest
 {
     public const GET_FOLDERS = 'api/v1/folders';
+    public const GET_FOLDERS_COUNT = 'api/v1/folders/count';
     public const GET_FOLDER = 'api/v1/folders/1';
     public const FOLDER_GET_DOCUMENTS = 'api/v1/folders/1/documents';
     public const FOLDER_ADD_PERSON = 'api/v1/folders/1/add-person';
@@ -549,7 +550,8 @@ class FoldersControllerTest extends BaseApiTest
         $workflowStatusHistoryRequest = new WorkflowStatusHistoryModel();
         $workflowStatusHistoryRequest
             ->setFolderId(1)
-            ->setAdministratorId(1);
+            ->setAdministratorId(1)
+            ->setFilters(['workflow_status' => [10350]]);
 
         $workflowStatusHistoryModelResponse = new WorkflowStatusHistoryModelResponse();
         $workflowStatusHistoryModelResponse
@@ -569,7 +571,10 @@ class FoldersControllerTest extends BaseApiTest
             [],
             [],
             true,
-            ['administrator-id' => 1]
+            [
+                'administrator-id' => 1,
+                'filters' => ['workflow_status' => [10350]],
+            ]
         );
 
         $this->assertEquals(200, $this->getStatusCode());
@@ -593,7 +598,8 @@ class FoldersControllerTest extends BaseApiTest
         $workflowStatusHistoryRequest = new WorkflowStatusHistoryModel();
         $workflowStatusHistoryRequest
             ->setFolderId(1)
-            ->setAdministratorId(1);
+            ->setAdministratorId(1)
+            ->setFilters(['workflow_status' => [10350]]);
 
         $this->internalApiWorkflowStatusHistoryService
             ->getWorkflowStatusHistory($workflowStatusHistoryRequest)
@@ -606,7 +612,10 @@ class FoldersControllerTest extends BaseApiTest
             [],
             [],
             true,
-            ['administrator-id' => 1]
+            [
+                'administrator-id' => 1,
+                'filters' => ['workflow_status' => [10350]],
+            ]
         );
 
         $this->assertEquals(400, $this->getStatusCode());
@@ -752,5 +761,28 @@ class FoldersControllerTest extends BaseApiTest
             ),
             $this->getResponseContent()
         );
+    }
+
+    public function testGetFoldersCountSuccess()
+    {
+        $this->internalApiFolderService->getFoldersCount(FolderData::GET_FOLDERS_COUNT)
+            ->shouldBeCalledOnce()
+            ->willReturn(FolderData::INTERNAL_API_FOLDERS_COUNT_RESPONSE);
+
+        $this->requestWithBody(BaseEnum::METHOD_GET, self::GET_FOLDERS_COUNT);
+
+        $this->assertEquals(200, $this->getStatusCode());
+        $this->assertEquals(FolderData::GET_FOLDERS_COUNT_RESPONSE, $this->getResponseContent());
+    }
+
+    public function testGetFoldersCountFailure()
+    {
+        $this->internalApiFolderService->getFoldersCount(FolderData::GET_FOLDERS_COUNT)
+            ->shouldBeCalledOnce()
+            ->willThrow(new InvalidDataException());
+
+        $this->requestWithBody(BaseEnum::METHOD_GET, self::GET_FOLDERS_COUNT);
+
+        $this->assertEquals(400, $this->getStatusCode());
     }
 }
