@@ -64,6 +64,43 @@ class FolderData
         ],
     ];
 
+    public const GET_FOLDERS_COUNT = [
+        'filters' => [
+            'view_1' => [
+                'workflow_status' => [10300],
+            ],
+            'view_2' => [
+                'workflow_status' => [10301, 10302, 10303, 10304],
+            ],
+        ],
+    ];
+
+    public const INTERNAL_API_FOLDERS_COUNT_RESPONSE = [
+        'folders' => [
+            [
+                'total' => 12,
+                'view' => 'view_1',
+            ],
+            [
+                'total' => 6,
+                'view' => 'view_2',
+            ],
+        ],
+    ];
+
+    public const GET_FOLDERS_COUNT_RESPONSE = [
+        'folders' => [
+            [
+                'total' => 12,
+                'view' => 1,
+            ],
+            [
+                'total' => 6,
+                'view' => 2,
+            ],
+        ],
+    ];
+
     public static function createFolderByIdModelResponse(array $data = self::FOLDER_BY_ID_DATA): FolderByIdModelResponse
     {
         return (new FolderByIdModelResponse())
