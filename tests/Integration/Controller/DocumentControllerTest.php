@@ -19,6 +19,7 @@ class DocumentControllerTest extends BaseApiTest
     public const DOCUMENT_FIELDS_PATH = 'api/v1/documents/fields';
     public const DOCUMENT_DATA_LOGS_PATH = 'api/v1/documents/document-data-logs';
     public const DELETE_DOCUMENT_PATH = 'api/v1/documents/617f896a61e39';
+    public const DOCUMENT_TYPES_PATH = 'api/v1/documents/types';
 
     protected ObjectProphecy $internalApiDocumentService;
 
@@ -281,5 +282,59 @@ class DocumentControllerTest extends BaseApiTest
             ->willThrow(new ResourceNotFoundException());
         $this->requestWithBody(BaseEnum::METHOD_DELETE, self::DELETE_DOCUMENT_PATH);
         $this->assertEquals(404, $this->getStatusCode());
+    }
+
+    public function testGetDocumentTypesSuccess()
+    {
+        $this->internalApiDocumentService
+            ->getDocumentTypes(DocumentsData::getDocumentTypesModelRequest())
+            ->shouldBeCalledOnce()
+            ->willReturn(DocumentsData::getDocumentTypesModelResponse());
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::DOCUMENT_TYPES_PATH,
+            [],
+            [],
+            true,
+            ['agency_id' => 1, 'person_type_id' => 1]
+        );
+        $this->assertEquals(200, $this->getStatusCode());
+
+        $this->assertEquals(
+            [
+                [
+                    'document_type_id' => 1,
+                    'sub_document_type_id' => 61,
+                    'treatment_instruction' => 'test1',
+                    'sub_treatment_instruction' => 'test2',
+                ],
+                [
+                    'document_type_id' => 4,
+                    'sub_document_type_id' => 5,
+                    'treatment_instruction' => 'test3',
+                    'sub_treatment_instruction' => 'test4',
+                ]
+            ],
+            $this->getResponseContent()
+        );
+    }
+
+    public function testGetDocumentTypesException()
+    {
+        $this->internalApiDocumentService
+            ->getDocumentTypes(DocumentsData::getDocumentTypesModelRequest())
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiInvalidDataException('Invalid request'));
+
+        $this->requestWithBody(
+            BaseEnum::METHOD_GET,
+            self::DOCUMENT_TYPES_PATH,
+            [],
+            [],
+            true,
+            ['agency_id' => 1, 'person_type_id' => 1]
+        );
+        $this->assertEquals(400, $this->getStatusCode());
     }
 }

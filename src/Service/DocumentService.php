@@ -12,6 +12,7 @@ use Kyc\InternalApiBundle\Enum\AdministratorEnum;
 use Kyc\InternalApiBundle\Model\Request\Document\DeleteDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\DocumentDataLogsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\DocumentFieldsModel;
+use Kyc\InternalApiBundle\Model\Request\Document\DocumentTypesModel;
 use Kyc\InternalApiBundle\Model\Request\Document\MergeDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentFieldsModelResponse;
@@ -106,5 +107,21 @@ class DocumentService
         );
 
         $this->internalApiDocumentService->deleteDocumentByUid($deleteDocumentModelData);
+    }
+
+    /**
+     * @return DocumentFieldsModelResponse[]
+     */
+    public function getDocumentTypes(array $data): array
+    {
+        try {
+            $documentTypesModelRequest = $this->serializer->deserialize(
+                json_encode($this->transformNumericValuesToInt($data)), DocumentTypesModel::class, 'json'
+            );
+
+            return $this->internalApiDocumentService->getDocumentTypes($documentTypesModelRequest);
+        } catch (\Exception $exception) {
+            throw new InvalidDataException($exception->getMessage());
+        }
     }
 }

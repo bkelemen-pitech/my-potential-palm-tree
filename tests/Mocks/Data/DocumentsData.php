@@ -8,12 +8,14 @@ use DateTime;
 use Kyc\InternalApiBundle\Model\Request\Document\DeleteDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\DocumentDataLogsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\DocumentFieldsModel;
+use Kyc\InternalApiBundle\Model\Request\Document\DocumentTypesModel;
 use Kyc\InternalApiBundle\Model\Request\Document\MergeDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentByFolderModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentDataLogsModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentFieldsModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
+use Kyc\InternalApiBundle\Model\Response\Document\DocumentTypesModelResponse;
 
 class DocumentsData
 {
@@ -215,5 +217,34 @@ class DocumentsData
         return (new DeleteDocumentModel())
             ->setDocumentUid($data['documentUid'])
             ->setAdministratorId($data['administratorId']);
+    }
+
+    public static function getDocumentTypesModelRequest(): DocumentTypesModel
+    {
+        $documentTypesRequest = new DocumentTypesModel();
+        $documentTypesRequest
+            ->setAgencyId(1)
+            ->setPersonTypeId(1);
+
+        return $documentTypesRequest;
+    }
+
+    public static function getDocumentTypesModelResponse(): array
+    {
+        $documentTypesResponse1 = new DocumentTypesModelResponse();
+        $documentTypesResponse1
+            ->setDocumentTypeId(1)
+            ->setSubDocumentTypeId(61)
+            ->setTreatmentInstruction('test1')
+            ->setSubTreatmentInstruction('test2');
+
+        $documentTypesResponse2 = new DocumentTypesModelResponse();
+        $documentTypesResponse2
+            ->setDocumentTypeId(4)
+            ->setSubDocumentTypeId(5)
+            ->setTreatmentInstruction('test3')
+            ->setSubTreatmentInstruction('test4');
+
+        return [$documentTypesResponse1, $documentTypesResponse2];
     }
 }

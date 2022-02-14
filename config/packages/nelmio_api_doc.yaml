@@ -366,6 +366,27 @@ nelmio_api_doc:
                     validatorMethod:
                       type: string
                       example: 'validateFormData'
+        DocumentTypesResponse:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    document_type_id:
+                      type: integer
+                      example: 1
+                    sub_document_type_id:
+                      type: integer
+                      example: 1
+                    treatment_instruction:
+                      type: string
+                      example: 'lorem ipsum'
+                    sub_treatment_instruction:
+                      type: string
+                      example: 'lorem ipsum'
         WorkflowStatusHistoryResponse:
           description: OK
           content:
@@ -732,6 +753,30 @@ nelmio_api_doc:
             '200':
               description: OK
               ref: '#/components/responses/DocumentDataLogs'
+            '400':
+              ref: '#/components/responses/InvalidRequest'
+            '500':
+              ref: '#/components/responses/ServerError'
+      /api/v1/documents/types:
+        get:
+          summary: Get the document types based on agency id and person type id
+          tags:
+            - Documents
+          parameters:
+            agency_id:
+              name: agency_id
+              in: query
+              description: The agency id
+              required: true
+            person_type_id:
+              name: person_type_id
+              in: query
+              description: The person type id
+              required: true
+          responses:
+            '200':
+              description: OK
+              ref: '#/components/responses/DocumentTypesResponse'
             '400':
               ref: '#/components/responses/InvalidRequest'
             '500':
