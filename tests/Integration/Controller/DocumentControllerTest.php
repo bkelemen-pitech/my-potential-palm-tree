@@ -286,13 +286,10 @@ class DocumentControllerTest extends BaseApiTest
 
     public function testGetDocumentTypesSuccess()
     {
-        $documentTypesModelRequest = DocumentsData::getDocumentTypesModelRequest();
-        $documentTypesModelResponse = DocumentsData::getDocumentTypesModelResponse();
-
         $this->internalApiDocumentService
-            ->getDocumentTypes($documentTypesModelRequest)
+            ->getDocumentTypes(DocumentsData::getDocumentTypesModelRequest())
             ->shouldBeCalledOnce()
-            ->willReturn($documentTypesModelResponse);
+            ->willReturn(DocumentsData::getDocumentTypesModelResponse());
 
         $this->requestWithBody(
             BaseEnum::METHOD_GET,
@@ -325,10 +322,8 @@ class DocumentControllerTest extends BaseApiTest
 
     public function testGetDocumentTypesException()
     {
-        $documentTypesModelRequest = DocumentsData::getDocumentTypesModelRequest();
-
         $this->internalApiDocumentService
-            ->getDocumentTypes($documentTypesModelRequest)
+            ->getDocumentTypes(DocumentsData::getDocumentTypesModelRequest())
             ->shouldBeCalledOnce()
             ->willThrow(new InternalApiInvalidDataException('Invalid request'));
 
