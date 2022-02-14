@@ -759,7 +759,7 @@ class FoldersControllerTest extends BaseApiTest
     {
         $this->internalApiFolderService->getFoldersCount(FolderData::GET_FOLDERS_COUNT)
             ->shouldBeCalledOnce()
-            ->willReturn(FolderData::GET_FOLDERS_COUNT_RESPONSE);
+            ->willReturn(FolderData::INTERNAL_API_FOLDERS_COUNT_RESPONSE);
 
         $this->requestWithBody(BaseEnum::METHOD_GET, self::GET_FOLDERS_COUNT);
 

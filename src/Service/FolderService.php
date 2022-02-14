@@ -181,8 +181,9 @@ class FolderService
     public function getFoldersCount(): array
     {
         $filters = $this->getFoldersCountFilters();
+        $foldersCount = $this->internalApiFolderService->getFoldersCount([FolderEnum::FILTERS => $filters]);
 
-        return $this->internalApiFolderService->getFoldersCount([FolderEnum::FILTERS => $filters]);
+        return $this->remapFoldersCountView($foldersCount);
     }
 
     private function getToBeTreatedFolders(array $data): array
@@ -340,5 +341,29 @@ class FolderService
         }
 
         return $filters;
+    }
+
+    private function remapFoldersCountView($foldersCount): array
+    {
+        $response = [];
+        foreach ($foldersCount[FolderEnum::FOLDERS] as $elements) {
+            $response[FolderEnum::FOLDERS][] = self::getNumericalValuesForView($elements);
+        }
+
+        return $response;
+    }
+
+    private function getNumericalValuesForView(array $folderCountProperties): array
+    {
+        $response = [];
+        foreach ($folderCountProperties as $key => $value) {
+            if ($key === FolderEnum::VIEW) {
+                $response[$key] = (int) explode('_', $value)[1];
+                continue;
+            }
+            $response[$key] = $value;
+        }
+
+        return $response;
     }
 }

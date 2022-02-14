@@ -75,6 +75,19 @@ class FolderData
         ],
     ];
 
+    public const INTERNAL_API_FOLDERS_COUNT_RESPONSE = [
+        'folders' => [
+            [
+                'total' => 12,
+                'view' => 'view_1',
+            ],
+            [
+                'total' => 6,
+                'view' => 'view_2',
+            ],
+        ],
+    ];
+
     public const GET_FOLDERS_COUNT_RESPONSE = [
         'folders' => [
             [
