@@ -61,6 +61,20 @@ class FoldersController extends AbstractController
     }
 
     /**
+     * @Route("/count", name="get_folders_count", methods="GET")
+     */
+    public function getFoldersCount(): JsonResponse
+    {
+        try {
+            $folders = $this->folderService->getFoldersCount();
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+
+        return $this->json($folders);
+    }
+
+    /**
      * @Route("/{id}", name="get_by_id", methods="GET")
      */
     public function getFolderById(int $id): JsonResponse
