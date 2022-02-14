@@ -38,7 +38,7 @@ class AdministratorData
                     "login" => "alice",
                     "role" => 1,
                     "email" => "marketing@beprems.com",
-                    "groupId" => 1,
+                    "group_id" => 1,
                 ],
             ],
         ];

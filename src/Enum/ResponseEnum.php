@@ -10,5 +10,5 @@ class ResponseEnum
     public const BODY = 'body';
     public const ERROR = 'error';
     public const STATUS = 'status';
-    public const STATUS_CODE = 'statusCode';
+    public const STATUS_CODE = 'status_code';
 }

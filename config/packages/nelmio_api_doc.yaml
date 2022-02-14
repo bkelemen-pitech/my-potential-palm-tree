@@ -124,22 +124,22 @@ nelmio_api_doc:
                     items:
                       type: object
                       properties:
-                        folderId:
+                        folder_id:
                           type: integer
                           example: 12345
                         folder:
                           type: string
                           example: Folder123
-                        firstName:
+                        first_name:
                           type: string
                           example: Bruce
-                        lastName:
+                        last_name:
                           type: string
                           example: Wayne
-                        assignedTo:
+                        assigned_to:
                           type: string
                           example: Admin1
-                        dateOfBirth:
+                        date_of_birth:
                           type: string
                           example: "1970-01-01T00:00:00+00:00"
                         subscription:
@@ -163,13 +163,13 @@ nelmio_api_doc:
                     id:
                       type: integer
                       example: 9
-                    partnerFolderId:
+                    partner_folder_id:
                       type: integer
                       example: 51
                     status:
                       type: integer
                       example: 3
-                    workflowStatus:
+                    workflow_status:
                       type: integer
                       example: 10400
                     label:
@@ -183,33 +183,33 @@ nelmio_api_doc:
                       items:
                         type: object
                         properties:
-                          personId:
+                          person_id:
                             type: integer
                             example: 1234
-                          lastName:
+                          last_name:
                             type: string
                             example: John
-                          firstName:
+                          first_name:
                             type: string
                             example: Smith
-                          dateOfBirth:
+                          date_of_birth:
                             type: string
                             example: 2020-05-05T00:00:00+00:00
-                          personTypeId:
+                          person_type_id:
                             type: integer
                             example: 221
-                          personUid:
+                          person_uid:
                             type: string
                             example: 5e86ebc489087
-                          personInfo:
+                          person_info:
                             type: array
                             items:
                               type: object
                               properties:
-                                nameInfo:
+                                name_info:
                                   type: string
                                   example: nom
-                                dataInfo:
+                                data_info:
                                   type: string
                                   example: data
                                 source:
@@ -236,13 +236,13 @@ nelmio_api_doc:
                     uid:
                       type: string
                       example: 5c3479c5eec12
-                    documentId:
+                    document_id:
                       type: integer
                       example: 12345
-                    documenStatus:
+                    documen_status:
                       type: integer
                       example: 1
-                    personId:
+                    person_id:
                       type: integer
                       example: 123
         SuccessDocumentsDetails:
@@ -462,7 +462,7 @@ nelmio_api_doc:
           title: 200 Success
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 200
             body:
@@ -475,7 +475,7 @@ nelmio_api_doc:
           title: 400 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 400
             body:
@@ -491,7 +491,7 @@ nelmio_api_doc:
           title: 401 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 401
             body:
@@ -507,7 +507,7 @@ nelmio_api_doc:
           title: 404 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 404
             body:
@@ -523,7 +523,7 @@ nelmio_api_doc:
           title: 500 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 500
             body:

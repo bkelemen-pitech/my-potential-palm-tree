@@ -398,7 +398,7 @@ class FoldersControllerTest extends BaseApiTest
 
         $this->assertEquals(200, $this->getStatusCode());
         $this->assertEquals(
-            [PersonEnum::PERSON_UID => PersonData::DEFAULT_PERSON_UID_TEST_DATA],
+            ['person_uid' => PersonData::DEFAULT_PERSON_UID_TEST_DATA],
             $this->getResponseContent()
         );
     }
@@ -549,7 +549,8 @@ class FoldersControllerTest extends BaseApiTest
         $workflowStatusHistoryRequest = new WorkflowStatusHistoryModel();
         $workflowStatusHistoryRequest
             ->setFolderId(1)
-            ->setAdministratorId(1);
+            ->setAdministratorId(1)
+            ->setFilters(['workflow_status' => [10350]]);
 
         $workflowStatusHistoryModelResponse = new WorkflowStatusHistoryModelResponse();
         $workflowStatusHistoryModelResponse
@@ -569,19 +570,22 @@ class FoldersControllerTest extends BaseApiTest
             [],
             [],
             true,
-            ['administrator-id' => 1]
+            [
+                'administrator-id' => 1,
+                'filters' => ['workflow_status' => [10350]],
+            ]
         );
 
         $this->assertEquals(200, $this->getStatusCode());
         $response = [
-            'workflowStatusHistory' => [
+            'workflow_status_history' => [
                 [
-                    'folderId' => $workflowStatusHistoryModelResponse->getFolderId(),
-                    'administratorId' => $workflowStatusHistoryModelResponse->getAdministratorId(),
-                    'agentId' => $workflowStatusHistoryModelResponse->getAgentId(),
-                    'workflowStatus' => $workflowStatusHistoryModelResponse->getWorkflowStatus(),
-                    'createdAt' => $workflowStatusHistoryModelResponse->getCreatedAt(),
-                    'updatedAt' => $workflowStatusHistoryModelResponse->getUpdatedAt(),
+                    'folder_id' => $workflowStatusHistoryModelResponse->getFolderId(),
+                    'administrator_id' => $workflowStatusHistoryModelResponse->getAdministratorId(),
+                    'agent_id' => $workflowStatusHistoryModelResponse->getAgentId(),
+                    'workflow_status' => $workflowStatusHistoryModelResponse->getWorkflowStatus(),
+                    'created_at' => $workflowStatusHistoryModelResponse->getCreatedAt(),
+                    'updated_at' => $workflowStatusHistoryModelResponse->getUpdatedAt(),
                 ],
             ],
         ];
@@ -593,7 +597,8 @@ class FoldersControllerTest extends BaseApiTest
         $workflowStatusHistoryRequest = new WorkflowStatusHistoryModel();
         $workflowStatusHistoryRequest
             ->setFolderId(1)
-            ->setAdministratorId(1);
+            ->setAdministratorId(1)
+            ->setFilters(['workflow_status' => [10350]]);
 
         $this->internalApiWorkflowStatusHistoryService
             ->getWorkflowStatusHistory($workflowStatusHistoryRequest)
@@ -606,7 +611,10 @@ class FoldersControllerTest extends BaseApiTest
             [],
             [],
             true,
-            ['administrator-id' => 1]
+            [
+                'administrator-id' => 1,
+                'filters' => ['workflow_status' => [10350]],
+            ]
         );
 
         $this->assertEquals(400, $this->getStatusCode());
