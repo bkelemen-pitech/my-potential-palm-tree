@@ -17,12 +17,13 @@ class WorkflowStatusHistoryService
         $this->internalApiWorkflowStatusHistoryService = $internalApiWorkflowStatusHistoryService;
     }
     
-    public function getWorkflowStatusHistory(int $folderId, ?int $administratorId): array
+    public function getWorkflowStatusHistory(int $folderId, ?int $administratorId, ?array $filters): array
     {
         $workflowStatusHistoryModel = new WorkflowStatusHistoryModel();
         $workflowStatusHistoryModel
             ->setFolderId($folderId)
-            ->setAdministratorId($administratorId);
+            ->setAdministratorId($administratorId)
+            ->setFilters($filters);
 
         return $this->internalApiWorkflowStatusHistoryService->getWorkflowStatusHistory($workflowStatusHistoryModel);
     }
