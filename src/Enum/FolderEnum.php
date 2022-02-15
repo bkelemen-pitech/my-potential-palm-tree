@@ -33,6 +33,11 @@ class FolderEnum extends BaseEnum
         self::USER_ID,
     ];
 
+    public const FOLDER_VIEWS = [
+        self::VIEW_TO_BE_TREATED,
+        self::VIEW_IN_TREATMENT,
+    ];
+
     // API VALUES
     public const VIEW_CRITERIA_ALL_FOLDERS = 1;
     public const VIEW_CRITERIA_MY_FOLDERS = 2;

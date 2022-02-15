@@ -158,4 +158,29 @@ class DocumentServiceTest extends BaseApiTest
 
         $this->documentService->deleteDocumentByUid(['documentUid' => DocumentsData::DEFAULT_DOCUMENT_UID_TEST_DATA]);
     }
+
+    public function testGetDocumentTypesSuccess()
+    {
+        $this->internalApiDocumentService
+            ->getDocumentTypes(DocumentsData::getDocumentTypesModelRequest())
+            ->shouldBeCalledOnce()
+            ->willReturn([DocumentsData::getDocumentTypesModelResponse()]);
+
+        $this->assertEquals(
+            [DocumentsData::getDocumentTypesModelResponse()],
+            $this->documentService->getDocumentTypes(['agency_id' => 1, 'person_type_id' => 1])
+        );
+    }
+
+    public function testGetDocumentTypesException()
+    {
+        $this->internalApiDocumentService
+            ->getDocumentTypes(DocumentsData::getDocumentTypesModelRequest())
+            ->shouldBeCalledOnce()
+            ->willThrow(new InternalApiInvalidDataException('Invalid request'));
+
+        $this->expectException(InvalidDataException::class);
+        $this->expectExceptionMessage('Invalid request');
+        $this->documentService->getDocumentTypes(['agency_id' => 1, 'person_type_id' => 1]);
+    }
 }
