@@ -223,6 +223,7 @@ class FolderService
 
         $foldersResponse = $this->internalApiFolderService->getFolders($folderFiltersModel);
         $folders = $foldersResponse[FolderEnum::FOLDERS];
+        $returnedViewCriteria = $this->getReturnedViewCriteria($folders, $viewCriteria);
 
         if (is_null($userId) || (is_null($viewCriteria) && empty($folders))) {
             if (is_null($viewCriteria) && empty($folders)) {
@@ -243,7 +244,7 @@ class FolderService
             FolderEnum::FOLDERS => $folders,
             FolderEnum::META => [
                 FolderEnum::TOTAL => $foldersResponse[FolderEnum::META][FolderEnum::TOTAL],
-                FolderEnum::VIEW_CRITERIA => $this->getReturnedViewCriteria($folders, $viewCriteria),
+                FolderEnum::VIEW_CRITERIA => $returnedViewCriteria,
             ],
         ];
     }

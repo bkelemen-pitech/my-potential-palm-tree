@@ -293,7 +293,7 @@ class FoldersControllerTest extends BaseApiTest
                 ],
                 FolderEnum::META => [
                     FolderEnum::TOTAL => 2,
-                    FolderEnum::VIEW_CRITERIA => 2,
+                    FolderEnum::VIEW_CRITERIA => 1,
                 ],
             ],
             $this->getResponseContent()
