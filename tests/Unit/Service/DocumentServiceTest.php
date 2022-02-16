@@ -183,4 +183,37 @@ class DocumentServiceTest extends BaseApiTest
         $this->expectExceptionMessage('Invalid request');
         $this->documentService->getDocumentTypes(['agency_id' => 1, 'person_type_id' => 1]);
     }
+
+    public function testUpdateDocumentTypeSuccess()
+    {
+        $data = [
+            'document_type_id' => 1,
+            'sub_document_type_id' => 2,
+            'documentUid' => 'testUid',
+        ];
+        $updateDocumentTypeModelRequest = DocumentsData::createUpdateDocumentTypeModel();
+        $this->internalApiDocumentService
+            ->updateDocumentType($updateDocumentTypeModelRequest)
+            ->shouldBeCalledOnce();
+
+        $this->documentService->updateDocumentTypes($data);
+    }
+
+    public function testUpdateDocumentTypeThrowsException()
+    {
+        $data = [
+            'document_type_id' => 1,
+            'sub_document_type_id' => 2,
+            'documentUid' => 'testUid',
+        ];
+        $updateDocumentTypeModelRequest = DocumentsData::createUpdateDocumentTypeModel();
+        $this->internalApiDocumentService
+            ->updateDocumentType($updateDocumentTypeModelRequest)
+            ->willThrow(new InternalApiInvalidDataException('{"document_type_id": "This value should not be blank."}'));
+
+        $this->expectException(InternalApiInvalidDataException::class);
+        $this->expectExceptionMessage('{"document_type_id": "This value should not be blank."}');
+
+        $this->documentService->updateDocumentTypes($data);
+    }
 }
