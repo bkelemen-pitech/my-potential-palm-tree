@@ -147,6 +147,7 @@ Content-Type: application/json
 {
   "document_data_logs": [
     { 
+      "document_dat_log_id": 1,
       "created_at" : "2021-11-01T06:30:02+00:00",
       "document_id" : 2, 
       "administrator_id" : 1,
