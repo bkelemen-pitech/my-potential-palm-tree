@@ -293,7 +293,7 @@ class FolderService
     }
 
     /**
-     * Method used to add "person_type_id" on filters if the user search for a valid date of birth in order to fetch only
+     * Method used to add "person_type_id" on filters if the user searches for a valid date of birth in order to fetch only
      * the physical persons folders.
      */
     private function setExtraFilters(array $data): array
