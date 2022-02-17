@@ -17,6 +17,8 @@ Content-Type: application/json
   "agency_id": 1,
   "verification2_status": 2
   "folder_id": 2,
+  "document_type_id": 1,
+  "person_type_id": 1,
   "data": {
     "nom": "JOHN",
     "prenom": "Doe",
@@ -41,4 +43,4 @@ Content-Type: application/json
 The `data` property is dynamic, this must be validated against the [Document fields API](./Document-fields.md). The 
 information in this property must be saved in the `data` field in the `document` table and also in the `personne_info` 
 table with the `administrator_id` and the source `Document`. When a document is treated add a new record into 
-`document_data_log` with the new status, the administrator id and a serialized array of the `data` property. 
+`document_data_log` with the new `verification2_status`, the administrator id and a serialized array of the `data` property. 
