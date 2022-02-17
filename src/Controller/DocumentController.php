@@ -110,4 +110,20 @@ class DocumentController extends AbstractController
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
     }
+
+    /**
+     * @Route("/{documentUid}", name="update_document_type", methods="PATCH", priority=2)
+     */
+    public function updateDocumentTypes(string $documentUid, Request $request, DocumentService $documentService): JsonResponse
+    {
+        try {
+            $documentService->updateDocumentTypes(array_merge([DocumentEnum::DOCUMENT_UID_CAMEL_CASE => $documentUid], $request->toArray()));
+
+            return $this->json(null, Response::HTTP_NO_CONTENT);
+        } catch (InternalApiResourceNotFound $exception) {
+            throw new NotFoundHttpException($exception->getMessage());
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+    }
 }

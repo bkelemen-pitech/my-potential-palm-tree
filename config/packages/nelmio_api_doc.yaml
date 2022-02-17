@@ -669,6 +669,32 @@ nelmio_api_doc:
               ref: '#/components/responses/NotFound'
             '500':
               ref: '#/components/responses/ServerError'
+        patch:
+          summary: Updates the document type
+          tags:
+            - Documents
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    document_type_id:
+                      type: integer
+                      example: 1
+                    sub_document_type_id:
+                      type: integer
+                      example: 3
+          responses:
+            '204':
+              description: No Content
+            '400':
+              ref: '#/components/responses/InvalidRequest'
+            '404':
+              ref: '#/components/responses/NotFound'
+            '500':
+              ref: '#/components/responses/ServerError'
       /api/v1/documents/{documentUid}/treat:
         post:
           summary: Update document verification2_status (statut_verification2).
