@@ -1,47 +1,51 @@
 # Endpoint responsibilities
 
-* Status: [proposed] <!-- optional -->
+* Status: [accepted] <!-- optional -->
 * Deciders: [[Bela Kelemen](https://github.com/bkelemen-pitech), [Marius Pop](https://github.com/mariuspop86), [Sergiu Parlea](https://github.com/SergiuParlea), [Florin
   Onica](https://github.com/fonica)]
-* Date: [2021-01-18] <!-- optional -->
+* Date: [2021-02-18] <!-- optional -->
 
 ## Context and Problem Statement
 
-There are some business requirements that span over multiple entities for GET requests. In some cases the business 
-logic requires to update one or more entities. 
+There are some business requirements that requires the update of certain entities when fetching a resource.  
+For example: for Back Office application when opening a folder for the first time, this folder must be assigned to the 
+user and the status of the folder must be updated.
 
 ## Considered Options
 
-* Complex endpoints
-* Endpoints that follow REST rules
+* Not idempotent endpoints
+* Idempotent endpoints
 
 ## Decision Outcome
 
-Chosen option: "[-]", because ...
+Chosen option: "[Idempotent endpoints]", because fetching a resource should just to that. It does not hide 
+implementation details. It will be easier to reuse if needed. Easier to maintain.
 
 ### Positive Consequences <!-- optional -->
 
-* [e.g., improvement of quality attribute satisfaction, follow-up decisions required, …]
-* …
+* simpler endpoints
+* maintainability
+* implementation details are not obscured
 
 ### Negative Consequences <!-- optional -->
 
-* [e.g., compromising quality attribute, follow-up decisions required, …]
-* …
+*  multiple request to the back-end application are needed to achieve the business logic, resulting in slower 
+   application
+* it's hard to recover in case of errors in the middle of the business logic
 
 ## Pros and Cons of the Options <!-- optional -->
 
-### Complex endpoints
+### Not idempotent endpoints
 
 * Good, because all the business logic is under one endpoint
 * Good, because one single request to the back-end application is needed to achieve the business logic
 * Good, because it's easier to recover in case of errors in the middle of the business logic
 * Neutral, because it hides the business logic in the back-end application
-* Bad, because does not follow the REST rules
+* Bad, because it's not an idempotent endpoint(the resource can change when requested multiple times)
 
-### Endpoints that follow REST rules
+### Idempotent endpoints
 
-* Good, because it follows REST rules
+* Good, because it follows REST rules for idempotency
 * Good, because simpler endpoints
 * Neutral, because it hides the business logic in the front-end application
 * Bad, because multiple request to the back-end application are needed to achieve the business logic

@@ -27,7 +27,7 @@ Chosen option: "[Symfony's roles + voters system]", because it's the default way
 allows for a complex permissions' system, while keeping the business logic intact.  
 Implementation details:
 * each entity is handled by one voter
-* if one or more voters fails access is denied
+* if at least one voter fails access is denied
 
 ## Pros and Cons of the Options <!-- optional -->
 
