@@ -208,7 +208,8 @@ class DocumentsData
             ->setDocumentId(1)
             ->setCreatedAt(new DateTime('2020-02-02'))
             ->setVerification2Status(2)
-            ->setData($data);
+            ->setData($data)
+            ->setDocumentDataLogId(1);
 
         return [$documentDataLogsModelResponse];
     }

@@ -201,6 +201,7 @@ class DocumentControllerTest extends BaseApiTest
                     'administrator_id' => 1,
                     'created_at' => '2020-02-02T00:00:00+00:00',
                     'data' => $responseValue,
+                    'document_data_log_id' => 1,
                 ]
             ]],
             $this->getResponseContent()
