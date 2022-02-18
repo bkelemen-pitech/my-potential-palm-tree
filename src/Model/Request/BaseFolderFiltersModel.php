@@ -19,6 +19,7 @@ class BaseFolderFiltersModel extends KycFolderFiltersModel
         FolderEnum::PERSON_LAST_NAME,
         FolderEnum::PERSON_EMAIL,
         FolderEnum::PERSON_TELEPHONE,
+        FolderEnum::PROCESSING_VALUE,
         FolderEnum::LABEL,
         FolderEnum::WORKFLOW_STATUS,
         FolderEnum::USER_FOLDER_ID,
