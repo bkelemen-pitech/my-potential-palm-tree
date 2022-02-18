@@ -28,5 +28,5 @@ class BaseFolderFiltersModel extends KycFolderFiltersModel
      * @Assert\Type(type="string")
      * @Assert\Choice(callback="getOrderByChoices")
      */
-    protected ?string $orderBy = FolderEnum::UPDATED_AT;
+    protected ?string $orderBy = FolderEnum::PROCESSING_VALUE;
 }
