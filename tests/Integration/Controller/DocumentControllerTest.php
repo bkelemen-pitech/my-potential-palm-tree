@@ -144,6 +144,10 @@ class DocumentControllerTest extends BaseApiTest
                     'helper_method' => 'test',
                     'ocr_field' => 1,
                     'validator_method' => 'validator',
+                    'values' => [
+                        'nom' => 'John',
+                        'prenom' => 'Doe'
+                    ]
                 ]
             ],
             $this->getResponseContent()
