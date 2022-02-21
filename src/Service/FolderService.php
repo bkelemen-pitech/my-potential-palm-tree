@@ -55,6 +55,8 @@ class FolderService
         $view = isset($data[FolderEnum::VIEW]) ? (int) $data[FolderEnum::VIEW] : null;
 
         switch ($view) {
+            case FolderEnum::VIEW_ALL_FOLDERS:
+                return $this->getAllFolders($data);
             case FolderEnum::VIEW_TO_BE_TREATED:
             case FolderEnum::VIEW_TO_BE_TREATED_SUPERVISOR:
                 return $this->getToBeTreatedFolders($data);
@@ -223,6 +225,7 @@ class FolderService
 
         $foldersResponse = $this->internalApiFolderService->getFolders($folderFiltersModel);
         $folders = $foldersResponse[FolderEnum::FOLDERS];
+        $returnedViewCriteria = $this->getReturnedViewCriteria($folders, $viewCriteria);
 
         if (is_null($userId) || (is_null($viewCriteria) && empty($folders))) {
             if (is_null($viewCriteria) && empty($folders)) {
@@ -243,7 +246,26 @@ class FolderService
             FolderEnum::FOLDERS => $folders,
             FolderEnum::META => [
                 FolderEnum::TOTAL => $foldersResponse[FolderEnum::META][FolderEnum::TOTAL],
-                FolderEnum::VIEW_CRITERIA => $this->getReturnedViewCriteria($folders, $viewCriteria),
+                FolderEnum::VIEW_CRITERIA => $returnedViewCriteria,
+            ],
+        ];
+    }
+
+    private function getAllFolders(array $data): array
+    {
+        $data = $this->setExtraFilters($data);
+        $folderFiltersModel = $this->serializer->deserialize(
+            \json_encode($data),
+            BaseFolderFiltersModel::class,
+            'json'
+        );
+
+        $foldersResponse = $this->internalApiFolderService->getFolders($folderFiltersModel);
+
+        return [
+            FolderEnum::FOLDERS => $foldersResponse[FolderEnum::FOLDERS],
+            FolderEnum::META => [
+                FolderEnum::TOTAL => $foldersResponse[FolderEnum::META][FolderEnum::TOTAL],
             ],
         ];
     }
@@ -270,6 +292,10 @@ class FolderService
         return $queryParameters;
     }
 
+    /**
+     * Method used to add "person_type_id" on filters if the user searches for a valid date of birth in order to fetch only
+     * the physical persons folders.
+     */
     private function setExtraFilters(array $data): array
     {
         if (isset($data[InternalApiFolderEnum::TEXT_SEARCH_FIELDS])) {

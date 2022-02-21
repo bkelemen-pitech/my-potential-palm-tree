@@ -11,6 +11,7 @@ use Kyc\InternalApiBundle\Model\Request\Document\DocumentFieldsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\DocumentTypesModel;
 use Kyc\InternalApiBundle\Model\Request\Document\MergeDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
+use Kyc\InternalApiBundle\Model\Request\Document\UpdateDocumentTypeModel;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentByFolderModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentDataLogsModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentFieldsModelResponse;
@@ -207,7 +208,8 @@ class DocumentsData
             ->setDocumentId(1)
             ->setCreatedAt(new DateTime('2020-02-02'))
             ->setVerification2Status(2)
-            ->setData($data);
+            ->setData($data)
+            ->setDocumentDataLogId(1);
 
         return [$documentDataLogsModelResponse];
     }
@@ -246,5 +248,13 @@ class DocumentsData
             ->setSubTreatmentInstruction('test4');
 
         return [$documentTypesResponse1, $documentTypesResponse2];
+    }
+
+    public static function createUpdateDocumentTypeModel(): UpdateDocumentTypeModel
+    {
+        return (new UpdateDocumentTypeModel())
+            ->setDocumentUid('testUid')
+            ->setDocumentTypeId(1)
+            ->setSubDocumentTypeId(2);
     }
 }

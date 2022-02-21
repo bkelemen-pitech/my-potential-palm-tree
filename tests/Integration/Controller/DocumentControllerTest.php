@@ -20,6 +20,7 @@ class DocumentControllerTest extends BaseApiTest
     public const DOCUMENT_DATA_LOGS_PATH = 'api/v1/documents/document-data-logs';
     public const DELETE_DOCUMENT_PATH = 'api/v1/documents/617f896a61e39';
     public const DOCUMENT_TYPES_PATH = 'api/v1/documents/types';
+    public const UPDATE_DOCUMENT_TYPE_PATH = 'api/v1/documents/testUid';
 
     protected ObjectProphecy $internalApiDocumentService;
 
@@ -200,6 +201,7 @@ class DocumentControllerTest extends BaseApiTest
                     'administrator_id' => 1,
                     'created_at' => '2020-02-02T00:00:00+00:00',
                     'data' => $responseValue,
+                    'document_data_log_id' => 1,
                 ]
             ]],
             $this->getResponseContent()
@@ -336,5 +338,46 @@ class DocumentControllerTest extends BaseApiTest
             ['agency_id' => 1, 'person_type_id' => 1]
         );
         $this->assertEquals(400, $this->getStatusCode());
+    }
+
+    public function testUpdateDocumentTypeSuccess()
+    {
+        $body = [
+            'document_type_id' => 1,
+            'sub_document_type_id' => 2,
+        ];
+        $this->internalApiDocumentService
+            ->updateDocumentType(DocumentsData::createUpdateDocumentTypeModel())
+            ->shouldBeCalledOnce();
+
+        $this->requestWithBody(BaseEnum::METHOD_PATCH, self::UPDATE_DOCUMENT_TYPE_PATH, $body);
+        $this->assertEquals(204, $this->getStatusCode());
+        $this->assertEquals(null, $this->getResponseContent());
+    }
+
+    public function testUpdateDocumentTypeThrowException()
+    {
+        $body = [
+            'document_type_id' => 1,
+            'sub_document_type_id' => 2,
+        ];
+        $this->internalApiDocumentService
+            ->updateDocumentType(DocumentsData::createUpdateDocumentTypeModel())
+            ->willThrow(new InternalApiInvalidDataException());
+        $this->requestWithBody(BaseEnum::METHOD_PATCH, self::UPDATE_DOCUMENT_TYPE_PATH, $body);
+        $this->assertEquals(400, $this->getStatusCode());
+    }
+
+    public function testUpdateDocumentTypeThrowNotFoundException()
+    {
+        $body = [
+            'document_type_id' => 1,
+            'sub_document_type_id' => 2,
+        ];
+        $this->internalApiDocumentService
+            ->updateDocumentType(DocumentsData::createUpdateDocumentTypeModel())
+            ->willThrow(new ResourceNotFoundException());
+        $this->requestWithBody(BaseEnum::METHOD_PATCH, self::UPDATE_DOCUMENT_TYPE_PATH, $body);
+        $this->assertEquals(404, $this->getStatusCode());
     }
 }

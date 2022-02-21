@@ -41,6 +41,7 @@ class FolderEnum extends BaseEnum
     // API VALUES
     public const VIEW_CRITERIA_ALL_FOLDERS = 1;
     public const VIEW_CRITERIA_MY_FOLDERS = 2;
+    public const VIEW_ALL_FOLDERS = 0;
     public const VIEW_TO_BE_TREATED = 1;
     public const VIEW_IN_TREATMENT = 2;
     public const VIEW_TO_BE_TREATED_SUPERVISOR = 3;
