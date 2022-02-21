@@ -366,6 +366,15 @@ nelmio_api_doc:
                     validatorMethod:
                       type: string
                       example: 'validateFormData'
+                    values:
+                      type: object
+                      properties:
+                        nom:
+                          type: string
+                          example: "Doe"
+                        prenom:
+                          type: string
+                          example: "John"
         DocumentTypesResponse:
           description: OK
           content:
@@ -729,6 +738,7 @@ nelmio_api_doc:
       /api/v1/documents/fields:
         get:
           summary: Get the document fields based on agency id, document type id and person type id
+          description: The "values" field is dynamic and the data presented here is just an example of possible values.
           tags:
             - Documents
           parameters:
