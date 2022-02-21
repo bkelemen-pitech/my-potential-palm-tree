@@ -95,4 +95,21 @@ Content-Type: application/json
   "status":"error"
 }
 ```
-> Obs: `reason` property is fetched by joining historique_statut_workflow table with historique_supervision table.
+> Obs: `reason` property is fetched by joining historique_statut_workflow table with historique_supervision table.  
+
+### Workflow status codes
+Bellow you can find workflow status relevant to the Back office application. 
+
+| Workflow status code | Label |
+| ------------- | ------------- |
+| 10300 | To treat |
+| 10301 | In treatment - 1. Documents |
+| 10302 | In treatment - 2. Cross-checking |
+| 10303 | In treatment - 3. Data |
+| 10304 | In treatment - 4. Label |
+| 10310 | Sent to supervision |
+| 10311 | In supervision - 1. Documents |
+| 10312 | In supervision - 2. Cross-checking |
+| 10313 | In supervision - 3. Data |
+| 10314 | In supervision - 4. Label |
+| 10350 | Treated folder |

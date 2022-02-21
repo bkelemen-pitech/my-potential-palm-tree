@@ -56,10 +56,5 @@ Content-Type: application/json
   "status":"error"
 }
 ```
-#### Assign folder to user
-This API will also assign the folder to the active user by calling the 
-`/internalAPI/folders/assign` in [Monolith](../Monolith.md). The active user id can be retrieved
-by decoding the [JWT token](../Authentification/Authentication.md#decoding-the-jwt)
-
 ### Flow
 ![Folder details](../assets/Folder%20details.png)
