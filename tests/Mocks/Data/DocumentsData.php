@@ -185,7 +185,8 @@ class DocumentsData
             ->setOrder(1)
             ->setHelperMethod('test')
             ->setOcrField(1)
-            ->setValidatorMethod('validator');
+            ->setValidatorMethod('validator')
+            ->setValues(['nom' => 'John', 'prenom' => 'Doe']);
 
         return [$documentFieldsModelResponse];
     }

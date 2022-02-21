@@ -10,4 +10,6 @@ class BaseEnum
 
     public const ASCENDANT = 'ASC';
     public const DESCENDANT = 'DESC';
+
+    public const VALUES = 'values';
 }

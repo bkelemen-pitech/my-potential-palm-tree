@@ -61,7 +61,7 @@ class DocumentController extends AbstractController
         try {
             $documentFields = $documentService->getDocumentFields($request->query->all());
 
-            return $this->json($documentFields);
+            return $this->json($documentFields, Response::HTTP_OK, [], ['json_encode_options' => JSON_FORCE_OBJECT]);
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
