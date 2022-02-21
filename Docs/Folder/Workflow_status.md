@@ -64,12 +64,24 @@ Content-Type: application/json
 {
   "workflow_status_history": [
     { 
-        "workflow_status" : 10300,
-        "folder_id" : 123,
-        "created_at" : "2021-11-18T13:36:17+00:00",
-        "updated_at" : "2021-11-18T13:36:17+00:00",
-        "agent_id" : 2, 
-        "administrator_id" : 1
+      "history_workflow_status_id" : 1,
+      "workflow_status" : 10300,
+      "folder_id" : 123,
+      "created_at" : "2021-11-18T13:36:17+00:00",
+      "updated_at" : "2021-11-18T13:36:17+00:00",
+      "agent_id" : 2, 
+      "administrator_id" : 1,
+      "reason": null
+    },
+    { 
+      "history_workflow_status_id" : 2,
+      "workflow_status" : 10310,
+      "folder_id" : 123,
+      "created_at" : "2021-11-18T13:37:17+00:00",
+      "updated_at" : "2021-11-18T13:37:17+00:00",
+      "agent_id" : 2, 
+      "administrator_id" : 1,
+      "reason": "Lorem Ipsum..."
     },
     ...
   ]
@@ -83,3 +95,4 @@ Content-Type: application/json
   "status":"error"
 }
 ```
+> Obs: `reason` property is fetched by joining historique_statut_workflow table with historique_supervision table.

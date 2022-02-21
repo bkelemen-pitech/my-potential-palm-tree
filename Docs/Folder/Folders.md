@@ -48,6 +48,7 @@ Content-Type: application/json
 This parameter will set a specific set of filters on the request to the internalAPI 
 from [Monolith](../Monolith.md). There are views that are specific to a user [role](../User/README.md#users-role)(eg.
 view = 3). It can have these values:
+- 0 - corresponds to the _to search_ tab. This will not add any filters;
 - 1 - corresponds to the _to be treated_ tab. This will add `workflow_status = 10300` filter to the internalAPI request;
 - 2 - corresponds to the _in treatment_ tab. This will add `workflow_status in [10301, 10302, 10303, 10304]` filter to the internalAPI request.
 If there is a _user_id_ in the `filters` query params, we need to call the `/internalAPI/administrators/assignedfolders/administrator-id/{administrator-id}` 
