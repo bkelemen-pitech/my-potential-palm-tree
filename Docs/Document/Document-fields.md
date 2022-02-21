@@ -26,9 +26,23 @@ Content-Type: application/json
       "order": 1,
       "format": 1,
       "ocr_field": 1,
-      "helper_method": "getCommonNom",
+      "values" : null,
       "validator_method": "validateFormData",
     },
+    { 
+      "db_field_name": "nom",
+      "label": "Nom",
+      "mandatory": 1,
+      "order": 1,
+      "format": 2,
+      "ocr_field": 1,
+      "values" : [ 
+        "key1": "value1",
+        "key2": "value2",
+        ...
+      ],
+      "validator_method": "validateFormData",
+    }
     ...
    ]}
 }
@@ -52,5 +66,5 @@ The response from internalAPI needs to be mapped according to this table
 | ordre  | order  | The order in which the fields need to be displayed |
 | format  | format  | Input type |
 | champs_ocr  | ocr_field  |  |
-| valeur_helper  | helper_method  |  |
+| values  | values  | The values from dropdowns or radio boxes |
 | validateur  | validator_method  |  |

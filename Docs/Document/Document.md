@@ -77,14 +77,18 @@ Content-Type: application/json
 > Obs: the `data` property is dynamic, it's a serialized string and the application won't apply any formatting on this
 
 ### Document subtype
-If the document type id is `1` the subtype is under `data.type_id` (this is an optional field).  
+If the document type id is `1` or `80` the subtype is under `data.type_id` (this is an optional field).  
 
 | Document subtype | Label | Sub document type id |
 | ------------- | ------------- | ------------- |
 | ID | Carte Nationale d’Identité | 1 |
 | P | Passeport | 2 |
-| RP | Titre de séjour | 4 |
 | DL | Permis de conduire | 3 |
+| RP | Titre de séjour | 4 |
+| V | Visa | 5 |
+| BL | Permis bateau | 6 |
+| E | Carte d'électeur | 7 |
+| F | Livret de famille | 8 |
 
 ## Delete document
 This API will soft delete a document. Internally it will
@@ -143,6 +147,7 @@ Content-Type: application/json
 {
   "document_data_logs": [
     { 
+      "document_dat_log_id": 1,
       "created_at" : "2021-11-01T06:30:02+00:00",
       "document_id" : 2, 
       "administrator_id" : 1,
@@ -220,4 +225,4 @@ Content-Type: application/json
   "status":"error"
 }
 ```
-The `sub_document_type_id` is mandatory only for `document_type_id` 1.
+The `sub_document_type_id` is mandatory only for `document_type_id` 1 and 80.
