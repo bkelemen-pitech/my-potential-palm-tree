@@ -185,6 +185,7 @@ Content-Type: application/json
   "status":"error"
 }
 ```
+> Obs: the `verification2_status` property is calculated based on document type and multiplier
 > Obs: the `data` property is dynamic, it's a serialized string and the application won't apply any formatting on this
 
 ## Update document type
