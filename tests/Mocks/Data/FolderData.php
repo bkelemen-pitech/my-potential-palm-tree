@@ -151,6 +151,9 @@ class FolderData
             ],
             'agency_id' => 7,
             'login' => 'Test login',
+            'partner_agency_id' => null,
+            'agency_ad_name' => null
+
         ];
     }
 
