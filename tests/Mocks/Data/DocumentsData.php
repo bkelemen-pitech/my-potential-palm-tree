@@ -147,7 +147,10 @@ class DocumentsData
             ->setVerification2Status($data['verification2_status'])
             ->setAgencyId($data['agency_id'])
             ->setAdministratorId($data['administrator_id'])
-            ->setFolderId($data['folder_id']);
+            ->setFolderId($data['folder_id'])
+            ->setPersonTypeId(1)
+            ->setDocumentTypeId(1)
+            ->setData(['name' => 'John']);
     }
 
     public static function createMergeDocumentModel(array $data = self::MERGE_DOCUMENTS_BODY, int $folderId = 1): MergeDocumentModel
