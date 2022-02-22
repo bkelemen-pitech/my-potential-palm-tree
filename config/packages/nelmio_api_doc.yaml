@@ -707,6 +707,7 @@ nelmio_api_doc:
       /api/v1/documents/{documentUid}/treat:
         post:
           summary: Update document verification2_status (statut_verification2).
+          description: The "data" field sent in body is dynamic and will contain the fields associated to the document
           tags:
             - Documents
           parameters:
@@ -727,6 +728,18 @@ nelmio_api_doc:
                     folder_id:
                       type: integer
                       example: 3
+                    person_type_id:
+                      type: integer
+                      example: 1
+                    document_type_id:
+                      type: integer
+                      example: 1
+                    data:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                          example: value
           responses:
             '204':
               description: No Content

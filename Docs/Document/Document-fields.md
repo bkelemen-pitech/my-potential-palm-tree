@@ -36,11 +36,11 @@ Content-Type: application/json
       "order": 1,
       "format": 2,
       "ocr_field": 1,
-      "values" : [ 
+      "values" : { 
         "key1": "value1",
         "key2": "value2",
         ...
-      ],
+      },
       "validator_method": "validateFormData",
     }
     ...
