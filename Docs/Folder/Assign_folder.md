@@ -13,7 +13,7 @@ GET {HOST_NAME}/api/v1/folders/1/assign
 Accept: application/json 
 Content-Type: application/json 
 
-204 OK
+204 NO CONTENT
 {}
 
 404 NOT FOUND
