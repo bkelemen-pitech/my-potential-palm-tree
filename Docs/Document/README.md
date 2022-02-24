@@ -10,13 +10,25 @@ folders is retrieved by calling the [folder documents](Folder-documents.md).
 The document details can be retrieved by calling the 
 [get document by uid API](./Document.md#get-document-by-document-uid-api) 
 
+### Delete document
+[Delete document by uid API](./Document.md#delete-document)
+
+### Document data logs
+The document data logs can be retrieved by calling the
+[get document data logs](./Document.md#document-data-log)
+
+### Change document type
+The document type can be changed by calling the
+[update document type](./Document.md#update-document-type)
+
 ### Treat document
 To treat a document the [treat document API](./TreateDocument.md) should be called. 
 
 ### Merge document
-TBD...
+To merge a document the [merge document API](./MergeDocument.md) should be called.
 
 ## Misc actions
 There are other API endpoints that are needed by the frontend application. Here is a list:  
 - [Document fields](./Document-fields.md)  
+- [Document types](./Document-types.md)  
 TBD...

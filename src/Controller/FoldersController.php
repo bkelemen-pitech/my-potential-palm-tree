@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enum\AdministratorEnum;
+use App\Enum\BaseEnum;
 use App\Enum\BepremsEnum;
 use App\Enum\FolderEnum;
 use App\Enum\PersonEnum;
@@ -12,6 +14,9 @@ use App\Exception\ResourceNotFoundException;
 use App\Service\FolderService;
 use App\Service\PersonService;
 use App\Service\DocumentService;
+use App\Service\WorkflowStatusHistoryService;
+use Kyc\InternalApiBundle\Exception\ResourceNotFoundException as InternalApiResourceNotFound;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,24 +32,41 @@ class FoldersController extends AbstractController
     protected PersonService $personService;
     protected FolderService $folderService;
     protected DocumentService $documentService;
+    protected LoggerInterface $logger;
 
     public function __construct(
         PersonService $personService,
         FolderService $folderService,
-        DocumentService $documentService
+        DocumentService $documentService,
+        LoggerInterface $logger
     ) {
         $this->personService = $personService;
         $this->folderService = $folderService;
         $this->documentService = $documentService;
+        $this->logger = $logger;
     }
 
     /**
-     * @Route("/", name="get_folders", methods="GET")
+     * @Route(name="get_folders", methods="GET")
      */
     public function getFolders(Request $request): JsonResponse
     {
         try {
-            $folders = $this->folderService->getFolders($request->query->all());
+            $folders = $this->folderService->getFoldersByView($request->query->all());
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+
+        return $this->json($folders);
+    }
+
+    /**
+     * @Route("/count", name="get_folders_count", methods="GET")
+     */
+    public function getFoldersCount(): JsonResponse
+    {
+        try {
+            $folders = $this->folderService->getFoldersCount();
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }
@@ -100,7 +122,9 @@ class FoldersController extends AbstractController
     public function assignDocument(int $folderId, Request $request): JsonResponse
     {
         try {
-            $this->personService->assignDocument(array_merge($request->attributes->get('_route_params'), [FolderEnum::FOLDER_ID => $folderId]));
+            $this->personService->assignDocument(
+                array_merge($request->attributes->get('_route_params'), [FolderEnum::FOLDER_ID => $folderId])
+            );
         } catch (ResourceNotFoundException $exception) {
             throw new NotFoundHttpException($exception->getMessage());
         } catch (\Exception $exception) {
@@ -116,7 +140,65 @@ class FoldersController extends AbstractController
     public function mergeDocuments(int $folderId, Request $request): JsonResponse
     {
         try {
-            $this->documentService->mergeDocuments(array_merge([FolderEnum::FOLDER_ID => $folderId], $request->toArray()));
+            $this->documentService->mergeDocuments(
+                array_merge([FolderEnum::FOLDER_ID => $folderId], $request->toArray())
+            );
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Route("/{id}/update-workflow-status", name="update_workflow_status", methods="POST")
+     */
+    public function updateWorkflowStatus(int $id, Request $request): JsonResponse
+    {
+        try {
+            $this->folderService->updateWorkflowStatus($id, $request->toArray());
+        } catch (InternalApiResourceNotFound $exception) {
+            throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
+        } catch (\Exception $exception) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Route("/{id}/workflow-status-history", name="get_workflow_status_history", methods="GET")
+     */
+    public function getWorkflowStatusHistory(
+        int $id,
+        Request $request,
+        WorkflowStatusHistoryService $workflowStatusHistoryService
+    ): JsonResponse {
+        try {
+            $response = $workflowStatusHistoryService->getWorkflowStatusHistory(
+                $id,
+                (int) $request->query->get(AdministratorEnum::ADMINISTRATOR_ID) ?: null,
+                $request->query->get(BaseEnum::FILTERS) ?: []
+            );
+
+            return $this->json([FolderEnum::WORKFLOW_STATUS_HISTORY => $response], Response::HTTP_OK);
+        } catch (\Exception $exception) {
+            $this->logger->error($exception->getMessage());
+            throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        } catch (\Error $error) {
+            throw new ApiException(Response::HTTP_BAD_REQUEST, ApiException::INVALID_DATA_EXCEPTION_MESSAGE);
+        }
+    }
+
+    /**
+     * @Route("/{id}/dissociate", name="dissociate_folder", methods="POST")
+     */
+    public function dissociateFolder(int $id): JsonResponse
+    {
+        try {
+            $this->folderService->dissociateFolder($id);
+        } catch (InternalApiResourceNotFound $exception) {
+            throw new ApiException(Response::HTTP_NOT_FOUND, $exception->getMessage());
         } catch (\Exception $exception) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
         }

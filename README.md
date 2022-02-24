@@ -1,11 +1,11 @@
-# KYC Back Office app
+# KYC Back Office app [![Run back end tests](https://github.com/mariuspop86/pipelines/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/mariuspop86/pipelines/actions/workflows/backend-tests.yml)
 ==================
 
 Docker setup project for KYC back-office project.
 
 ## [Docs](./Docs)
 
-## Usage
+## Usage 
 
 For the initial install, you should use:
 - make install
@@ -18,7 +18,7 @@ For project permissions, you can run:
 For test, you can run:
 - make run-test
 
-Please check Makefile file for more available commands
+Please check Makefile file for more available commands.
 
 JWT
 ---
@@ -26,7 +26,7 @@ JWT
 In order to generate keys, you can run:
  - make generate-jwt-keys
 
-Your keys will land in config/jwt/private.pem and config/jwt/public.pem
+Your keys will land in config/jwt/private.pem and config/jwt/public.pem 
 
 Hosts
 -----
@@ -48,7 +48,8 @@ cp githooks/pre-push .git/hooks/pre-push
 chmod +x .git/hooks/pre-push
 ```
 
-In case you need to push changes without running the tests (for partial work), you can use `--no-verify` to skip the hook.
+In case you need to push changes without running the tests (for partial work), you can use `--no-verify` to skip the 
+hook.
 
 Docker Containers
 -----------------
@@ -66,6 +67,6 @@ The container `app` contains xdebug enabled by default. Make sure to set the cor
 You can check and update (if needed) the xdebug.ini file by accessing the 'app' folder in the docker directory
 
 In order to have xdebug up and running, follow the above:
-1. the PHPStorm server needs to be configured and mapped from `Settings > Languages and Frameworks > PHP > Servers`.
+1. the PHPStorm server needs to be configured and mapped from `Settings > Languages and Frameworks > PHP > Servers`
 2. Add `bo_traitement.local` as `host`
 3. Map the folders properly: `/local/path/to/bo_traitement_agent/ > /var/www/html`

@@ -7,16 +7,16 @@ status property in the database. To update this field the application calls
 
 ---
 __Method__: POST  
-__URL__: `/api/v1/folders/{folderId}/update-workflow-status`  
+__URL__: `/api/v1/folders/{folderId}/update_workflow_status`  
 Request example:
 
 ```http request
-POST {HOST_NAME}/api/v1/folders/1/update-workflow-status
+POST {HOST_NAME}/api/v1/folders/1/update_workflow_status
 Accept: application/json 
 Content-Type: application/json 
 
 {
-  "workflowStatus": 10301
+  "workflow_status": 10301
 }
 
 204 NO CONTENT
@@ -41,31 +41,47 @@ Content-Type: application/json
 
 ### Workflow status history
 This API will retrieve the workflow status history. Internally it will call
-`internalAPI/workflowstatushistory/folder-id/{folderId}` API.
+`internalAPI/workflowstatushistory?user_dossier_id={folderId}` API.
 
 ---
 __Method__: GET  
-__URL__: `/api/v1/folders/{folderId}/workflow-status-history`  
+__URL__: `/api/v1/folders/{folderId}/workflow_status_history`  
 __Query params__:
-- __administratorId__ (int) - the administrator id, _optional_    
+- __administrator_id__ (int) - the administrator id, _optional_
+- __workflow_status__ (array) - an array of workflow statuses to filter. If a range is needed set the `start` and
+`end` keys. If only the `start` key is provided, the API will filter by workflow_status higher or equal with the 
+  value provided. If only the `end` key is provided, the API will filter by workflow_status lower or equal with the
+  value provided. 
 
 Request example:
 
 ```http request
-GET {HOST_NAME}/api/v1/folders/1/workflow-status-history?administratorId=1
+GET {HOST_NAME}/api/v1/folders/1/workflow_status_history?administrator_id=1&workflow_status[start]=10300&workflow_status[end]=10399
 Accept: application/json 
 Content-Type: application/json
 
 200 OK
 {
-  "workflowStatusHistory": [
+  "workflow_status_history": [
     { 
-        "workflowStatus" : 10000,
-        "folderId" : 123,
-        "createdAt" : "2022-01-14 09:42:38.000000",
-        "updatedAt" : "2022-01-14 09:43:38.000000",
-        "agentId" : 2, 
-        "administratorId" : 1
+      "history_workflow_status_id" : 1,
+      "workflow_status" : 10300,
+      "folder_id" : 123,
+      "created_at" : "2021-11-18T13:36:17+00:00",
+      "updated_at" : "2021-11-18T13:36:17+00:00",
+      "agent_id" : 2, 
+      "administrator_id" : 1,
+      "reason": null
+    },
+    { 
+      "history_workflow_status_id" : 2,
+      "workflow_status" : 10310,
+      "folder_id" : 123,
+      "created_at" : "2021-11-18T13:37:17+00:00",
+      "updated_at" : "2021-11-18T13:37:17+00:00",
+      "agent_id" : 2, 
+      "administrator_id" : 1,
+      "reason": "Lorem Ipsum..."
     },
     ...
   ]
@@ -79,3 +95,4 @@ Content-Type: application/json
   "status":"error"
 }
 ```
+> Obs: `reason` property is fetched by joining historique_statut_workflow table with historique_supervision table.

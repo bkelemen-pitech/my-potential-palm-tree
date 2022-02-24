@@ -52,6 +52,11 @@ nelmio_api_doc:
           in: query
           description: "'user_dossier' database property used to order the results by"
           required: false
+        order_by_kebab_case:
+          name: order-by
+          in: query
+          description: "'login' or other database properties can be used to order the results by"
+          required: false
         page:
           name: page
           in: query
@@ -119,24 +124,24 @@ nelmio_api_doc:
                     items:
                       type: object
                       properties:
-                        folderId:
+                        folder_id:
                           type: integer
                           example: 12345
                         folder:
                           type: string
                           example: Folder123
-                        firstName:
+                        first_name:
                           type: string
                           example: Bruce
-                        lastName:
+                        last_name:
                           type: string
                           example: Wayne
-                        assignedTo:
+                        assigned_to:
                           type: string
                           example: Admin1
-                        dateOfBirth:
+                        date_of_birth:
                           type: string
-                          example: "2020-02-02"
+                          example: "1970-01-01T00:00:00+00:00"
                         subscription:
                           type: integer
                           example: 10
@@ -158,13 +163,13 @@ nelmio_api_doc:
                     id:
                       type: integer
                       example: 9
-                    partnerFolderId:
+                    partner_folder_id:
                       type: integer
                       example: 51
                     status:
                       type: integer
                       example: 3
-                    workflowStatus:
+                    workflow_status:
                       type: integer
                       example: 10400
                     label:
@@ -178,33 +183,33 @@ nelmio_api_doc:
                       items:
                         type: object
                         properties:
-                          personId:
+                          person_id:
                             type: integer
                             example: 1234
-                          lastName:
+                          last_name:
                             type: string
                             example: John
-                          firstName:
+                          first_name:
                             type: string
                             example: Smith
-                          dateOfBirth:
+                          date_of_birth:
                             type: string
                             example: 2020-05-05T00:00:00+00:00
-                          personTypeId:
+                          person_type_id:
                             type: integer
                             example: 221
-                          personUid:
+                          person_uid:
                             type: string
                             example: 5e86ebc489087
-                          personInfo:
+                          person_info:
                             type: array
                             items:
                               type: object
                               properties:
-                                nameInfo:
+                                name_info:
                                   type: string
                                   example: nom
-                                dataInfo:
+                                data_info:
                                   type: string
                                   example: data
                                 source:
@@ -231,13 +236,13 @@ nelmio_api_doc:
                     uid:
                       type: string
                       example: 5c3479c5eec12
-                    documentId:
+                    document_id:
                       type: integer
                       example: 12345
-                    documenStatus:
+                    documen_status:
                       type: integer
                       example: 1
-                    personId:
+                    person_id:
                       type: integer
                       example: 123
         SuccessDocumentsDetails:
@@ -361,6 +366,84 @@ nelmio_api_doc:
                     validatorMethod:
                       type: string
                       example: 'validateFormData'
+                    values:
+                      type: object
+                      properties:
+                        nom:
+                          type: string
+                          example: "Doe"
+                        prenom:
+                          type: string
+                          example: "John"
+        DocumentTypesResponse:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    document_type_id:
+                      type: integer
+                      example: 1
+                    sub_document_type_id:
+                      type: integer
+                      example: 1
+                    treatment_instruction:
+                      type: string
+                      example: 'lorem ipsum'
+                    sub_treatment_instruction:
+                      type: string
+                      example: 'lorem ipsum'
+        WorkflowStatusHistoryResponse:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    workflowStatus:
+                      type: integer
+                      example: 10000
+                    folderId:
+                      type: integer
+                      example: 123
+                    createdAt:
+                      type: string
+                      example: '2022-01-14 09:42:38.000000'
+                    updatedAt:
+                      type: string
+                      example: '2022-01-14 09:42:38.000000'
+                    agentId:
+                      type: integer
+                      example: 1
+                    administratorId:
+                      type: integer
+                      example: 1
+        DocumentDataLogs:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    documentId:
+                      type: integer
+                      example: 1
+                    createdAt:
+                      type: string
+                      example: '2021-11-01T06:30:02+00:00'
+                    administratorId:
+                      type: integer
+                      example: 1
+                    verification2Status:
+                      type: integer
+                      example: 1
         Unauthenticated:
           description: Authentication failed
           content:
@@ -377,12 +460,57 @@ nelmio_api_doc:
                   token:
                     type: string
                     example: stringJWTToken
+        SuccessAdministrators:
+          description: Success response example for the GET administrators API call
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  administrators:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 12
+                        login:
+                          type: string
+                          example: alice
+                        role:
+                          type: integer
+                          example: 1
+                        email:
+                          type: string
+                          example: marketing@beprems.com
+                        groupId:
+                          type: integer
+                          example: 1
+        SuccessFoldersCount:
+          description: Success response example for the GET folders count API call
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  folders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        view:
+                          type: integer
+                          example: 1
+                        total:
+                          type: integer
+                          example: 123
       schemas:
         200Success:
           title: 200 Success
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 200
             body:
@@ -395,7 +523,7 @@ nelmio_api_doc:
           title: 400 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 400
             body:
@@ -411,7 +539,7 @@ nelmio_api_doc:
           title: 401 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 401
             body:
@@ -427,7 +555,7 @@ nelmio_api_doc:
           title: 404 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 404
             body:
@@ -443,7 +571,7 @@ nelmio_api_doc:
           title: 500 Error
           type: object
           properties:
-            statusCode:
+            status_code:
               type: integer
               example: 500
             body:
@@ -535,9 +663,23 @@ nelmio_api_doc:
               ref: '#/components/responses/NotFound'
             '500':
               ref: '#/components/responses/ServerError'
-      /api/v1/documents/treat:
-        post:
-          summary: Update document status verification 2 (statut_verification2).
+        delete:
+          summary: Delete document(s) by uid.
+          tags:
+            - Documents
+          parameters:
+            - ref: '#/components/parameters/documentUid'
+          responses:
+            '204':
+              description: No Content
+            '400':
+              ref: '#/components/responses/InvalidRequest'
+            '404':
+              ref: '#/components/responses/NotFound'
+            '500':
+              ref: '#/components/responses/ServerError'
+        patch:
+          summary: Updates the document type
           tags:
             - Documents
           requestBody:
@@ -547,12 +689,57 @@ nelmio_api_doc:
                 schema:
                   type: object
                   properties:
-                    document_uid:
-                      type: string
-                      example: 618145978da9e
-                    status_verification2:
+                    document_type_id:
+                      type: integer
+                      example: 1
+                    sub_document_type_id:
                       type: integer
                       example: 3
+          responses:
+            '204':
+              description: No Content
+            '400':
+              ref: '#/components/responses/InvalidRequest'
+            '404':
+              ref: '#/components/responses/NotFound'
+            '500':
+              ref: '#/components/responses/ServerError'
+      /api/v1/documents/{documentUid}/treat:
+        post:
+          summary: Update document verification2_status (statut_verification2).
+          description: The "data" field sent in body is dynamic and will contain the fields associated to the document
+          tags:
+            - Documents
+          parameters:
+            - ref: '#/components/parameters/documentUid'
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    verification2_status:
+                      type: integer
+                      example: 3
+                    agency_id:
+                      type: integer
+                      example: 3
+                    folder_id:
+                      type: integer
+                      example: 3
+                    person_type_id:
+                      type: integer
+                      example: 1
+                    document_type_id:
+                      type: integer
+                      example: 1
+                    data:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                          example: value
           responses:
             '204':
               description: No Content
@@ -564,6 +751,7 @@ nelmio_api_doc:
       /api/v1/documents/fields:
         get:
           summary: Get the document fields based on agency id, document type id and person type id
+          description: The "values" field is dynamic and the data presented here is just an example of possible values.
           tags:
             - Documents
           parameters:
@@ -586,6 +774,58 @@ nelmio_api_doc:
             '200':
               description: OK
               ref: '#/components/responses/DocumentFieldsResponse'
+            '400':
+              ref: '#/components/responses/InvalidRequest'
+            '500':
+              ref: '#/components/responses/ServerError'
+      /api/v1/documents/document-data-logs:
+        get:
+          summary: Get the document data logs
+          tags:
+            - Documents
+          parameters:
+            document-ids:
+              name: document-ids
+              in: query
+              description: The list of document ids
+              required: true
+              schema:
+                type: array
+                items:
+                  type: integer
+            administrator-id:
+              name: administrator-id
+              in: query
+              description: The administrator id
+              required: false
+          responses:
+            '200':
+              description: OK
+              ref: '#/components/responses/DocumentDataLogs'
+            '400':
+              ref: '#/components/responses/InvalidRequest'
+            '500':
+              ref: '#/components/responses/ServerError'
+      /api/v1/documents/types:
+        get:
+          summary: Get the document types based on agency id and person type id
+          tags:
+            - Documents
+          parameters:
+            agency_id:
+              name: agency_id
+              in: query
+              description: The agency id
+              required: true
+            person_type_id:
+              name: person_type_id
+              in: query
+              description: The person type id
+              required: true
+          responses:
+            '200':
+              description: OK
+              ref: '#/components/responses/DocumentTypesResponse'
             '400':
               ref: '#/components/responses/InvalidRequest'
             '500':
@@ -691,6 +931,78 @@ nelmio_api_doc:
               ref: '#/components/responses/NotFound'
             '500':
               ref: '#/components/responses/ServerError'
+      /api/v1/folders/{id}/update-workflow-status:
+        post:
+          summary: Updates folder's workflow status.
+          tags:
+            - Folders
+          parameters:
+            - ref: '#/components/parameters/id'
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    workflowStatus:
+                      type: integer
+                      example: 10301
+                  required:
+                    - workflowStatus
+          responses:
+            204:
+              description: No content
+            '400':
+              description: Invalid Request
+              ref: '#/components/responses/InvalidRequest'
+            '404':
+              ref: '#/components/responses/NotFound'
+            '500':
+              ref: '#/components/responses/ServerError'
+      /api/v1/folders/{id}/workflow-status-history:
+        get:
+          summary: Gets the workflow status history of the given folder
+          tags:
+            - Folders
+          parameters:
+            id:
+              name: id
+              in: path
+              description: The id of the folder
+              schema:
+                type: integer
+                example: 9
+              required: true
+            administrator-id:
+              name: administrator-id
+              in: query
+              description: The administrator id
+              required: false
+          responses:
+            '200':
+              ref: '#/components/responses/WorkflowStatusHistoryResponse'
+            '400':
+              ref: '#/components/responses/InvalidRequest'
+            '500':
+              ref: '#/components/responses/ServerError'
+      /api/v1/folders/{id}/dissociate:
+        post:
+          summary: Dissociate any user associated to the folder
+          tags:
+            - Folders
+          parameters:
+            - ref: '#/components/parameters/id'
+          responses:
+            204:
+              description: No content
+            '400':
+              description: Invalid Request
+              ref: '#/components/responses/InvalidRequest'
+            '404':
+              ref: '#/components/responses/NotFound'
+            '500':
+              ref: '#/components/responses/ServerError'
       /api/v1/users/login:
         post:
           summary: This action is used for login
@@ -726,3 +1038,42 @@ nelmio_api_doc:
               description: No content
             401:
               $ref: '#/components/responses/Unauthenticated'
+      /api/v1/administrators:
+        get:
+          description: Get administrators with or without parameters
+          parameters:
+            - ref: '#/components/parameters/order_by_kebab_case'
+            - ref: '#/components/parameters/order'
+          tags:
+            - Administrators
+          responses:
+            '200':
+              description: OK
+              ref: '#/components/responses/SuccessAdministrators'
+            '400':
+              description: Invalid Request
+              ref: '#/components/responses/InvalidRequest'
+            '401':
+              description: Invalid Request
+              ref: '#/components/responses/Unauthenticated'
+            '500':
+              description: Invalid Request
+              ref: '#/components/responses/ServerError'
+      /api/v1/folders/count:
+        get:
+          description: Get folders with or without parameters
+          tags:
+            - Folders
+          responses:
+            '200':
+              description: OK
+              ref: '#/components/responses/SuccessFoldersCount'
+            '400':
+              description: Invalid Request
+              ref: '#/components/responses/InvalidRequest'
+            '401':
+              description: Invalid Request
+              ref: '#/components/responses/Unauthenticated'
+            '500':
+              description: Invalid Request
+              ref: '#/components/responses/ServerError'

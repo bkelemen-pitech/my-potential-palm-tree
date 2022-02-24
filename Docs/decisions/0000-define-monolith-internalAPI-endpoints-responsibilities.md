@@ -1,6 +1,7 @@
 # Define monolith internalAPI endpoints responsibilities
 * Status: [accepted]
-* Deciders: @bkelemen-pitech, @mariuspop86, @SergiuParlea, @fonica
+* Deciders: [[Bela Kelemen](https://github.com/bkelemen-pitech), [Marius Pop](https://github.com/mariuspop86), [Sergiu Parlea](https://github.com/SergiuParlea), [Florin
+  Onica](https://github.com/fonica)]
 * Date: [2022-01-14]
 
 <!-- Technical Story: [description | ticket/issue URL] -->

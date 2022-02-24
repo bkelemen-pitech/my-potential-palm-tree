@@ -3,7 +3,7 @@ This API retrieves the fields of a specific document type and person type.
 Internally it will call `internalAPI/documents/fields`. 
 
 __Method__: GET.  
-__URL__: `/api/v1/document/fields`.  
+__URL__: `/api/v1/documents/fields`.  
 __Query params__:
 - __document_type_id__ (int) 
 - __person_type_id__ (int)   
@@ -12,7 +12,7 @@ __Query params__:
 Request example:
 
 ```http request
-GET {HOST_NAME}/api/v1/document/fields?document_type_id=1&person_type_id=2&agency_id=1
+GET {HOST_NAME}/api/v1/documents/fields?document_type_id=1&person_type_id=2&agency_id=1
 Accept: application/json 
 Content-Type: application/json 
 
@@ -20,15 +20,29 @@ Content-Type: application/json
 {
   "fields":{[
     { 
-      "dbFieldName": "nom",
+      "db_field_name": "nom",
       "label": "Nom",
       "mandatory": 1,
       "order": 1,
       "format": 1,
-      "ocr_field: 1,
-      "helperMethod": "getCommonNom",
-      "validatorMethod": "validateFormData",
+      "ocr_field": 1,
+      "values" : null,
+      "validator_method": "validateFormData",
     },
+    { 
+      "db_field_name": "nom",
+      "label": "Nom",
+      "mandatory": 1,
+      "order": 1,
+      "format": 2,
+      "ocr_field": 1,
+      "values" : { 
+        "key1": "value1",
+        "key2": "value2",
+        ...
+      },
+      "validator_method": "validateFormData",
+    }
     ...
    ]}
 }
@@ -46,11 +60,11 @@ The response from internalAPI needs to be mapped according to this table
 
 | InternalAPI  | Bundle | Obs |
 | ------------- | ------------- | ------------- |
-| nom_info  | dbFieldName  |  |
+| nom_info  | db_field_name  | Database field name |
 | libelle  | label  |  |
 | obligatoir  | mandatory  | Possible values: 1 for mandatory, 2 for optional |
 | ordre  | order  | The order in which the fields need to be displayed |
-| format  | format  |  |
+| format  | format  | Input type |
 | champs_ocr  | ocr_field  |  |
-| valeur_helper  | helperMethod  |  |
-| validateur  | validatorMethod  |  |
+| values  | values  | The values from dropdowns or radio boxes |
+| validateur  | validator_method  |  |

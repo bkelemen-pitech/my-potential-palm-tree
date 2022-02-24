@@ -5,22 +5,43 @@ declare(strict_types=1);
 namespace App\Tests\Mocks\Data;
 
 use DateTime;
+use Kyc\InternalApiBundle\Model\Request\Document\DeleteDocumentModel;
+use Kyc\InternalApiBundle\Model\Request\Document\DocumentDataLogsModel;
 use Kyc\InternalApiBundle\Model\Request\Document\DocumentFieldsModel;
+use Kyc\InternalApiBundle\Model\Request\Document\DocumentTypesModel;
 use Kyc\InternalApiBundle\Model\Request\Document\MergeDocumentModel;
 use Kyc\InternalApiBundle\Model\Request\Document\TreatDocumentModel;
+use Kyc\InternalApiBundle\Model\Request\Document\UpdateDocumentTypeModel;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentByFolderModelResponse;
+use Kyc\InternalApiBundle\Model\Response\Document\DocumentDataLogsModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentFieldsModelResponse;
 use Kyc\InternalApiBundle\Model\Response\Document\DocumentModelResponse;
+use Kyc\InternalApiBundle\Model\Response\Document\DocumentTypesModelResponse;
 
 class DocumentsData
 {
     public const DEFAULT_DOCUMENT_UID_TEST_DATA = '617f896a61e39';
-    public const TREAT_DOCUMENT_DATA = [self::DEFAULT_DOCUMENT_UID_TEST_DATA, 8];
+    public const TREAT_DOCUMENT_DATA = [
+        'document_uid' => self::DEFAULT_DOCUMENT_UID_TEST_DATA,
+        'verification2_status' => 8,
+        'agency_id' => 1,
+        'folder_id' => 1,
+        'administrator_id' => 1,
+        'person_type_id' => 1,
+        'document_type_id' => 1,
+        'data' => [
+            'name' => 'John'
+        ],
+    ];
     public const MERGE_DOCUMENTS_BODY = [
         "personUid" => "617ff03bb7c55",
         "filename" => "test_merge_documents",
         "documentTypeId" => 51,
         "documentIds" => [37441, 37442]
+    ];
+    public const DELETE_DOCUMENT_MODEL_DATA = [
+        'documentUid' => self::DEFAULT_DOCUMENT_UID_TEST_DATA,
+        'administratorId' => 1
     ];
 
     public static function getInternalApiDocumentsByFolderId(): array
@@ -64,8 +85,8 @@ class DocumentsData
             ->setCreation(new DateTime('2021-11-01T06:30:02+00:00'))
             ->setDocumentTypeId(51)
             ->setSize(181333)
-            ->setStatusVerification(0)
-            ->setStatusVerification2(0)
+            ->setVerificationStatus(0)
+            ->setVerification2Status(0)
             ->setAnomaly(null)
             ->setUrl("_TEMP_COMPANYID_1129_617f896a61e39.jpg")
             ->setSignature("6bba0ea97392769fffb14df19f7c850ba4c0bfdf9d214b490e001d7bbdfe335f")
@@ -90,26 +111,29 @@ class DocumentsData
     {
         $expected = [
             'name' => 'Kbis (CompanyID)',
-            'documentId' => 36090,
-            'documentUid' => '617f896a61e39',
-            'masterDocumentId' => 0,
-            'statusVerification' => 0,
-            'statusVerification2' => 0,
+            'document_id' => 36090,
+            'document_uid' => '617f896a61e39',
+            'master_document_id' => 0,
+            'verification_status' => 0,
+            'verification2_status' => 0,
             'status' => 1,
             'creation' => '2021-11-01T06:30:02+00:00',
-            'personDocumentId' => null,
-            'documentTypeId' => 51,
+            'person_document_id' => null,
+            'document_type_id' => 51,
             'encryption' => true,
-            'customerAnomaly' => null,
-            'partnerVerificationStatus' => null,
-            'data' => 'a:2:{s:20:"agence_document_type";s:2:"11";s:16:"controle_couleur";i:0;}',
+            'customer_anomaly' => null,
+            'partner_verification_status' => null,
+            'data' => [
+                'agence_document_type' => 11,
+                'controle_couleur' => null,
+            ],
             'size' => 181333,
             'anomaly' => null,
-            'partnerDocumentId' => 'passport.jpeg',
+            'partner_document_id' => 'passport.jpeg',
             'url' => '_TEMP_COMPANYID_1129_617f896a61e39.jpg',
             'signature' => '6bba0ea97392769fffb14df19f7c850ba4c0bfdf9d214b490e001d7bbdfe335f',
-            'signatureInfos' => null,
-            'orderDocument' => 21,
+            'signature_infos' => null,
+            'order_document' => 21,
             'type' => 'Kbis',
             'mandatory' => null,
         ];
@@ -124,8 +148,14 @@ class DocumentsData
     public static function createTreatDocumentModel(array $data = self::TREAT_DOCUMENT_DATA)
     {
         return (new TreatDocumentModel())
-            ->setDocumentUid($data[0])
-            ->setStatusVerification2($data[1]);
+            ->setDocumentUid($data['document_uid'])
+            ->setVerification2Status($data['verification2_status'])
+            ->setAgencyId($data['agency_id'])
+            ->setAdministratorId($data['administrator_id'])
+            ->setFolderId($data['folder_id'])
+            ->setPersonTypeId($data['person_type_id'])
+            ->setDocumentTypeId($data['document_type_id'])
+            ->setData($data['data']);
     }
 
     public static function createMergeDocumentModel(array $data = self::MERGE_DOCUMENTS_BODY, int $folderId = 1): MergeDocumentModel
@@ -163,8 +193,77 @@ class DocumentsData
             ->setOrder(1)
             ->setHelperMethod('test')
             ->setOcrField(1)
-            ->setValidatorMethod('validator');
+            ->setValidatorMethod('validator')
+            ->setValues(['nom' => 'John', 'prenom' => 'Doe']);
 
         return [$documentFieldsModelResponse];
+    }
+
+    public static function createDocumentDataLogsRequestModel(): DocumentDataLogsModel
+    {
+        $documentDataLogsRequest = new DocumentDataLogsModel();
+        $documentDataLogsRequest
+            ->setAdministratorId(1)
+            ->setDocumentIds([1, 2]);
+
+        return $documentDataLogsRequest;
+    }
+
+    public static function createDocumentDataLogsModelResponse(?string $data = null): array
+    {
+        $documentDataLogsModelResponse = new DocumentDataLogsModelResponse();
+        $documentDataLogsModelResponse
+            ->setAdministratorId(1)
+            ->setDocumentId(1)
+            ->setCreatedAt(new DateTime('2020-02-02'))
+            ->setVerification2Status(2)
+            ->setData($data)
+            ->setDocumentDataLogId(1);
+
+        return [$documentDataLogsModelResponse];
+    }
+
+    public static function createDeleteDocumentModel(array $data = self::DELETE_DOCUMENT_MODEL_DATA): DeleteDocumentModel
+    {
+        return (new DeleteDocumentModel())
+            ->setDocumentUid($data['documentUid'])
+            ->setAdministratorId($data['administratorId']);
+    }
+
+    public static function getDocumentTypesModelRequest(): DocumentTypesModel
+    {
+        $documentTypesRequest = new DocumentTypesModel();
+        $documentTypesRequest
+            ->setAgencyId(1)
+            ->setPersonTypeId(1);
+
+        return $documentTypesRequest;
+    }
+
+    public static function getDocumentTypesModelResponse(): array
+    {
+        $documentTypesResponse1 = new DocumentTypesModelResponse();
+        $documentTypesResponse1
+            ->setDocumentTypeId(1)
+            ->setSubDocumentTypeId(61)
+            ->setTreatmentInstruction('test1')
+            ->setSubTreatmentInstruction('test2');
+
+        $documentTypesResponse2 = new DocumentTypesModelResponse();
+        $documentTypesResponse2
+            ->setDocumentTypeId(4)
+            ->setSubDocumentTypeId(5)
+            ->setTreatmentInstruction('test3')
+            ->setSubTreatmentInstruction('test4');
+
+        return [$documentTypesResponse1, $documentTypesResponse2];
+    }
+
+    public static function createUpdateDocumentTypeModel(): UpdateDocumentTypeModel
+    {
+        return (new UpdateDocumentTypeModel())
+            ->setDocumentUid('testUid')
+            ->setDocumentTypeId(1)
+            ->setSubDocumentTypeId(2);
     }
 }
