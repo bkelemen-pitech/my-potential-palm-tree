@@ -65,9 +65,14 @@ class DocumentControllerTest extends BaseApiTest
     public function testTreatDocumentOk()
     {
         $body = [
-          "verification2_status" => 8,
-          "agency_id" => 1,
-          "folder_id" => 1
+            "verification2_status" => 8,
+            "agency_id" => 1,
+            "folder_id" => 1,
+            "person_type_id" => 1,
+            "document_type_id" => 1,
+            "data" => [
+                "name" => "John",
+            ]
         ];
 
         $this->internalApiDocumentService
@@ -91,7 +96,12 @@ class DocumentControllerTest extends BaseApiTest
         $body = [
             "verification2_status" => '100',
             "agency_id" => 1,
-            "folder_id" => 1
+            "folder_id" => 1,
+            "person_type_id" => 1,
+            "document_type_id" => 1,
+            "data" => [
+                "name" => "John",
+            ]
         ];
 
         $treatDocumentModel = DocumentsData::createTreatDocumentModel();
@@ -144,6 +154,10 @@ class DocumentControllerTest extends BaseApiTest
                     'helper_method' => 'test',
                     'ocr_field' => 1,
                     'validator_method' => 'validator',
+                    'values' => [
+                        'nom' => 'John',
+                        'prenom' => 'Doe'
+                    ]
                 ]
             ],
             $this->getResponseContent()

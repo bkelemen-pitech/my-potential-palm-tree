@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f329429c411f5d76d6adeb448583b7bc",
+    "content-hash": "b0ece3d63817055c06d89f59e5872fee",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -229,16 +229,16 @@
         },
         {
             "name": "kyc/internal-api-bundle",
-            "version": "v1.2.12",
+            "version": "v1.2.16",
             "source": {
                 "type": "git",
                 "url": "git@github.com:beprems/internal_api_bundle.git",
-                "reference": "b91fe42f5c1edd20ca8194a580fc6459a488de3c"
+                "reference": "4c98e931023c21a0b0297dc105f1fee2c696d5e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beprems/internal_api_bundle/zipball/b91fe42f5c1edd20ca8194a580fc6459a488de3c",
-                "reference": "b91fe42f5c1edd20ca8194a580fc6459a488de3c",
+                "url": "https://api.github.com/repos/beprems/internal_api_bundle/zipball/4c98e931023c21a0b0297dc105f1fee2c696d5e8",
+                "reference": "4c98e931023c21a0b0297dc105f1fee2c696d5e8",
                 "shasum": ""
             },
             "require": {
@@ -298,7 +298,7 @@
                 "proprietary"
             ],
             "description": "Offers the mechanism to retrieve and update data needed for kyc projects.",
-            "time": "2022-02-18T16:28:44+00:00"
+            "time": "2022-02-22T17:46:53+00:00"
         },
         {
             "name": "lcobucci/clock",
@@ -8036,10 +8036,9 @@
     "platform": {
         "php": ">=7.4",
         "ext-ctype": "*",
-        "ext-iconv": "*"
-    },
-    "platform-dev": {
+        "ext-iconv": "*",
         "ext-json": "*"
     },
+    "platform-dev": [],
     "plugin-api-version": "2.1.0"
 }

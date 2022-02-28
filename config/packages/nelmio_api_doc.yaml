@@ -366,6 +366,15 @@ nelmio_api_doc:
                     validatorMethod:
                       type: string
                       example: 'validateFormData'
+                    values:
+                      type: object
+                      properties:
+                        nom:
+                          type: string
+                          example: "Doe"
+                        prenom:
+                          type: string
+                          example: "John"
         DocumentTypesResponse:
           description: OK
           content:
@@ -698,6 +707,7 @@ nelmio_api_doc:
       /api/v1/documents/{documentUid}/treat:
         post:
           summary: Update document verification2_status (statut_verification2).
+          description: The "data" field sent in body is dynamic and will contain the fields associated to the document
           tags:
             - Documents
           parameters:
@@ -718,6 +728,18 @@ nelmio_api_doc:
                     folder_id:
                       type: integer
                       example: 3
+                    person_type_id:
+                      type: integer
+                      example: 1
+                    document_type_id:
+                      type: integer
+                      example: 1
+                    data:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                          example: value
           responses:
             '204':
               description: No Content
@@ -729,6 +751,7 @@ nelmio_api_doc:
       /api/v1/documents/fields:
         get:
           summary: Get the document fields based on agency id, document type id and person type id
+          description: The "values" field is dynamic and the data presented here is just an example of possible values.
           tags:
             - Documents
           parameters:

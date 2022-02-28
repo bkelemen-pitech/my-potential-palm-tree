@@ -26,7 +26,12 @@ class DocumentsData
         'verification2_status' => 8,
         'agency_id' => 1,
         'folder_id' => 1,
-        'administrator_id' => 1
+        'administrator_id' => 1,
+        'person_type_id' => 1,
+        'document_type_id' => 1,
+        'data' => [
+            'name' => 'John'
+        ],
     ];
     public const MERGE_DOCUMENTS_BODY = [
         "personUid" => "617ff03bb7c55",
@@ -147,7 +152,10 @@ class DocumentsData
             ->setVerification2Status($data['verification2_status'])
             ->setAgencyId($data['agency_id'])
             ->setAdministratorId($data['administrator_id'])
-            ->setFolderId($data['folder_id']);
+            ->setFolderId($data['folder_id'])
+            ->setPersonTypeId($data['person_type_id'])
+            ->setDocumentTypeId($data['document_type_id'])
+            ->setData($data['data']);
     }
 
     public static function createMergeDocumentModel(array $data = self::MERGE_DOCUMENTS_BODY, int $folderId = 1): MergeDocumentModel
@@ -185,7 +193,8 @@ class DocumentsData
             ->setOrder(1)
             ->setHelperMethod('test')
             ->setOcrField(1)
-            ->setValidatorMethod('validator');
+            ->setValidatorMethod('validator')
+            ->setValues(['nom' => 'John', 'prenom' => 'Doe']);
 
         return [$documentFieldsModelResponse];
     }
