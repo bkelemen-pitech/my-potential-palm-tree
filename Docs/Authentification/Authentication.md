@@ -40,6 +40,7 @@ Decoding the JWT will result in something similar to this
   "roles": [
     "ROLE_1"
   ],
+  "administrator_group_id": 1,
   "userId": 1,
   "username": "peter-parker"
 }

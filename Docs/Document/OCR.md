@@ -63,24 +63,24 @@ Content-Type: application/json
 }
 200 OK
 {
-  "status" => 2
-  "must_validate" => 1
+  "status": 2
+  "must_validate": 1
   "must_validate_messages": 
     [
-      "mrz": [
+      "mrz": {
         "0": "Erreur : pas de date expiration"
-      ],
+      },
       "0": "OK : Le nom inscription a été contrôlé",
-      "date_naissance": {[
+      "date_naissance": {
         "0": "Erreur : ALERTE MINEUR : ddn document = 04/05/2004 > limite 18a (ou max acceptable) = 28/02/2004",
         "1": "Erreur : date naissance document <>  inscription : 04/05/2004 <> 05/05/2020"
-      ]},
+      },
       "1": "INFO: nom document = nom  SI : Dumortier = Dumortier, Nom document vérifié avec nom inscription (patronimique)",
-      "errors": {[
+      "errors": {
          "0": "Erreur : prenom  document trop long (>15 caractères) : iuliana-alexandra",
          "1": "Erreur : prenom  document <> prenom  inscription : iuliana-alexandra <> test prenom | prenom1",
          ...
-      ]}
+      }
     ]
 }
 
