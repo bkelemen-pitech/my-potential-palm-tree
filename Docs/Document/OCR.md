@@ -2,7 +2,9 @@
 The [Monolith](../Monolith.md) application uses an OCR system to validate and extract data from the uploaded documents.
 ### Get OCR data for document
 This API will retrieve the data extracted from the OCR for a specific document uid and document type id. Internally it 
-will call `internalAPI/documents/getocrdata/document-uid/{document_uid}/document-type-id/{document_type_id}`. 
+will call `internalAPI/documents/getocrdata/document-uid/{document_uid}/document-type-id/{document_type_id}`. The 
+internalAPI will retrieve the master document id and call the OCR system with it. The document sub type id is 
+handled by the OCR system.   
 
 ---
 __Method__: GET.  
@@ -41,9 +43,14 @@ Content-Type: application/json
   "status":"error"
 }
 ```
+The response is an object with key value pairs. For each pair the key matches the `ocr_field` from 
+[document fields](Document-fields.md) response. This way we can match the values received from the OCR system with 
+the values saved on  the document.
+
 ### Recalculate global status for document
 This API will recalculate global status for the document with the specified data. Internally it
-will call `internalAPI/documents/recalculateglobalstatus/document-uid/{document_uid}`.
+will call `internalAPI/documents/recalculateglobalstatus/document-uid/{document_uid}`. The internalAPI will retrieve 
+the master document id and call the OCR system with it. The document sub type id is handled by the OCR system.
 
 ---
 __Method__: GET.  
@@ -98,3 +105,6 @@ Content-Type: application/json
   "status":"error"
 }
 ```
+In the response `must_validate_messages` key is an array with key value pairs. For each pair the key matches the 
+`db_field_name` from [document fields](Document-fields.md) response. If the response has the `status` key this must 
+be used in the front end application to set the value for `status_verification2`. 
