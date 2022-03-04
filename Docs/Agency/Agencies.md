@@ -7,7 +7,7 @@ __Query params__:
 - __filters__ - described in the [filter section](#filters)
 - __order_by__ - (array) the order by column(optional)
 - __order__ - the order `ASC`|`DESC`(optional)
-- __view__ - the folders list [view](#views)
+- __view__ - described in the [view section](#views)
 
 Request example:
 ```http request

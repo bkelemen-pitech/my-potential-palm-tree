@@ -45,7 +45,7 @@ Content-Type: application/json
 ```
 The response is an object with key value pairs. For each pair the key matches the `ocr_field` from 
 [document fields](Document-fields.md) response. This way we can match the values received from the OCR system with 
-the values saved on  the document.
+the values saved on the document.
 
 ### Recalculate global status for document
 This API will recalculate global status for the document with the specified data. Internally it
