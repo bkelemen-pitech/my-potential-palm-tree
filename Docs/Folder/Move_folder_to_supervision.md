@@ -1,6 +1,7 @@
-## Move a folder into supervision
-The application must be able to move a folder into supervision. Internally this API will trigger dissociate flow and 
-save the reason by calling `/internalAPI/supervisionhistory/save`.   
+## Move a folder to supervision
+The application must be able to move a folder into supervision. Internally this API will update the workflow status to
+[10310](./Workflow_status.md#workflow-status-codes) and save the reason by calling 
+`/internalAPI/supervisionhistory/save`.   
 
 ---
 __Method__: POST  
@@ -16,7 +17,7 @@ Content-Type: application/json
   "reason": "Lorem ipsum"
 }
 
-204 NO CONTENT
+201 Created
 {}
 
 400 BAD REQUEST

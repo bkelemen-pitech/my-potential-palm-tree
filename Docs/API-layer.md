@@ -6,5 +6,6 @@ The unprotected APIs are used for authenticating the user into the application.
 ### Protected APIs
 - [Folder](./Folder/README.md) actions  
 - [Document](./Document/README.md) actions
+- [Agency](./Agency/README.md) actions
 
 

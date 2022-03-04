@@ -1,6 +1,6 @@
 ## Document Actions
 The Back-office application must give to the user the possibility to manage the
-documents inside  a folder. Here are described the different actions a user can perform.
+documents inside a folder. Here are described the different actions a user can perform.
 
 ### Folder documents 
 The documents attached to a specific
@@ -31,4 +31,5 @@ To merge a document the [merge document API](./MergeDocument.md) should be calle
 There are other API endpoints that are needed by the frontend application. Here is a list:  
 - [Document fields](./Document-fields.md)  
 - [Document types](./Document-types.md)  
+- [OCR](./OCR.md) related endpoints  
 TBD...

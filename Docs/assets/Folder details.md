@@ -4,20 +4,34 @@ with this content
 ```
 title BO - Folder details
 
-FE BO->+BE BO: /api/v1/folders/{folderId}
-BE BO->+Monolith: internalAPI get folder by id
-alt Folder not found
-    Monolith->BE BO: 404 - folder
-    BE BO->FE BO: 404 - not found
+FE BO->+BE BO: Get folder by Id
+BE BO->+Monolith: InternalAPI get folder by id
+alt Error - folder not found
+    Monolith->BE BO: 404
+    BE BO->FE BO: 404 - Not found
 else Folder found
-    Monolith->-BE BO: 200 - folder
-    opt IF workflowStatus = 10300
-        BE BO->+Monolith: internalAPI assign folder to user
-        Monolith->-BE BO: 204
-        
-        BE BO->+Monolith: internalAPI update folder workflowStatus to 10301
-        Monolith->-BE BO: 204 
+    Monolith->-BE BO: 200
+    BE BO->BE BO: Check permissions
+    alt Error - forbidden
+        BE BO->FE BO: 403 - Forbidden
+    else OK
+        BE BO->-FE BO: 200 - Folder
+        opt IF workflowStatus = 10300/10310
+            FE BO->+BE BO: Assign folder to logged user
+            BE BO->+Monolith: InternalAPI assign folder to user
+            alt Error
+                Monolith->BE BO: 404
+                BE BO->FE BO: 404 - Failed to assign folder to user
+            else Success
+                Monolith->-BE BO: 204
+                BE BO->-FE BO: 204
+                FE BO->FE BO: Compute new workflowStatus
+                FE BO->+BE BO: Update folder workflowStatus
+                BE BO->+Monolith: internalAPI update folder workflowStatus
+                Monolith->-BE BO: 204
+                BE BO->-FE BO: 204
+            end
+        end
     end
-BE BO->-FE BO: 200 - folder
 end
 ```

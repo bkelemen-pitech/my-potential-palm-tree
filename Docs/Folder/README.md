@@ -18,5 +18,6 @@ attached to a specific folders check documentation [here](../Document/Folder-doc
 ### Misc actions
 There are other API endpoints that are needed by the frontend application. Here is a list:
 - [Update workflow status](./Workflow_status.md)  
-- [Move folder to supervision](./Move_folder_to_supervision.md)
+- [Move folder to supervision](./Move_folder_to_supervision.md#move-a-folder-to-supervision)
+- [Assign folder to administrator](./Assign_folder.md)
 
