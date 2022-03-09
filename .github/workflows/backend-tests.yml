@@ -6,11 +6,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo ${{ github.event.action }}
+      - name: Checkout repo
         uses: actions/checkout@v2
         with:
-#          repository: ${{ github.event.action }}
-#          ref: ${{ github.event.client_payload.branch }}
           token: ${{ secrets.GH_PAT }}
           
       - uses: satackey/action-docker-layer-caching@v0.0.11

@@ -1,0 +1,46 @@
+name: Analyze branch
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup sonar scanner
+        uses: warchant/setup-sonar-scanner@v1
+
+      - name: 'Checkout repository on branch: ${{ github.REF }}'
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.REF }}
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
+
+      # Conditional execution can be done, in this case the parameter to use with sonar scanner are different if we are analyzing master or a branch
+#      - if: endsWith(github.REF, '/master') != true
+#        name: 'Run an analysis of the ${{ github.REF }} branch'
+#        env:
+#          # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        run: sonar-scanner
+#          -Dsonar.host.url=${{ secrets.SONAR_URL }}
+#          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+#          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+#          -Dsonar.branch.name=${GITHUB_REF:11}
+#          -Dsonar.scm.provider=git
+
+      - if: endsWith(github.REF, '/main') == true
+        name: 'Run an analysis of the master branch'
+        env:
+          # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: sonar-scanner
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+          -Dsonar.scm.provider=git
+          -Dsonar.java.binaries=/tmp
