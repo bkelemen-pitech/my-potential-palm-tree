@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-      
+      - workflows_test
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,11 +18,12 @@ jobs:
           token: ${{ secrets.GH_PAT }}
 
       - name: 'Run an analysis of the main branch'
-        uses: sonarsource/sonarqube-scan-action@master
+        uses: ptuc/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      
+          SONAR_ENDPOINT: 'sonar.wks-recette.com'
+
 
 #      - if: endsWith(github.REF, '/main') == true
 #        name: 'Run an analysis of the master branch'
