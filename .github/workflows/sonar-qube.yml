@@ -1,11 +1,7 @@
 name: Analyze branch
 
 on:
-  push:
-    branches:
-      - main
-      - workflows_test
-
+  pull_request
 jobs:
   build:
     runs-on: ubuntu-latest
