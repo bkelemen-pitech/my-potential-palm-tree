@@ -20,18 +20,12 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT }}
 
-      # Conditional execution can be done, in this case the parameter to use with sonar scanner are different if we are analyzing master or a branch
-#      - if: endsWith(github.REF, '/master') != true
-#        name: 'Run an analysis of the ${{ github.REF }} branch'
-#        env:
-#          # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: sonar-scanner
-#          -Dsonar.host.url=${{ secrets.SONAR_URL }}
-#          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-#          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-#          -Dsonar.branch.name=${GITHUB_REF:11}
-#          -Dsonar.scm.provider=git
+      - name: 'Run an analysis of the main branch'
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      
 
 #      - if: endsWith(github.REF, '/main') == true
 #        name: 'Run an analysis of the master branch'
@@ -44,8 +38,3 @@ jobs:
 #          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
 #          -Dsonar.scm.provider=git
 #          -Dsonar.java.binaries=/tmp
-        - name: 'Run an analysis of the master branch'
-          uses: sonarsource/sonarqube-scan-action@master
-            env:
-              SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-              SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
