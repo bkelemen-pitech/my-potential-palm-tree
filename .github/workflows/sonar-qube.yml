@@ -19,15 +19,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_ENDPOINT: 'sonar.wks-recette.com'
-
-
-      - name: 'Run an analysis of the master branch'
-        env:
-          # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: sonar-scanner
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
           -Dsonar.scm.provider=git
           -Dsonar.java.binaries=/tmp
+          -Dsonar.sources=src
