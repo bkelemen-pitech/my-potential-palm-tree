@@ -1,7 +1,10 @@
 name: Analyze branch
 
 on:
-  pull_request
+  push:
+    branches:
+      - main
+      - new_branch
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,5 +27,4 @@ jobs:
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
           -Dsonar.scm.provider=git
-          -Dsonar.java.binaries=/tmp
           -Dsonar.sources=src
