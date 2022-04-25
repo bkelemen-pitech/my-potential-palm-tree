@@ -1,51 +1,51 @@
-name: Run back end tests
-on: push
-  
-jobs:
-  bo_traitement_agent-test-run:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.GH_PAT }}
-          
-      - uses: satackey/action-docker-layer-caching@v0.0.11
-        # Ignore the failure of a step and avoid terminating the job.
-        continue-on-error: true
-      
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache composer dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-      
-      - name: Install dependencies
-        uses: php-actions/composer@v6
-        with:
-          php_version: "7.4"
-          ssh_key: ${{ secrets.SSH_GITHUB_PRIVATE_KEY }}
-          ssh_key_pub: ${{ secrets.SSH_GITHUB_PUBLIC_KEY }}
-
-      - name: Build and start containers
-        run: docker-compose -f "docker-compose-test.yaml" up -d --build
-
-      - name: Generate Keys
-#        https://github:com/actions/runner/issues/241
-        shell: 'script --return --quiet --command "bash {0}"'
-        run: docker-compose exec app bin/console lexik:jwt:generate-keypair --skip-if-exists
-
-      - name: run test
-#        https://github:com/actions/runner/issues/241
-        shell: 'script --return --quiet --command "bash {0}"' 
-        run: docker-compose exec app php bin/phpunit
-
-      - name: Stop containers
-        if: always()
-        run: docker-compose -f "docker-compose-test.yaml" down
+#name: Run back end tests
+#on: push
+#
+#jobs:
+#  bo_traitement_agent-test-run:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout repo
+#        uses: actions/checkout@v2
+#        with:
+#          token: ${{ secrets.GH_PAT }}
+#
+#      - uses: satackey/action-docker-layer-caching@v0.0.11
+#        # Ignore the failure of a step and avoid terminating the job.
+#        continue-on-error: true
+#
+#      - name: Get composer cache directory
+#        id: composer-cache
+#        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+#
+#      - name: Cache composer dependencies
+#        uses: actions/cache@v2
+#        with:
+#          path: ${{ steps.composer-cache.outputs.dir }}
+#          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+#          restore-keys: ${{ runner.os }}-composer-
+#
+#      - name: Install dependencies
+#        uses: php-actions/composer@v6
+#        with:
+#          php_version: "7.4"
+#          ssh_key: ${{ secrets.SSH_GITHUB_PRIVATE_KEY }}
+#          ssh_key_pub: ${{ secrets.SSH_GITHUB_PUBLIC_KEY }}
+#
+#      - name: Build and start containers
+#        run: docker-compose -f "docker-compose-test.yaml" up -d --build
+#
+#      - name: Generate Keys
+##        https://github:com/actions/runner/issues/241
+#        shell: 'script --return --quiet --command "bash {0}"'
+#        run: docker-compose exec app bin/console lexik:jwt:generate-keypair --skip-if-exists
+#
+#      - name: run test
+##        https://github:com/actions/runner/issues/241
+#        shell: 'script --return --quiet --command "bash {0}"'
+#        run: docker-compose exec app php bin/phpunit
+#
+#      - name: Stop containers
+#        if: always()
+#        run: docker-compose -f "docker-compose-test.yaml" down
