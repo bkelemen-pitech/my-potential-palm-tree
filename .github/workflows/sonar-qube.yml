@@ -1,30 +1,30 @@
-name: Analyze branch
-
-on:
-  push:
-    branches:
-      - main
-      - new_branch
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Checkout repository on branch: ${{ github.REF }}'
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.REF }}
-          fetch-depth: 0
-          token: ${{ secrets.GH_PAT }}
-
-      - name: 'Run an analysis of the main branch'
-        uses: ptuc/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_ENDPOINT: 'sonar.wks-recette.com'
-        run: sonar-scanner
-          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-          -Dsonar.scm.provider=git
-          -Dsonar.sources=src
+#name: Analyze branch
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#      - new_branch
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: 'Checkout repository on branch: ${{ github.REF }}'
+#        uses: actions/checkout@v2
+#        with:
+#          ref: ${{ github.REF }}
+#          fetch-depth: 0
+#          token: ${{ secrets.GH_PAT }}
+#
+#      - name: 'Run an analysis of the main branch'
+#        uses: ptuc/sonarqube-scan-action@master
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+#          SONAR_ENDPOINT: 'sonar.wks-recette.com'
+#        run: sonar-scanner
+#          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+#          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+#          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+#          -Dsonar.scm.provider=git
+#          -Dsonar.sources=src
